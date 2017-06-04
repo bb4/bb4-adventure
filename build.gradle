@@ -1,9 +1,5 @@
-// Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-plugins {
-    id "com.github.maiflai.scalatest" version "0.14" // needed to run scala tests
-}
-description = 'A scala puzzle framework with generator and solver implementations ' +
-        'for puzzles like Sudoku, Hi-Q, OneTough Puzzle, Tantrix, and others.'
+// Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+description = 'A framework for creating adventure games. It could also be used for other educational purposes.'
 group = 'com.barrybecker4'
 version = '1.4-SNAPSHOT'
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'
@@ -11,33 +7,12 @@ apply plugin: 'scala'  // This can be moved into bb4.gradle
 
 
 project.archivesBaseName = 'bb4-puzzle'
-mainClassName = "com.barrybecker4.puzzle.maze.ui.MazeSimulator"
+mainClassName = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure"
 
-/** added scala directory layout. This can be moved to bb4.gradle. Consider changing to conventional src/main/... */
-sourceSets {
-    main {
-        scala {
-            srcDir 'scala-source'
-        }
-        resources {
-            srcDir 'scala-source'
-        }
-    }
-    test {
-        scala {
-            srcDir 'scala-test'
-        }
-    }
-}
 
 dependencies {
-    compile 'com.barrybecker4:bb4-A-star:1.0' // scala lib
     compile 'com.barrybecker4:bb4-sound:1.4-SNAPSHOT'
-    compile 'com.barrybecker4:bb4-optimization:1.4-SNAPSHOT'
-
-    // scala dependencies
-    compile('org.scala-lang:scala-library:2.12.1') { force = true }
-    testCompile 'org.scalatest:scalatest_2.12:3.0.1'
+    compile 'com.barrybecker4:bb4-ui2:1.4-SNAPSHOT'
     // Used to generate html unit test report
     testRuntime 'org.pegdown:pegdown:1.6.0'
 }
@@ -56,74 +31,9 @@ task runTextAdventure(type: JavaExec) {
     args = ['ludlow/ludlowScript.xml']
 }
 
-task runMaze(type: JavaExec) {
-    group = 'application'
-    main = 'com.barrybecker4.puzzle.maze.ui.MazeSimulator'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runRedPuzzle(type: JavaExec) {
-    group = 'application'
-    main = 'com.barrybecker4.puzzle.redpuzzle.ui.RedPuzzle'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runTantrixPuzzle(type: JavaExec) {
-    group = 'application'
-    main = 'com.barrybecker4.puzzle.tantrix.ui.TantrixPuzzle'
-    classpath = sourceSets.main.runtimeClasspath
-    jvmArgs = ["-ea", "-Xms512M", "-Xmx4G"]
-}
-
-task runSudoku(type: JavaExec) {
-    group = 'application'
-    main = 'com.barrybecker4.puzzle.sudoku.ui.SudokuPuzzle'
-    classpath = sourceSets.main.runtimeClasspath
-    jvmArgs = ["-ea"]
-}
-
-task runHiQ(type: JavaExec) {
-    group = 'application'
-    main = 'com.barrybecker4.puzzle.hiq.ui.HiQPuzzle'
-    classpath = sourceSets.main.runtimeClasspath
-    args = ['-locale', 'ENGLISH']
-}
-
-task runSlidingPuzzle(type: JavaExec) {
-    group = 'application'
-    main = 'com.barrybecker4.puzzle.slidingpuzzle.ui.SlidingPuzzle'
-    classpath = sourceSets.main.runtimeClasspath
-    jvmArgs = ["-Xss64m"]
-}
-
-task runTwoPailsPuzzle(type: JavaExec) {
-    group = 'application'
-    main = 'com.barrybecker4.puzzle.twopails.ui.TwoPailsPuzzle'
-    classpath = sourceSets.main.runtimeClasspath
-    jvmArgs = ["-Xss64m"]
-}
-
-task runBridgePuzzle(type: JavaExec) {
-    group = 'application'
-    main = 'com.barrybecker4.puzzle.bridge.ui.BridgePuzzle'
-    classpath = sourceSets.main.runtimeClasspath
-    jvmArgs = ["-Xss64m"]
-}
-
-
 ext.appMap = new LinkedHashMap()
-appMap.put('puzzle', [include:['com/barrybecker4/puzzle/common/**']])
 appMap.put('adventure',
     [include:['com/barrybecker4/puzzle/adventure/**'],
      exclude:['com/barrybecker4/puzzle/adventure/**/*.pdf']])
-appMap.put('hiq', [include:['com/barrybecker4/puzzle/hiq/**']])
-appMap.put('slidingpuzzle', [include:['com/barrybecker4/puzzle/slidingpuzzle/**']])
-appMap.put('maze', [include:['com/barrybecker4/puzzle/maze/**']])
-appMap.put('redpuzzle', [include:['com/barrybecker4/puzzle/redpuzzle/**']])
-appMap.put('sudoku', [include:['com/barrybecker4/puzzle/sudoku/**']])
-appMap.put('tantrix', [include:['com/barrybecker4/puzzle/tantrix/**']])
-appMap.put('bridge', [include:['com/barrybecker4/puzzle/bridge/**']])
-appMap.put('twopails', [include:['com/barrybecker4/puzzle/twopails/**']])
-
 
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4-publish.gradle'
