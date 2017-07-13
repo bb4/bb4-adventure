@@ -6,7 +6,7 @@ apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'
 apply plugin: 'scala'  // This can be moved into bb4.gradle
 
 
-project.archivesBaseName = 'bb4-puzzle'
+project.archivesBaseName = 'bb4-adventure'
 mainClassName = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure"
 
 

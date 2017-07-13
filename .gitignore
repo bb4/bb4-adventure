@@ -1,8 +1,6 @@
-*.class
 .idea
 .gradle
 .project
-classes/
 build/
 bin/
 *.iml

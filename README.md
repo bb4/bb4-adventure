@@ -1,16 +1,17 @@
-# bb4-puzzles
+# bb4-adventure
 
-A java puzzle framework with generator and solver implementations for puzzles like
-[Sudoku](http://barrybecker4.com/applets/sudoku_en.html), [Hi-Q](http://barrybecker4.com/applets/hiq_en.html), [One Tough Puzzle](http://barrybecker4.com/applets/redpuzzle_en.html), [Tantrix](http://barrybecker4.com/applets/tantrix_en.html), and others.
+A configurable adventure game. Adventure games are configured using xml script files that reside in 
+com/barryecker4/puzzle/adventure/stories.
+Currently there is a Ludlow adventure based on a scenario from an old Dragon magazine, 
+and a learnBinary tutorial that demonstrates that the framework can be used for thinga other than adventure gaming.
 
 
 ### [How to Build](https://github.com/barrybecker4/bb4-common/wiki/Building-bb4-Projects)
 
 If you have not already done so, first install [Git](http://git-scm.com/), and [Intellij](http://www.jetbrains.com/idea/).
 
-Type 'gradlew build' at the root (or ./gradlew if running in Cygwin).
+Type 'gradlew build run' at the root (or ./gradlew if running in Cygwin). This will start the adventure game.
 If you want to open the source in Intellij, then first run 'gradle idea'.
-Use gradle tasks to see all the different puzzles that can be run using a command like 'gradle runRedPuzzle'
 
 When there is a new release, versioned artifacts will be published by Barry Becker to [Sonatype](https://oss.sonatype.org).
 
