@@ -50,7 +50,7 @@ class NewChoiceDialog extends AbstractDialog
 
 
     @Override
-    protected JComponent createDialogContent() {
+    public JComponent createDialogContent() {
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel mainPanel = new JPanel();
         BoxLayout layout = new BoxLayout(mainPanel, BoxLayout.Y_AXIS);
@@ -92,10 +92,10 @@ class NewChoiceDialog extends AbstractDialog
         JPanel buttonsPanel = new JPanel();
 
         initBottomButton( okButton_, "OK", "Use the selected scene as the new choice destination. " );
-        initBottomButton(cancelButton, "Cancel", "Do not select any scene." );
+        initBottomButton(cancelButton(), "Cancel", "Do not select any scene." );
 
         buttonsPanel.add( okButton_ );
-        buttonsPanel.add(cancelButton);
+        buttonsPanel.add(cancelButton());
 
         return buttonsPanel;
     }

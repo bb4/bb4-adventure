@@ -39,7 +39,7 @@ public class StoryEditorDialog extends AbstractDialog
 
     private SceneEditorPanel sceneEditor;
 
-    private static final Font INSTRUCTION_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 10);
+    private static final Font INSTRUCTION_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY(), Font.PLAIN, 10);
 
     private List<Scene>  parentScenes_;
     private ChildTable  childTable_;
@@ -75,7 +75,7 @@ public class StoryEditorDialog extends AbstractDialog
     }
 
     @Override
-    protected JComponent createDialogContent() {
+    public JComponent createDialogContent() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 700));
         JPanel editingPane = createEditingPane();
@@ -212,11 +212,11 @@ public class StoryEditorDialog extends AbstractDialog
 
         initBottomButton( okButton_, "OK",
                 "Save your edits and see the changes in the story. " );
-        initBottomButton(cancelButton, "Cancel",
+        initBottomButton(cancelButton(), "Cancel",
                 "Go back to the story without saving your edits." );
 
         rightButtonsPanel.add( okButton_ );
-        rightButtonsPanel.add(cancelButton);
+        rightButtonsPanel.add(cancelButton());
         return rightButtonsPanel;
     }
 

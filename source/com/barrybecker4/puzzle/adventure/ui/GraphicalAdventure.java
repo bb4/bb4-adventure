@@ -76,7 +76,7 @@ public final class GraphicalAdventure extends ApplicationApplet
      * Build the user interface with parameter input controls at the top.
      */
     @Override
-    protected JPanel createMainPanel() {
+    public JPanel createMainPanel() {
         mainPanel_ = new JPanel();
         mainPanel_.setLayout( new BorderLayout() );
 

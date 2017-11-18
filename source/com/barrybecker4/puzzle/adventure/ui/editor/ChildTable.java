@@ -7,6 +7,7 @@ import com.barrybecker4.ui.table.TableBase;
 import com.barrybecker4.ui.table.TableButton;
 import com.barrybecker4.ui.table.TableButtonListener;
 import com.barrybecker4.ui.table.TableColumnMeta;
+import scala.collection.Seq;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
@@ -45,7 +46,7 @@ class ChildTable extends TableBase  {
     {
         initColumnMeta(CHILD_COLUMN_NAMES);
         tableButtonListener_ = listener;
-        initializeTable(choices);
+        initializeTable((Seq<Object>) choices);
         getTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -62,8 +63,7 @@ class ChildTable extends TableBase  {
      * Add a row based on a player object.
      */
     @Override
-    protected void addRow(Object choice)
-    {
+    public void addRow(Object choice) {
         Choice childChoice = (Choice) choice;
         Object d[] = new Object[getNumColumns()];
         d[NAVIGATE_INDEX] = childChoice.getDestination();
@@ -72,7 +72,7 @@ class ChildTable extends TableBase  {
     }
 
     @Override
-    protected void updateColumnMeta(TableColumnMeta[] columnMeta) {
+    public void updateColumnMeta(TableColumnMeta[] columnMeta) {
 
         TableColumnMeta navigateCol = columnMeta[NAVIGATE_INDEX];
 
@@ -90,11 +90,11 @@ class ChildTable extends TableBase  {
 
 
     @Override
-    protected TableModel createTableModel(String[] columnNames)  {
+    public TableModel createTableModel(String[] columnNames)  {
         return new ChildTableModel(columnNames, 0);
     }
 
     ChildTableModel getChildTableModel() {
-        return (ChildTableModel)table_.getModel();
+        return (ChildTableModel)table().getModel();
     }
 }

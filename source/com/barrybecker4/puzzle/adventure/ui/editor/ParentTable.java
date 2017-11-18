@@ -6,6 +6,7 @@ import com.barrybecker4.ui.table.TableBase;
 import com.barrybecker4.ui.table.TableButton;
 import com.barrybecker4.ui.table.TableButtonListener;
 import com.barrybecker4.ui.table.TableColumnMeta;
+import scala.collection.Seq;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -42,7 +43,7 @@ class ParentTable extends TableBase  {
     public ParentTable(List<Scene> scenes, TableButtonListener listener)  {
         initColumnMeta(PARENT_COLUMN_NAMES);
         tableButtonListener_ = listener;
-        initializeTable(scenes);
+        initializeTable((Seq<Object>) scenes);
     }
 
     /**
@@ -50,7 +51,7 @@ class ParentTable extends TableBase  {
      * @param scene scene to add
      */
     @Override
-    protected void addRow(Object scene) {
+    public void addRow(Object scene) {
         Scene parentScene = (Scene) scene;
         Object d[] = new Object[getNumColumns()];
         d[NAVIGATE_INDEX] = parentScene.getName();
@@ -60,7 +61,7 @@ class ParentTable extends TableBase  {
 
 
     @Override
-    protected void updateColumnMeta(TableColumnMeta[] columnMeta) {
+    public void updateColumnMeta(TableColumnMeta[] columnMeta) {
 
         TableColumnMeta navigateCol = columnMeta[NAVIGATE_INDEX];
 
@@ -78,12 +79,12 @@ class ParentTable extends TableBase  {
 
 
     @Override
-    protected TableModel createTableModel(String[] columnNames)  {
+    public TableModel createTableModel(String[] columnNames)  {
         return new ParentTableModel(columnNames, 0);
     }
 
 
     DefaultTableModel getParentTableModel() {
-        return (DefaultTableModel)table_.getModel();
+        return (DefaultTableModel)table().getModel();
     }
 }
