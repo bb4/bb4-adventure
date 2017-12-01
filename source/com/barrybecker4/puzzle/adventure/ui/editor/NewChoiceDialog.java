@@ -62,7 +62,7 @@ class NewChoiceDialog extends AbstractDialog
                 BorderFactory.createTitledBorder("Select an existing scene or type in the name for a new scene."));
 
         JLabel orLabel = new JLabel("or");
-        orLabel.setAlignmentX( Comp onent.LEFT_ALIGNMENT);
+        orLabel.setAlignmentX( Component.LEFT_ALIGNMENT);
 
         sceneTextInput_ = new TextInput("New scene name");
         sceneTextInput_.setColumns(30);
