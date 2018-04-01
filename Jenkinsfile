@@ -1,3 +1,3 @@
 commonJenkinsPipeline(
-    upstreamProjects: 'bb4-ui-pipeline,bb4-sound-pipeline'
+    upstreamProjects: 'bb4-ui-pipeline'
 )
