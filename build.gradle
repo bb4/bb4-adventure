@@ -3,8 +3,6 @@ description = 'A framework for creating adventure games. It could also be used f
 group = 'com.barrybecker4'
 version = '1.5-SNAPSHOT'
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'
-apply plugin: 'scala'  // This can be moved into bb4.gradle
-
 
 project.archivesBaseName = 'bb4-adventure'
 mainClassName = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure"

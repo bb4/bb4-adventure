@@ -42,7 +42,7 @@ You find nothing in them except for leaves, dust, and 200 paperclips. ",
         </choices>
     </scene>
     <scene name="sky_falls">
-        <description>The sky falls on you.</description>
+        <description>The sky falls on you. Game over.</description>
         <choices/>
     </scene>
     <scene name="stub">
