@@ -28,7 +28,7 @@ object ChoiceList {
 }
 
 /**
-  * A choice that you can make in a scene.
+  * A list of choices that you can make in a scene.
   * @author Barry Becker
   */
 class ChoiceList(var choices: Seq[Choice]) {
@@ -36,7 +36,7 @@ class ChoiceList(var choices: Seq[Choice]) {
   /** @param scene use the choices from this scene to initialize from.
     */
   def this(scene: Scene) {
-    this(scene.choices.get.choices)
+    this(scene.getChoices)
   }
 
   /** @param sceneNode to initialize from.

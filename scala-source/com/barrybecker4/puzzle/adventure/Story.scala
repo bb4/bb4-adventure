@@ -4,7 +4,6 @@ package com.barrybecker4.puzzle.adventure
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.common.xml.DomUtil
 import org.w3c.dom.Document
-import java.util
 import scala.collection.mutable
 import scala.collection.Set
 import Story._
@@ -119,7 +118,7 @@ class Story(val title: String = "", val name: String = "",
     initializeFrom(story)
   }
 
-  private def initializeFrom(story: Story): Unit = {
+  private[adventure] def initializeFrom(story: Story): Unit = {
     this.resourcePath = story.resourcePath
     if (sceneMap == null)
       sceneMap = createSceneMap(0)
@@ -228,12 +227,12 @@ class Story(val title: String = "", val name: String = "",
   }
 
   /** @return a list of all the scenes that led to the current scene. */
-  def getParentScenes: util.List[Scene] = {
-    val parentScenes = new util.ArrayList[Scene]
+  def getParentScenes: Seq[Scene] = {
+    var parentScenes: Seq[Scene] = Seq()
     // loop through all the scenes, and if any of them have us as a child, add to the list
     for (sceneName <- sceneMap.keySet) {
       val s = sceneMap(sceneName)
-      if (s.isParentOf(currentScene)) parentScenes.add(s)
+      if (s.isParentOf(currentScene)) parentScenes :+= s
     }
     parentScenes
   }
@@ -253,10 +252,10 @@ class Story(val title: String = "", val name: String = "",
   /** @return a list of all the existing scenes that we could navigate to
     *         that are not already included in the current scene's list of choices.
     */
-  def getCandidateDestinationSceneNames: util.List[String] = {
-    val candidateSceneNames = new util.ArrayList[String]
+  def getCandidateDestinationSceneNames: Seq[String] = {
+    var candidateSceneNames: Seq[String] = Seq()
     for (sceneName <- sceneMap.keySet) {
-      if (!getCurrentScene.choices.get.isDestination(sceneName)) candidateSceneNames.add(sceneName)
+      if (!getCurrentScene.choices.get.isDestination(sceneName)) candidateSceneNames :+= sceneName
     }
     candidateSceneNames
   }
@@ -267,7 +266,7 @@ class Story(val title: String = "", val name: String = "",
   private def verifyScenes(): Unit = {
     for (scene <- sceneMap.values) {
       scene.verifyMedia
-      for (choice <- scene.choices.get.choices) {
+      for (choice <- scene.getChoices) {
         val dest = choice.destinationScene
         if (dest != null && sceneMap.get(choice.destinationScene) == null)
           throw new IllegalStateException(

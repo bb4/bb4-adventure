@@ -54,7 +54,7 @@ object Scene {
   * @param isFirst if true, then this is the first scene in the story
   * @author Barry Becker
   */
-class Scene(var name: String, val text: String, val choices: Option[ChoiceList] = None,
+class Scene(var name: String, var text: String, val choices: Option[ChoiceList] = None,
             val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None,
             val isFirst: Boolean = false) {
 
@@ -88,8 +88,8 @@ class Scene(var name: String, val text: String, val choices: Option[ChoiceList] 
     val choicesElem = document.createElement("choices")
     sceneElem.appendChild(choicesElem)
     var i = 0
-    while (i < choices.size) {
-      val choice: Choice = choices.get.choices(i)
+    while (i < choices.get.size) {
+      val choice: Choice = getChoices(i)
       choicesElem.appendChild(choice.createElement(document))
       i += 1
     }
@@ -126,11 +126,13 @@ class Scene(var name: String, val text: String, val choices: Option[ChoiceList] 
     */
   def getNextSceneName(choice: Int): String = {
     assert(choice >= 0 || choice < choices.size)
-    choices.get.choices(choice).destinationScene
+    getChoices(choice).destinationScene
   }
 
   /** @return true if there are more than one coice for the user to select from.*/
   def hasChoices: Boolean = choices.isDefined
+
+  def getChoices: Seq[Choice] = choices.get.choices
 
   /** Prints what is missing if anything for this scene.
     * @return false if something is missing.
@@ -153,7 +155,7 @@ class Scene(var name: String, val text: String, val choices: Option[ChoiceList] 
       val len = choices.size
       var i = 0
       while (i < len) {
-        buf.append(1 + i).append(") ").append(choices.get.choices(i).description).append('\n')
+        buf.append(1 + i).append(") ").append(getChoices(i).description).append('\n')
         i += 1
       }
     }
