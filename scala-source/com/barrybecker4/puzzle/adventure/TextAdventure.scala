@@ -21,9 +21,7 @@ object TextAdventure extends App {
     println(currentScene.print)
     val nextSceneIndex = getNextSceneIndex(currentScene, scanner)
     story.advanceScene(nextSceneIndex)
-  } while ( {
-    !story.isOver
-  })
+  } while (!story.isOver)
   scanner.close()
 
   /** Retrieve the selection from the player using the scanner.

@@ -148,17 +148,13 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
   }
 
   def print: String = {
-    val buf = new StringBuilder
-    buf.append('\n').append(this.text).append('\n')
-    if (choices != null) {
-      val len = choices.size
-      var i = 0
-      while (i < len) {
-        buf.append(1 + i).append(") ").append(getChoices(i).description).append('\n')
-        i += 1
-      }
+    var s: String = s"\n $text\n"
+    if (choices.isDefined) {
+      s += choices.get.choices.zipWithIndex.map {
+        case (c, i) => (i + 1) + ") " + c.description
+      }.mkString("\n")
     }
-    buf.toString
+    s
   }
 
   /** @return the text and choices. */
