@@ -24,7 +24,7 @@ import java.io.File
   */
 object GraphicalAdventure extends App {
 
-  new GraphicalAdventure(args, getDefaultStory)
+  new GraphicalAdventure(Array(), getDefaultStory)
 
   def getDefaultStory: Story = {
     val document = Story.importStoryDocument(Array[String]())
