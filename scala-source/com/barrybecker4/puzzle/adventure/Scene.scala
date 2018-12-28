@@ -64,7 +64,7 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
 
   def this(sceneNode: Node, resourcePath: String, isFirst: Boolean) {
     this(DomUtil.getAttribute(sceneNode, "name"),
-      sceneNode.getFirstChild.getTextContent, None,
+      sceneNode.getFirstChild.getTextContent, Some(new ChoiceList(sceneNode, isFirst)),
       loadSound(DomUtil.getAttribute(sceneNode, "name"), resourcePath),
       loadImage(DomUtil.getAttribute(sceneNode, "name"), resourcePath),
       isFirst)
@@ -99,8 +99,7 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
 
   def deleteChoice(choice: Int): Unit = choices.get.remove(choice)
 
-  /**
-    * When changing the name we must call sceneNameChanged on the listeners that are interested in the change.
+  /** When changing the name we must call sceneNameChanged on the listeners that are interested in the change.
     * @param name new scene name
     */
   def setName(name: String): Unit = {
