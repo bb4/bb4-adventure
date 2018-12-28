@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure.ui.editor;
+package com.barrybecker4.puzzle.adventure1.ui.editor;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.List;

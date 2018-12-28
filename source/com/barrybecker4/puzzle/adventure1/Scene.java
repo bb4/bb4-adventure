@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure;
+package com.barrybecker4.puzzle.adventure1;
 
 import com.barrybecker4.common.util.FileUtil;
 import com.barrybecker4.common.xml.DomUtil;
@@ -8,7 +8,6 @@ import com.barrybecker4.ui.util.GUIUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
@@ -27,8 +26,8 @@ public class Scene {
     private String text;
     private ChoiceList choices;
     private boolean isFirst;
-    private URL soundURL_;
-    private BufferedImage image_;
+    private URL soundURL;
+    private BufferedImage image;
 
     /**
      * @param sceneNode  xml element to initialize from.
@@ -49,8 +48,8 @@ public class Scene {
     Scene(Scene scene) {
         this.name = scene.getName();
         this.text = scene.getText();
-        this.image_ = scene.getImage();
-        this.soundURL_ = scene.soundURL_;
+        this.image = scene.getImage();
+        this.soundURL = scene.soundURL;
         this.choices = new ChoiceList(scene);
         this.isFirst = scene.isFirst();
     }
@@ -96,11 +95,11 @@ public class Scene {
         try {
             System.out.println("Scene load resources path="+ resourcePath);
             String soundPath = resourcePath + "sounds/" + name + ".au";
-            soundURL_ = FileUtil.getURL(soundPath, false);
+            soundURL = FileUtil.getURL(soundPath, false);
 
             String imagePath = resourcePath + "images/" +name + ".jpg";
             System.out.println("reading image from " + imagePath);
-            image_ = GUIUtil.getBufferedImage(imagePath);
+            image = GUIUtil.getBufferedImage(imagePath);
         } catch (NoClassDefFoundError e) {
             System.err.println("You are trying to load sounds and images when only text scenes are supported. " +
                     "If you need this to work add the jai library to your classpath");
@@ -157,19 +156,19 @@ public class Scene {
      * @return image associated with this scene if there is one (else null)
      */
     public BufferedImage getImage() {
-         return image_;
+         return image;
     }
 
     public boolean hasSound() {
-        if (soundURL_ == null) return false;
-        //File file = new File(soundURL_.getFile());
+        if (soundURL == null) return false;
+        //File file = new File(soundURL.getFile());
         //return file.exists();
         return true;
     }
 
     public void playSound() {
         if (hasSound()) {
-             SoundUtil.playSound(soundURL_);
+             SoundUtil.playSound(soundURL);
         }
     }
 

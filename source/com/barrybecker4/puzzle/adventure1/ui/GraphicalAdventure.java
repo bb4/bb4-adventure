@@ -1,10 +1,10 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure.ui;
+package com.barrybecker4.puzzle.adventure1.ui;
 
 import com.barrybecker4.common.xml.DomUtil;
-import com.barrybecker4.puzzle.adventure.Story;
-import com.barrybecker4.puzzle.adventure.TextAdventure;
-import com.barrybecker4.puzzle.adventure.ui.editor.StoryEditorDialog;
+import com.barrybecker4.puzzle.adventure1.Story;
+import com.barrybecker4.puzzle.adventure1.TextAdventure;
+import com.barrybecker4.puzzle.adventure1.ui.editor.StoryEditorDialog;
 import com.barrybecker4.ui.application.ApplicationApplet;
 import com.barrybecker4.ui.dialogs.PasswordDialog;
 import com.barrybecker4.ui.util.GUIUtil;

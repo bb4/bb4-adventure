@@ -1,3 +1,4 @@
 commonJenkinsPipeline(
-    upstreamProjects: 'bb4-ui-pipeline'
+    upstreamProjects: 'bb4-ui-pipeline',
+    language: 'scala'
 )

@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure;
+package com.barrybecker4.puzzle.adventure1;
 
+import com.barrybecker4.puzzle.adventure.Choice;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -17,16 +18,16 @@ import java.util.ListIterator;
  * @author Barry Becker
  */
 @SuppressWarnings("ClassWithTooManyMethods")
-public class ChoiceList implements List<Choice> {
+public class ChoiceList implements List<com.barrybecker4.puzzle.adventure.Choice> {
 
-    private List<Choice> choices_;
+    private List<com.barrybecker4.puzzle.adventure.Choice> choices;
 
 
     /**
      * Default constructor.
      */
     ChoiceList() {
-        choices_ = new ArrayList<>();
+        choices = new ArrayList<>();
     }
 
     /**
@@ -35,7 +36,7 @@ public class ChoiceList implements List<Choice> {
      */
     ChoiceList(Scene scene) {
         this();
-        choices_.addAll(scene.getChoices());
+        choices.addAll(scene.getChoices());
     }
 
     /**
@@ -45,20 +46,19 @@ public class ChoiceList implements List<Choice> {
      * @param isFirst true if this is the first scene.
      */
     ChoiceList(Node sceneNode, boolean isFirst) {
-
         // if there are choices they will be the second element (right after description).
         NodeList children = sceneNode.getChildNodes();
         if (children.getLength() > 1) {
             Node choicesNode = children.item(1);
             NodeList choiceList = choicesNode.getChildNodes();
             int numChoices = choiceList.getLength();
-            choices_ = new ArrayList<Choice>(numChoices + (isFirst? 0 : 1));
+            choices = new ArrayList<Choice>(numChoices + (isFirst? 0 : 1));
             for (int i=0; i<numChoices; i++) {
                 assert choiceList.item(i) != null;
-                choices_.add(new Choice(choiceList.item(i)));
+                choices.add(new com.barrybecker4.puzzle.adventure.Choice(choiceList.item(i)));
             }
         } else {
-            choices_ = new ArrayList<Choice>();
+            choices = new ArrayList<com.barrybecker4.puzzle.adventure.Choice>();
         }
     }
 
@@ -67,8 +67,8 @@ public class ChoiceList implements List<Choice> {
      * @return true if sceneName is one of our choices.
      */
     boolean isDestination(String sceneName) {
-        for (Choice c : choices_) {
-            if (c.getDestination().equals(sceneName)) {
+        for (com.barrybecker4.puzzle.adventure.Choice c : choices) {
+            if (c.destinationScene().equals(sceneName)) {
                 return true;
             }
         }
@@ -76,9 +76,9 @@ public class ChoiceList implements List<Choice> {
     }
 
     void sceneNameChanged(String oldSceneName, String newSceneName) {
-        for (Choice c : choices_) {
-            if (c.getDestination().equals(oldSceneName)) {
-                c.setDestination(newSceneName);
+        for (com.barrybecker4.puzzle.adventure.Choice c : choices) {
+            if (c.destinationScene().equals(oldSceneName)) {
+                c.destinationScene = newSceneName;
             }
         }
     }
@@ -88,41 +88,41 @@ public class ChoiceList implements List<Choice> {
      * @param choiceMap new order and descriptions to update with.
      */
     public void update(LinkedHashMap<String, String> choiceMap)  {
-        assert choiceMap.size() == choices_.size() :
-                "choiceMap.size()=" + choiceMap.size() + " not equal choices_.size()=" + choices_.size();
-        List<Choice> newChoices = new ArrayList<Choice>(choiceMap.size());
+        assert choiceMap.size() == choices.size() :
+                "choiceMap.size()=" + choiceMap.size() + " not equal choices.size()=" + choices.size();
+        List<com.barrybecker4.puzzle.adventure.Choice> newChoices = new ArrayList<com.barrybecker4.puzzle.adventure.Choice>(choiceMap.size());
         for (String dest : choiceMap.keySet()) {
-            newChoices.add(new Choice(choiceMap.get(dest), dest));
+            newChoices.add(new com.barrybecker4.puzzle.adventure.Choice(choiceMap.get(dest), dest));
         }
-        choices_ = newChoices;
+        choices = newChoices;
     }
 
     public int size() {
-        return choices_.size();
+        return choices.size();
     }
 
     public boolean isEmpty() {
-        return choices_.isEmpty();
+        return choices.isEmpty();
     }
 
     public boolean contains(Object o) {
-        return choices_.contains(o);
+        return choices.contains(o);
     }
 
-    public Iterator<Choice> iterator() {
-        return choices_.iterator();
+    public Iterator<com.barrybecker4.puzzle.adventure.Choice> iterator() {
+        return choices.iterator();
     }
 
     public Object[] toArray() {
-       return choices_.toArray();
+       return choices.toArray();
     }
 
-    public boolean add(Choice choice) {
-        return choices_.add(choice);
+    public boolean add(com.barrybecker4.puzzle.adventure.Choice choice) {
+        return choices.add(choice);
     }
 
     public boolean remove(Object o) {
-        return choices_.remove(o);
+        return choices.remove(o);
     }
 
     public boolean containsAll(Collection<?> c) {
@@ -130,37 +130,37 @@ public class ChoiceList implements List<Choice> {
     }
 
     public void clear() {
-        choices_.clear();
+        choices.clear();
     }
 
-    public Choice get(int index) {
-        return choices_.get(index);
+    public com.barrybecker4.puzzle.adventure.Choice get(int index) {
+        return choices.get(index);
     }
 
-    public Choice set(int index, Choice element) {
-        return  choices_.set(index, element);
+    public com.barrybecker4.puzzle.adventure.Choice set(int index, com.barrybecker4.puzzle.adventure.Choice element) {
+        return  choices.set(index, element);
     }
 
-    public void add(int index, Choice element) {
-        choices_.add(index, element);
+    public void add(int index, com.barrybecker4.puzzle.adventure.Choice element) {
+        choices.add(index, element);
     }
 
-    public Choice remove(int index) {
-        return choices_.remove(index);
+    public com.barrybecker4.puzzle.adventure.Choice remove(int index) {
+        return choices.remove(index);
     }
 
     public int indexOf(Object o) {
-        return choices_.indexOf(o);
+        return choices.indexOf(o);
     }
 
     // unsupported stuff. implement only if needed.
     public <T> T[] toArray(T[] a) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    public boolean addAll(Collection<? extends Choice> c) {
+    public boolean addAll(Collection<? extends com.barrybecker4.puzzle.adventure.Choice> c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    public boolean addAll(int index, Collection<? extends Choice> c) {
+    public boolean addAll(int index, Collection<? extends com.barrybecker4.puzzle.adventure.Choice> c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     public boolean removeAll(Collection<?> c) {
@@ -172,10 +172,10 @@ public class ChoiceList implements List<Choice> {
     public int lastIndexOf(Object o) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    public ListIterator<Choice> listIterator() {
+    public ListIterator<com.barrybecker4.puzzle.adventure.Choice> listIterator() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    public ListIterator<Choice> listIterator(int index) {
+    public ListIterator<com.barrybecker4.puzzle.adventure.Choice> listIterator(int index) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     public List<Choice> subList(int fromIndex, int toIndex) {

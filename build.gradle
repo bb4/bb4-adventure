@@ -1,4 +1,7 @@
-// Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016 - 2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+plugins {
+    id "com.github.maiflai.scalatest" version "0.19" // needed to run scala tests
+}
 description = 'A framework for creating adventure games. It could also be used for other educational purposes.'
 group = 'com.barrybecker4'
 version = '1.5-SNAPSHOT'

@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure.ui.editor;
+package com.barrybecker4.puzzle.adventure1.ui.editor;
 
 import com.barrybecker4.puzzle.adventure.Choice;
-import com.barrybecker4.puzzle.adventure.ChoiceList;
+import com.barrybecker4.puzzle.adventure1.ChoiceList;
 import com.barrybecker4.ui.table.TableBase;
 import com.barrybecker4.ui.table.TableButton;
 import com.barrybecker4.ui.table.TableButtonListener;

@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2000-2012. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure.ui.editor;
+package com.barrybecker4.puzzle.adventure1.ui.editor;
 
 import com.barrybecker4.ui.components.GradientButton;
 import com.barrybecker4.ui.components.TextInput;

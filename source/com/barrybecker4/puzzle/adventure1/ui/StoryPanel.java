@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure.ui;
+package com.barrybecker4.puzzle.adventure1.ui;
 
-import com.barrybecker4.puzzle.adventure.Story;
+import com.barrybecker4.puzzle.adventure1.Story;
 import com.barrybecker4.ui.components.ImageListPanel;
 
 import javax.swing.JSplitPane;

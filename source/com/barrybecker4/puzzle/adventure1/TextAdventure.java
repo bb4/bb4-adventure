@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure;
+package com.barrybecker4.puzzle.adventure1;
 
-import com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure;
+import com.barrybecker4.puzzle.adventure1.ui.GraphicalAdventure;
 import org.w3c.dom.Document;
 
 import java.io.IOException;

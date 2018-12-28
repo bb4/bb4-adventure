@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2000-2012. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure.ui.editor;
+package com.barrybecker4.puzzle.adventure1.ui.editor;
 
-import com.barrybecker4.puzzle.adventure.Scene;
+import com.barrybecker4.puzzle.adventure1.Scene;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.LinkedHashMap;

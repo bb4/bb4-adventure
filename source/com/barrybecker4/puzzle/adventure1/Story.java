@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure;
+package com.barrybecker4.puzzle.adventure1;
 
 import com.barrybecker4.common.util.FileUtil;
 import com.barrybecker4.common.xml.DomUtil;
@@ -62,19 +62,19 @@ public class Story {
     private String date;
 
     /** Maps scene name to the scene. Preserves order of scenes. */
-    private LinkedHashMap<String, Scene> sceneMap_;
+    private LinkedHashMap<String, Scene> sceneMap;
 
     /** The scene where the user is now. */
     private Scene currentScene_;
 
     private static final String ROOT_ELEMENT = "script";
 
-    private String resourcePath_;
+    private String resourcePath;
 
     /**
      * A stack of currently visited scenes. There may be duplicates if you visit the same scene twice.
      */
-    private List<Scene> visitedScenes_;
+    private List<Scene> visitedScenes;
 
     /** all the stories need to be stored at this location */
     public static final String STORIES_ROOT = "com/barrybecker4/puzzle/adventure/stories/";
@@ -90,11 +90,11 @@ public class Story {
         name =  DomUtil.getAttribute(root, "name");
         author = DomUtil.getAttribute(root, "author");
         date = DomUtil.getAttribute(root, "date");
-        resourcePath_ = STORIES_ROOT + name + "/";
+        resourcePath = STORIES_ROOT + name + "/";
         NodeList children = root.getChildNodes();
         Scene[] scenes = new Scene[children.getLength()];
         for (int i=0; i < children.getLength(); i++) {
-            scenes[i] = new Scene(children.item(i), resourcePath_, i==0);
+            scenes[i] = new Scene(children.item(i), resourcePath, i==0);
         }
         initFromScenes(scenes);
     }
@@ -112,16 +112,16 @@ public class Story {
         this.name = story.name;
         this.author = story.author;
         this.date = story.date;
-        this.resourcePath_ = story.resourcePath_;
-        if (sceneMap_ == null) {
-            sceneMap_ = createSceneMap(story.getSceneMap().size());
+        this.resourcePath = story.resourcePath;
+        if (sceneMap == null) {
+            sceneMap = createSceneMap(story.getSceneMap().size());
         }
-        this.sceneMap_.clear();
+        this.sceneMap.clear();
         copySceneMap(story.getSceneMap());
         //this.currentScene_ = story.currentScene_;
         this.advanceToScene(story.getCurrentScene().getName());
-        this.visitedScenes_ = new LinkedList<>();
-        this.visitedScenes_.addAll(story.visitedScenes_);
+        this.visitedScenes = new LinkedList<>();
+        this.visitedScenes.addAll(story.visitedScenes);
     }
 
     /** @return the title of the story */
@@ -131,7 +131,7 @@ public class Story {
 
     /** Return to the initial sceen from wherever they be now. */
     public void resetToFirstScene() {
-        currentScene_ = sceneMap_.values().iterator().next();
+        currentScene_ = sceneMap.values().iterator().next();
     }
 
     /**
@@ -151,7 +151,7 @@ public class Story {
 
 
     private LinkedHashMap<String, Scene> getSceneMap() {
-        return sceneMap_;
+        return sceneMap;
     }
 
     /**
@@ -168,8 +168,8 @@ public class Story {
         rootElement.setAttribute("title", title);
         document.appendChild(rootElement);
 
-        for (String sceneName : sceneMap_.keySet()) {
-            Scene scene = sceneMap_.get(sceneName);
+        for (String sceneName : sceneMap.keySet()) {
+            Scene scene = sceneMap.get(sceneName);
             scene.appendToDocument(document);
         }
 
@@ -219,21 +219,21 @@ public class Story {
         for (String sceneName : fromMap.keySet()) {
             Scene scene = fromMap.get(sceneName);
             // add deep copies of the scene.
-            sceneMap_.put(sceneName, new Scene(scene));
+            sceneMap.put(sceneName, new Scene(scene));
         }
     }
 
     private void initFromScenes(Scene[] scenes)  {
-        sceneMap_ = createSceneMap(scenes.length);
+        sceneMap = createSceneMap(scenes.length);
 
         for (final Scene scene : scenes) {
             assert scene.getChoices() != null;
-            sceneMap_.put(scene.getName(), scene);
+            sceneMap.put(scene.getName(), scene);
         }
         verifyScenes();
 
         currentScene_ = scenes[0];
-        visitedScenes_ = new LinkedList<>();
+        visitedScenes = new LinkedList<>();
     }
 
     public Scene getCurrentScene()  {
@@ -267,8 +267,8 @@ public class Story {
 
         if (nextSceneName != null) {
             if (currentScene_ != null)
-                visitedScenes_.add(currentScene_);
-            currentScene_ = sceneMap_.get( nextSceneName );
+                visitedScenes.add(currentScene_);
+            currentScene_ = sceneMap.get( nextSceneName );
             assert (currentScene_ != null)  : "Could not find a scene named '"+ nextSceneName+"'.";
         }
     }
@@ -279,8 +279,8 @@ public class Story {
     public List<Scene> getParentScenes()  {
         List<Scene> parentScenes = new ArrayList<>();
         // loop through all the scenes, and if any of them have us as a child, add to the list
-        for (String sceneName : sceneMap_.keySet()) {
-            Scene s = sceneMap_.get(sceneName);
+        for (String sceneName : sceneMap.keySet()) {
+            Scene s = sceneMap.get(sceneName);
             if (s.isParentOf(currentScene_)) {
                 parentScenes.add(s);
             }
@@ -295,11 +295,11 @@ public class Story {
      */
     public void addChoiceToCurrentScene(String newSceneName, String choiceDescription) {
         // if we do not already have this scene, we need to create it.
-        if (!sceneMap_.containsKey(newSceneName)) {
-            Scene newScene = new Scene(newSceneName, " --- describe the scene here ---", resourcePath_);
-            sceneMap_.put(newSceneName, newScene);
+        if (!sceneMap.containsKey(newSceneName)) {
+            Scene newScene = new Scene(newSceneName, " --- describe the scene here ---", resourcePath);
+            sceneMap.put(newSceneName, newScene);
         }
-        this.getCurrentScene().getChoices().add( new Choice(choiceDescription, newSceneName));
+        this.getCurrentScene().getChoices().add( new com.barrybecker4.puzzle.adventure.Choice(choiceDescription, newSceneName));
     }
 
     /**
@@ -309,7 +309,7 @@ public class Story {
     public List<String> getCandidateDestinationSceneNames() {
         List<String> candidateSceneNames = new ArrayList<>();
 
-         for (String sceneName : sceneMap_.keySet()) {
+         for (String sceneName : sceneMap.keySet()) {
             if (!getCurrentScene().getChoices().isDestination(sceneName)) {
                 candidateSceneNames.add(sceneName);
             }
@@ -318,19 +318,19 @@ public class Story {
     }
 
     public List<String> getAllSceneNames() {
-        return new ArrayList<>(sceneMap_.keySet());
+        return new ArrayList<>(sceneMap.keySet());
     }
 
     /**
      * make sure the set of scenes in internally consistent.
      */
     private void verifyScenes() {
-        for (Scene scene : sceneMap_.values()) {
+        for (Scene scene : sceneMap.values()) {
             scene.verifyMedia();
 
             for (Choice choice : scene.getChoices())  {
                 String dest = choice.getDestination();
-                if (dest != null  && sceneMap_.get(choice.getDestination()) == null) {
+                if (dest != null  && sceneMap.get(choice.getDestination()) == null) {
                     assert false : "No scene named " + choice.getDestination() + " desc="+ choice.getDescription();
                 }
             }
@@ -341,13 +341,12 @@ public class Story {
      * Since the name of one of the scenes has changed we need to update the sceneMap.
      */
     public void sceneNameChanged(String oldSceneName, String newSceneName) {
-        Scene changedScene = sceneMap_.remove(oldSceneName);
+        Scene changedScene = sceneMap.remove(oldSceneName);
         //System.out.println("oldScene name=" + oldSceneName +"  newSceneName="+ newSceneName+"  changedScene=" + changedScene.getName());
-        sceneMap_.put(newSceneName, changedScene);
+        sceneMap.put(newSceneName, changedScene);
         // also need to update the references to named scenes in the choices.
-        for (String sceneName : sceneMap_.keySet()) {
-            sceneMap_.get(sceneName).getChoices().sceneNameChanged(oldSceneName, newSceneName);
+        for (String sceneName : sceneMap.keySet()) {
+            sceneMap.get(sceneName).getChoices().sceneNameChanged(oldSceneName, newSceneName);
         }
     }
 }
-
