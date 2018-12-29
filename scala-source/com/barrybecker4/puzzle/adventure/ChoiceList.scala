@@ -7,7 +7,8 @@ import ChoiceList._
 
 object ChoiceList {
 
-  private def getChoices(sceneNode: Node, isFirst: Boolean): Seq[Choice] = {
+  /** @return extracted choices from a sceneNode */
+  private def getChoices(sceneNode: Node): Seq[Choice] = {
     // if there are choices they will be the second element (right after description).
     val children = sceneNode.getChildNodes
     var choices: Seq[Choice] = Seq()
@@ -33,17 +34,14 @@ object ChoiceList {
   */
 class ChoiceList(var choices: Seq[Choice]) {
 
-  /** @param scene use the choices from this scene to initialize from.
-    */
+  /** @param scene use the choices from this scene to initialize from. */
   def this(scene: Scene) {
     this(scene.getChoices)
   }
 
-  /** @param sceneNode to initialize from.
-    * @param isFirst   true if this is the first scene.
-    */
-  def this(sceneNode: Node, isFirst: Boolean) {
-    this(getChoices(sceneNode, isFirst))
+  /** @param sceneNode to initialize from. */
+  def this(sceneNode: Node) {
+    this(getChoices(sceneNode))
   }
 
   /** @param sceneName sceneName to look for as a destination.
@@ -73,17 +71,6 @@ class ChoiceList(var choices: Seq[Choice]) {
   def size: Int = choices.size
   def isEmpty: Boolean = choices.isEmpty
   def contains(o: Any): Boolean = choices.contains(o)
-  //def iterator: util.Iterator[Choice] = choices.iterator
-  //def toArray: Array[AnyRef] = choices.toArray
-
   def add(choice: Choice): Unit = { choices :+= choice }
-
-  //def remove(o: Any): Boolean = choices -= o
-  //def containsAll(c: Collection[_]) = throw new UnsupportedOperationException("Not supported yet.")
-  //def clear(): Unit = choices.clear()
-  //def get(index: Int): Choice = choices.get(index)
-  //def set(index: Int, element: Choice): Choice = choices.set(index, element)
-  //def add(index: Int, element: Choice): Unit = choices.add(index, element)
   def remove(index: Int): Unit = choices = choices.take(index - 1) ++ choices.drop(index)
-  //def indexOf(o: Any): Int = choices.indexOf(o)
 }

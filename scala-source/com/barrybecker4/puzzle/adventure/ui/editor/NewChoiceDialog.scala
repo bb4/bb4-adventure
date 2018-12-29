@@ -19,7 +19,7 @@ import java.awt.event.ActionListener
 /**
   * Allow the user to select the name of the destination scene
   * or type in the name of a new scene.
-  * @param candidateDestinations used to populate .
+  * @param candidateDestinations used to populate the choice list
   * @author Barry Becker
   */
 class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDialog with ActionListener {

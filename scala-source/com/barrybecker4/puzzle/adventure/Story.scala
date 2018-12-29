@@ -16,7 +16,6 @@ object Story {
 
   /**
     * If args[0] does not have the name of the document to use, use a default.
-    *
     * @param args command line args (0 or 1 if name of xml doc is specified.)
     * @return the loaded Document that contains the adventure.
     */
@@ -46,30 +45,6 @@ object Story {
   * Just modify the script in SceneData and run.
   * This program is meant as a very simple example of how you can
   * approach creating a simple adventure game on a computer.
-  *
-  * There are many improvements that  I will leave as an exercise for reader (Brian I hope).
-  * Next to each is a number which is the number of hours I expect it would take me to implement.
-  *
-  * 1) Keep track of the items that the player has. They initially start with about 10 things but then find/use
-  * items as their adventure progresses.
-  * 2) Automatic fighting with monsters. We know the hit points and armor class of the player and monster.
-  * It should be a simple matter to have the compat automatically carried out in order to determine the winner and
-  * subtract hit point losses as appropriate. We can also take into other effects like disease or healing effects.
-  * The player should also be given the option to flee, or instigate other action during the melee.
-  * 3) Add a graphical User Interface. We could have windows that pop up to show the players stats or item inventory.
-  * 4) Make multi-player (hard)
-  * 7) Allow the user to edit the scenes - live through the UI.
-  * When editing a scene you are presented with a form that has all the
-  * attributes for the scene including a dropdown for selecting which scenes navigate to it and
-  * where you can navigate to from this scene. Save and load the xml that defines the game.
-  * 8) This type of application could be used for more than just games. Tutorials or an expert system would
-  * be other nice applications.
-  * 9) Have probabilistic choices. For example, if you encounter a monster and choose to fight it, then
-  * the outcome may be one of several different things. We can also influence the outcome by what sort of
-  * items the player has.
-  * 10) fix sound deploy in ant
-  * 11) add means to edit the network of scene from within the application. Show all scene leading to and from
-  * the current scene. Allow editing of scene properties and associating media.
   * @param title  title of the story
   * @param name name of the story used as an identifier for by convention
   *             resolution of locations and things like that. e.g. ludlow.
@@ -108,14 +83,6 @@ class Story(val title: String = "", val name: String = "",
       i += 1
     }
     initFromScenes(scenes)
-  }
-
-  /** Copy constructor. Creates a deep copy.
-    * @param story story to copy
-    */
-  def this(story: Story) {
-    this(story.getTitle, story.name, story.author, story.date)
-    initializeFrom(story)
   }
 
   private[adventure] def initializeFrom(story: Story): Unit = {
@@ -199,7 +166,6 @@ class Story(val title: String = "", val name: String = "",
   }
 
   def getCurrentScene: Scene = currentScene
-
   def isOver: Boolean = getCurrentScene == null
 
   /** Advance the story to the next scene based on the specified choice

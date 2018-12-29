@@ -119,10 +119,14 @@ class StoryEditorDialog(val story: Story)
 
   private def createChildRowEditButtons = {
     val leftButtonsPanel = new JPanel(new FlowLayout)
-    initBottomButton(addButton, "Add", "Add a new child scene choice to the current scene before the selected position.")
-    initBottomButton(removeButton, "Remove", "Remove the child scene at the selected position.")
-    initBottomButton(moveUpButton, "Up", "Move the current scene up one row.")
-    initBottomButton(moveDownButton, "Down", "Move the current scene down one row.")
+    initBottomButton(addButton, "Add",
+      "Add a new child scene choice to the current scene before the selected position.")
+    initBottomButton(removeButton, "Remove",
+      "Remove the child scene at the selected position.")
+    initBottomButton(moveUpButton, "Up",
+      "Move the current scene up one row.")
+    initBottomButton(moveDownButton, "Down",
+      "Move the current scene down one row.")
     addButton.setIcon(GUIUtil.getIcon(StoryEditorDialog.IMAGE_PATH + "plus.gif"))
     removeButton.setIcon(GUIUtil.getIcon(StoryEditorDialog.IMAGE_PATH + "minus.gif"))
     moveUpButton.setIcon(GUIUtil.getIcon(StoryEditorDialog.IMAGE_PATH + "up_arrow.png"))
@@ -178,7 +182,8 @@ class StoryEditorDialog(val story: Story)
     if (source eq okButton) ok()
     else if (source eq addButton) addNewChoice(row)
     else if (source eq removeButton) { //System.out.println("remove row");
-      val answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete choice " + childModel.getValueAt(row, com.barrybecker4.puzzle.adventure.ui.editor.ChildTable.NAVIGATE_INDEX) + "?")
+      val answer = JOptionPane.showConfirmDialog(this,
+        "Are you sure you want to delete choice " + childModel.getValueAt(row, ChildTable.NAVIGATE_INDEX) + "?")
       if (answer == JOptionPane.YES_OPTION) {
         childModel.removeRow(row)
         story.getCurrentScene.deleteChoice(row)
@@ -208,8 +213,10 @@ class StoryEditorDialog(val story: Story)
     */
   override def tableButtonClicked(row: Int, col: Int, buttonId: String): Unit = {
     commitSceneChanges()
-    if (ChildTable.NAVIGATE_TO_CHILD_BUTTON_ID.equals(buttonId)) story.advanceScene(row)
-    else if (ParentTable.NAVIGATE_TO_PARENT_BUTTON_ID == buttonId) story.advanceToScene(parentScenes(row).name)
+    if (ChildTable.NAVIGATE_TO_CHILD_BUTTON_ID.equals(buttonId))
+      story.advanceScene(row)
+    else if (ParentTable.NAVIGATE_TO_PARENT_BUTTON_ID == buttonId)
+      story.advanceToScene(parentScenes(row).name)
     else assert(false, "unexpected id =" + buttonId)
     selectedChildRow = -1
     showContent()

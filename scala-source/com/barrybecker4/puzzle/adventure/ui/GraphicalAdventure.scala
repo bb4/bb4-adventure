@@ -105,9 +105,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
     mainPanel.repaint()
   }
 
-  /**
-    * Allow user to edit the current story if they know the password.
-    */
+  /** Allow user to edit the current story if they know the password. */
   def editStory(): Unit = { // show password dialog.
     val pwDlg = new PasswordDialog(GraphicalAdventureConsts.PASSWORD)
     val canceled = pwDlg.showDialog
@@ -145,9 +143,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
 
   override def getSize = new Dimension(1000, 700)
 
-  /**
-    * Entry point for applet.
-    */
+  /** Entry point for applet. */
   override def init(): Unit = {
     super.init()
     if (story == null) {

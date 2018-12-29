@@ -37,13 +37,11 @@ class ChoicePanel(val choices: ChoiceList) extends JPanel with ActionListener {
     this.repaint()
   }
 
-  def addSceneChangeListener(listener: SceneChangeListener): Unit = {
+  def addSceneChangeListener(listener: SceneChangeListener): Unit =
     sceneChangeListeners += listener
-  }
 
-  def removeSceneChangeListener(listener: SceneChangeListener): Unit = {
+  def removeSceneChangeListener(listener: SceneChangeListener): Unit =
     sceneChangeListeners -= listener
-  }
 
   private def addOption(index: Int, choice: Choice): Unit = {
     val choiceElement = new JPanel

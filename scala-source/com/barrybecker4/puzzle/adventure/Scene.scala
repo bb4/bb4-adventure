@@ -18,7 +18,7 @@ object Scene {
     var soundUrl: Option[URL] = None
     try {
       val soundPath = resourcePath + "sounds/" + name + ".au"
-      soundUrl = Some(FileUtil.getURL(soundPath, false))
+      soundUrl = Option(FileUtil.getURL(soundPath, false))
     } catch {
       case e: NoClassDefFoundError =>
         System.err.println("You are trying to load sound when only text scenes are supported.")
@@ -43,7 +43,7 @@ object Scene {
 }
 
 /**
-  * Every scene has a name, some text which describes the scene. and a list of
+  * Every scene has a name, some text which describes the scene, and a list of
   * choices which the actor chooses from to decide what to do next.
   * There is a "Return to last scene" choice automatically appended to all list of choices.
   * A scene may also have an associated sound and image.
@@ -64,7 +64,7 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
 
   def this(sceneNode: Node, resourcePath: String, isFirst: Boolean) {
     this(DomUtil.getAttribute(sceneNode, "name"),
-      sceneNode.getFirstChild.getTextContent, Some(new ChoiceList(sceneNode, isFirst)),
+      sceneNode.getFirstChild.getTextContent, Some(new ChoiceList(sceneNode)),
       loadSound(DomUtil.getAttribute(sceneNode, "name"), resourcePath),
       loadImage(DomUtil.getAttribute(sceneNode, "name"), resourcePath),
       isFirst)
@@ -130,7 +130,6 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
 
   /** @return true if there are more than one coice for the user to select from.*/
   def hasChoices: Boolean = choices.isDefined
-
   def getChoices: Seq[Choice] = choices.get.choices
 
   /** Prints what is missing if anything for this scene.
