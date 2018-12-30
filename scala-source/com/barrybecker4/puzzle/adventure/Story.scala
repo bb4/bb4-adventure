@@ -25,11 +25,11 @@ object Story {
     // default story
     var url = FileUtil.getURL(STORIES_ROOT + "ludlow/ludlowScript.xml")
     if (args.length == 1) {
-      System.out.println("args[0]=" + args(0))
+      println("args[0]=" + args(0))
       url = FileUtil.getURL(STORIES_ROOT + args(0))
     }
     else if (args.length > 1) {
-      System.out.println("importStoryDocument Args=" + args.mkString(", "))
+      println("importStoryDocument Args=" + args.mkString(", "))
       url = FileUtil.getURL(STORIES_ROOT + args(1))
     }
     //throw new IllegalStateException("bad url=" + url + "args="+ args);
@@ -85,20 +85,26 @@ class Story(val title: String = "", val name: String = "",
     initFromScenes(scenes)
   }
 
+  def this(story: Story) {
+    this(story.title, story.name, story.author, story.date)
+    currentScene = story.currentScene
+    initializeFrom(story)
+  }
+
   private[adventure] def initializeFrom(story: Story): Unit = {
     this.resourcePath = story.resourcePath
     if (sceneMap == null)
-      sceneMap = createSceneMap(0)
-    this.sceneMap.clear()
-    copySceneMap(story.getSceneMap)
-    this.advanceToScene(story.getCurrentScene.name)
-    this.visitedScenes = story.visitedScenes
+      sceneMap = createSceneMap()
+    sceneMap.clear()
+    sceneMap = copySceneMap(story.getSceneMap)
+    advanceToScene(story.getCurrentScene.name)
+    visitedScenes = story.visitedScenes
   }
 
   /** @return the title of the story */
   def getTitle: String = title
 
-  /** Return to the initial sceen from wherever they be now. */
+  /** Return to the initial scene from wherever they be now. */
   def resetToFirstScene(): Unit = {
     currentScene = sceneMap.values.iterator.next
   }
@@ -110,7 +116,7 @@ class Story(val title: String = "", val name: String = "",
     try {
       val document = createStoryDocument
       DomUtil.writeXMLFile(destFileName, document, "script.dtd")
-      System.out.println("done saving.")
+      println("done saving.")
     } catch {
       case e: Exception =>
         e.printStackTrace()
@@ -144,21 +150,24 @@ class Story(val title: String = "", val name: String = "",
   }
 
   /** must be ordered */
-  private def createSceneMap(size: Int) = new mutable.LinkedHashMap[String, Scene]()
+  private def createSceneMap() = new mutable.LinkedHashMap[String, Scene]()
 
-  private def copySceneMap(fromMap: mutable.LinkedHashMap[String, Scene]): Unit = {
+  private def copySceneMap(fromMap: mutable.LinkedHashMap[String, Scene]): mutable.LinkedHashMap[String, Scene] = {
+    println("now copying these scenes from fromMap: " + fromMap.keySet)
+    val map = new mutable.LinkedHashMap[String, Scene]()
     for (sceneName <- fromMap.keySet) {
       val scene = fromMap(sceneName)
       // add deep copies of the scene.
-      sceneMap.put(sceneName, new Scene(scene))
+      map.put(sceneName, new Scene(scene))
     }
+    map
   }
 
   private def initFromScenes(scenes: Array[Scene]): Unit = {
-    sceneMap = createSceneMap(scenes.length)
+    sceneMap = createSceneMap()
     for (scene <- scenes) {
       assert(scene.choices.isDefined)
-      sceneMap.put(scene.name, scene)
+      sceneMap += scene.name -> scene
     }
     verifyScenes()
     currentScene = scenes(0)
@@ -187,6 +196,8 @@ class Story(val title: String = "", val name: String = "",
   def advanceToScene(nextSceneName: String): Unit = {
     if (nextSceneName != null) {
       if (currentScene != null) visitedScenes :+= currentScene
+      assert(sceneMap.contains(nextSceneName), nextSceneName +
+        " not found among map keys: " + sceneMap.keySet.mkString(","))
       currentScene = sceneMap(nextSceneName)
       assert(currentScene != null, "Could not find a scene named '" + nextSceneName + "'.")
     }

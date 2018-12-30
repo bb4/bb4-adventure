@@ -28,7 +28,7 @@ class ChildTable(val choices: ChoiceList, var tableButtonListener: TableButtonLi
   extends TableBase {
 
   initColumnMeta(ChildTable.CHILD_COLUMN_NAMES)
-  initializeTable(choices.asInstanceOf[Seq[AnyRef]])
+  initializeTable(choices.choices.asInstanceOf[Seq[AnyRef]])
   getTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 
   def moveRow(oldRow: Int, newRow: Int): Int = {

@@ -110,7 +110,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
     val pwDlg = new PasswordDialog(GraphicalAdventureConsts.PASSWORD)
     val canceled = pwDlg.showDialog
     if (canceled) return
-    val storyEditor = new StoryEditorDialog(story)
+    val storyEditor = new StoryEditorDialog(new Story(story))
     val editingCanceled = storyEditor.showDialog
     if (!editingCanceled) { // show the edited version.
       story.initializeFrom(storyEditor.getEditedStory)
