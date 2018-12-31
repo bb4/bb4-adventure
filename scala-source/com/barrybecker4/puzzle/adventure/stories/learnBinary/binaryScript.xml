@@ -20,7 +20,9 @@
         <description>
         There are two hands.
         </description>
-        <choices/>
+        <choices>
+          <choice description="Go back" resultScene="how_many_fingers"/>
+        </choices>
     </scene>
     <scene name="ten_fingers">
         <description>
@@ -39,28 +41,38 @@
         <description>
         You are just being silly
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="ten_fingers"/>
+        </choices>
     </scene>
     <scene name="ten_representation">
         <description>
             Yes, "ten" is correct, but there are other ways as well.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="ten_fingers"/>
+        </choices>
     </scene>
     <scene name="X_representation">
         <description>
             Yes, X is a Roman Numeral that represents 10, but there are other ways as well.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="ten_fingers"/>
+        </choices>
     </scene>
     <scene name="hash_representation">
         <description>
             Yes, a sequence of 10 hash marks is a primitive way to represent 10, but there are other ways as well.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="ten_fingers"/>
+        </choices>
     </scene>
     <scene name="letters">
         <description>
+            Yes, all are valid.
+
             Suppose I write "The word ten". What are written words made up of?
         </description>
         <choices>
@@ -73,7 +85,9 @@
         <description>
             You could say that words are composed of symbols, but there is a more accurate answer. Which is it?
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="letters"/>
+        </choices>
     </scene>
     <scene name="letters.Letters">
         <description>
@@ -94,43 +108,57 @@
         <description>
             No, numbers are composed of digits.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="letters"/>
+        </choices>
     </scene>
     <scene name="num_letters.24">
         <description>
             No, that is too few.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="letters.Letters"/>
+        </choices>
     </scene>
     <scene name="num_letters.26">
         <description>
             Yes, that is correct. There are 26 letters in the English alphabet.
             ...
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="letters.Letters"/>
+        </choices>
     </scene>
     <scene name="num_letters.28">
         <description>
             No, that is too many.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="letters.Letters"/>
+        </choices>
     </scene>
     <scene name="num_letters.42">
         <description>
             No, that is too many.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="letters.Letters"/>
+        </choices>
     </scene>
     <scene name="num_letters.44">
         <description>
             No, that is too many.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="letters.Letters"/>
+        </choices>
     </scene>
     <scene name="num_letters.46">
         <description>
             No, that is too many.
         </description>
-        <choices/>
+        <choices>
+            <choice description="Go back" resultScene="letters.Letters"/>
+        </choices>
     </scene>
 </script>
