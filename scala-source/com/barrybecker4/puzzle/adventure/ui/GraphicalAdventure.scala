@@ -24,12 +24,8 @@ import java.io.File
   */
 object GraphicalAdventure extends App {
 
-  new GraphicalAdventure(Array(), getDefaultStory)
-
-  def getDefaultStory: Story = {
-    val document = Story.importStoryDocument(Array[String]())
-    new Story(document)
-  }
+  val document = Story.importStoryDocument(args)
+  new GraphicalAdventure(Array(), new Story(document))
 
   /** @param file name of the xml document to import.
     * @return the imported story xml document.
@@ -67,7 +63,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   private var storyEdited: Boolean = false
 
   def this() {
-    this(Array[String](), GraphicalAdventure.getDefaultStory)
+    this(Array[String](), new Story(Story.importStoryDocument(Array())))
   }
 
   override def getName: String = story.getTitle

@@ -40,6 +40,14 @@ task runTextBinaryTutorial(type: JavaExec) {
     args = ['learnBinary/binaryScript.xml']
 }
 
+task runBinaryTutorial(type: JavaExec) {
+    group = 'application'
+    main = 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure'
+    classpath = sourceSets.main.runtimeClasspath
+    args = ['learnBinary/binaryScript.xml']
+}
+
+
 ext.appMap = new LinkedHashMap()
 appMap.put('adventure',
     [include:['com/barrybecker4/puzzle/adventure/**'],
