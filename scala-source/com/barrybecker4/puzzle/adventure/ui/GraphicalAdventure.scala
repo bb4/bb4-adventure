@@ -85,8 +85,8 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
     this.story = story
     val storyPanel = new StoryPanel(this.story)
     // setup for initial scene
-    choicePanel = new ChoicePanel(this.story.getCurrentScene.choices.get)
-    this.story.getCurrentScene.playSound()
+    choicePanel = new ChoicePanel(story.getCurrentScene.choices.get)
+    story.getCurrentScene.playSound()
     choicePanel.addSceneChangeListener(this)
     mainPanel.add(storyPanel, BorderLayout.CENTER)
     mainPanel.add(choicePanel, BorderLayout.SOUTH)

@@ -27,12 +27,13 @@ class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDi
   this.setResizable(false)
   setTitle("New Scene Choice")
   this.setModal(true)
-  showContent()
+
   /** click this when done selecting a name for the destination scene. */
   private val okButton = new GradientButton
   private var sceneSelector: JComboBox[String] = _
   private var sceneTextInput: TextInput = _
   private var selectedDestinationScene: String = _
+  showContent()
 
   override def createDialogContent: JComponent = {
     val outerPanel = new JPanel(new BorderLayout)

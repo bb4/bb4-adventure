@@ -54,13 +54,14 @@ object Story {
   */
 class Story(val title: String = "", val name: String = "",
             val author: String = "", var date: String = "") {
+
   /** The scene where the user is now. */
   private var currentScene: Scene = _
   private var resourcePath: String = _
   /** A stack of currently visited scenes. There may be duplicates if you visit the same scene twice. */
   private var visitedScenes: Seq[Scene] = Seq()
   /** Maps scene name to the scene. Preserves order of scenes. */
-  private var sceneMap: mutable.LinkedHashMap[String, Scene] = _
+  private var sceneMap: SceneMap = new SceneMap()
 
   /** Construct an adventure given an xml document object
     * @param document containing the scene data
@@ -82,7 +83,8 @@ class Story(val title: String = "", val name: String = "",
       scenes(i) = new Scene(children.item(i), resourcePath, i == 0)
       i += 1
     }
-    initFromScenes(scenes)
+    sceneMap.initFromScenes(scenes)
+    currentScene = scenes(0)
   }
 
   def this(story: Story) {
@@ -93,10 +95,7 @@ class Story(val title: String = "", val name: String = "",
 
   private[adventure] def initializeFrom(story: Story): Unit = {
     this.resourcePath = story.resourcePath
-    if (sceneMap == null)
-      sceneMap = createSceneMap()
-    sceneMap.clear()
-    sceneMap = copySceneMap(story.getSceneMap)
+    sceneMap = story.getSceneMap.copy()
     advanceToScene(story.getCurrentScene.name)
     visitedScenes = story.visitedScenes
   }
@@ -106,8 +105,11 @@ class Story(val title: String = "", val name: String = "",
 
   /** Return to the initial scene from wherever they be now. */
   def resetToFirstScene(): Unit = {
-    currentScene = sceneMap.values.iterator.next
+    currentScene = sceneMap.getFirst
   }
+
+  def sceneNameChanged(oldSceneName: String, newSceneName: String): Unit =
+    sceneMap.sceneNameChanged(oldSceneName, newSceneName)
 
   /** Write the story document back to xml.
     * @param destFileName file to write to.
@@ -118,8 +120,7 @@ class Story(val title: String = "", val name: String = "",
       DomUtil.writeXMLFile(destFileName, document, "script.dtd")
       println("done saving.")
     } catch {
-      case e: Exception =>
-        e.printStackTrace()
+      case e: Exception => throw new IllegalStateException("Could not save. ", e)
     }
   }
 
@@ -134,8 +135,8 @@ class Story(val title: String = "", val name: String = "",
     rootElement.setAttribute("date", date)
     rootElement.setAttribute("title", title)
     document.appendChild(rootElement)
-    for (sceneName <- sceneMap.keySet) {
-      val scene: Scene = sceneMap(sceneName)
+    for (sceneName <- sceneMap.sceneNames) {
+      val scene: Scene = sceneMap.get(sceneName)
       scene.appendToDocument(document)
     }
     document
@@ -147,29 +148,14 @@ class Story(val title: String = "", val name: String = "",
   def this(scenes: Array[Scene]) {
     this()
     initFromScenes(scenes)
+    currentScene = scenes(0)
   }
 
   /** must be ordered */
   private def createSceneMap() = new mutable.LinkedHashMap[String, Scene]()
 
-  private def copySceneMap(fromMap: mutable.LinkedHashMap[String, Scene]): mutable.LinkedHashMap[String, Scene] = {
-    println("now copying these scenes from fromMap: " + fromMap.keySet)
-    val map = new mutable.LinkedHashMap[String, Scene]()
-    for (sceneName <- fromMap.keySet) {
-      val scene = fromMap(sceneName)
-      // add deep copies of the scene.
-      map.put(sceneName, new Scene(scene))
-    }
-    map
-  }
-
   private def initFromScenes(scenes: Array[Scene]): Unit = {
-    sceneMap = createSceneMap()
-    for (scene <- scenes) {
-      assert(scene.choices.isDefined)
-      sceneMap += scene.name -> scene
-    }
-    verifyScenes()
+    sceneMap.initFromScenes(scenes)
     currentScene = scenes(0)
     visitedScenes = Seq()
   }
@@ -197,22 +183,14 @@ class Story(val title: String = "", val name: String = "",
     if (nextSceneName != null) {
       if (currentScene != null) visitedScenes :+= currentScene
       assert(sceneMap.contains(nextSceneName), nextSceneName +
-        " not found among map keys: " + sceneMap.keySet.mkString(","))
-      currentScene = sceneMap(nextSceneName)
+        " not found among map keys: " + sceneMap)
+      currentScene = sceneMap.get(nextSceneName)
       assert(currentScene != null, "Could not find a scene named '" + nextSceneName + "'.")
     }
   }
 
   /** @return a list of all the scenes that led to the current scene. */
-  def getParentScenes: Seq[Scene] = {
-    var parentScenes: Seq[Scene] = Seq()
-    // loop through all the scenes, and if any of them have us as a child, add to the list
-    for (sceneName <- sceneMap.keySet) {
-      val s = sceneMap(sceneName)
-      if (s.isParentOf(currentScene)) parentScenes :+= s
-    }
-    parentScenes
-  }
+  def getParentScenes: Seq[Scene] = sceneMap.getParentScenes(currentScene)
 
   /** @param newSceneName      name of the new scene. It may or may not exist already.
     * @param choiceDescription text describing what you will do to go to the destination.
@@ -231,36 +209,11 @@ class Story(val title: String = "", val name: String = "",
     */
   def getCandidateDestinationSceneNames: Seq[String] = {
     var candidateSceneNames: Seq[String] = Seq()
-    for (sceneName <- sceneMap.keySet) {
+    for (sceneName <- sceneMap.sceneNames) {
       if (!getCurrentScene.choices.get.isDestination(sceneName)) candidateSceneNames :+= sceneName
     }
     candidateSceneNames
   }
 
-  def getAllSceneNames: Set[String] = sceneMap.keySet
-
-  /** make sure the set of scenes in internally consistent. */
-  private def verifyScenes(): Unit = {
-    for (scene <- sceneMap.values) {
-      scene.verifyMedia
-      for (choice <- scene.getChoices) {
-        val dest = choice.destinationScene
-        if (dest != null && sceneMap.get(choice.destinationScene) == null)
-          throw new IllegalStateException(
-            "No scene named " + choice.destinationScene + " desc=" + choice.description)
-      }
-    }
-  }
-
-  /** Since the name of one of the scenes has changed we need to update the sceneMap. */
-  def sceneNameChanged(oldSceneName: String, newSceneName: String): Unit = {
-    val changedScene = sceneMap.remove(oldSceneName)
-    //println("oldScene name=" + oldSceneName +
-    // "  newSceneName="+ newSceneName+"  changedScene=" + changedScene.getName())
-    sceneMap.put(newSceneName, changedScene.get)
-    // also need to update the references to named scenes in the choices.
-    for (sceneName <- sceneMap.keySet) {
-      sceneMap(sceneName).choices.get.sceneNameChanged(oldSceneName, newSceneName)
-    }
-  }
+  def getAllSceneNames: Set[String] = sceneMap.sceneNames
 }
