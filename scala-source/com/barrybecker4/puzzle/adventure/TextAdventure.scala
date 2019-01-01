@@ -32,7 +32,7 @@ object TextAdventure extends App {
     if (scene.hasChoices) {
       var nextInt = -1
       var valid = true
-      while (nextInt < 1) {
+      while (!scene.isValidChoice(nextInt)) {
         try
           nextInt = scanner.nextInt
         catch {
@@ -40,7 +40,7 @@ object TextAdventure extends App {
             valid = false
             scanner.next
         }
-        if (nextInt < 1 || !valid)
+        if (!scene.isValidChoice(nextInt) || !valid)
           println("You must enter a number from among the choices.")
       }
       sceneIndex = nextInt - 1

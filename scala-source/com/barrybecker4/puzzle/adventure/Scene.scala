@@ -97,6 +97,10 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
     rootElement.appendChild(sceneElem)
   }
 
+  def isValidChoice(i: Int): Boolean =
+    hasChoices && i > 0 && i <= getChoices.size
+
+
   def deleteChoice(choice: Int): Unit = choices.get.remove(choice)
 
   /** When changing the name we must call sceneNameChanged on the listeners that are interested in the change.
