@@ -47,10 +47,28 @@ task runBinaryTutorial(type: JavaExec) {
     args = ['learnBinary/binaryScript.xml']
 }
 
-
 ext.appMap = new LinkedHashMap()
 appMap.put('adventure',
     [include:['com/barrybecker4/puzzle/adventure/**'],
      exclude:['com/barrybecker4/puzzle/adventure/**/*.pdf']])
+
+
+// The application is deployed to /build/distributions. Run scripts are in the bin directory.
+// Additional script to run text version.
+// It can take parameters like 'ludlow/ludlowScript.xml' or 'learnBinary/binaryScript.xml'
+task createTextAdventureApp(type: CreateStartScripts) {
+    mainClassName = "com.barrybecker4.puzzle.adventure.TextAdventure"
+    classpath = startScripts.classpath
+    outputDir = startScripts.outputDir
+    applicationName = 'bb4-text-adventure'
+    defaultJvmOpts = ["-Xmx1024m"]
+}
+
+// add extra execution scripts
+applicationDistribution.into("bin") {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(createTextAdventureApp)
+    fileMode = 0755
+}
 
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4-publish.gradle'
