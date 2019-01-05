@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE script SYSTEM "http://barrybecker4.com/schema/script.dtd">
+<!DOCTYPE script SYSTEM "http://barrybecker4.com/bb4-projects/schema/script.dtd">
 <script author="Barry Becker" date="10/19/2006" name="ludlow" title="The Mansion of Professor Ludlow">
     <scene name="start">
         <description>

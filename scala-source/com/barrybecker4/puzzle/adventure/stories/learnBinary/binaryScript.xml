@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE script SYSTEM "http://barrybecker4.com/schema/script.dtd">
+<!DOCTYPE script SYSTEM "http://barrybecker4.com/bb4-projects/schema/script.dtd">
 <script author="Barry Becker" date="1/10/2014" name="learnBinary" title="A Tutorial for Binary Numbers Using the Socratic Method">
     <scene name="how_many_fingers">
         <description>
