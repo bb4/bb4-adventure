@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//{locale}">
+<html>
+<head>
+    <meta http-equiv="content-type"
+          content="text/html; charset=iso-8859-1">
+    <title>Adventure</title>
+    <meta name="author" content="Barry Becker">
+    <meta name="description" content="Adventure based programs">
+    <meta name="keywords" content="adventure simulation optimization barry becker">
+    <link rel="stylesheet" type="text/css" href="adventure_index.css" />
+</head>
+<body>
+<div id="intro">
+    <h1>Adventure</h1>
+    <p>
+    This project started as framework for building simple text based adventures.
+    The scenes were stored in an xml file.
+    I thought it would be cool to have images and sounds associated with the scenes, so I added a UI.
+    When editing the xml file got tedious, I decided to add the graphical editor.
+    You can edit the story if you know the password.
+    Next I would like to add support for keeping track of found items and hit points.
+    This story is based on a adventure in Dragon Magazine back in 1980.
+    This framework can also be used for educational purposes.
+    </p>
+    <p>
+    I used to deploy this application as applets or using WebStart, but that fell out of favor, so now I use
+        a <a href="bb4-adventure-1.5-SNAPSHOT.zip">zip file</a> that you can unpack and run locally.
+    After unpacking, go into the bin directory and run one of the following.
+    Note that if you are on Windows, you need to use the *.bat version of the script to run.
+    </p>
+    <br>
+</div>
+
+<div>
+    <table>
+        <tbody>
+        <tr>
+            <td style="vertical-align: top;"><h3>Text Adventure</h3></td>
+            <td>bb4-text-adventure 'ludlow/ludlowScript.xml'</td>
+            <td style="vertical-align: top;"></td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top;"><h3>Graphical Adventure</h3></td>
+            <td>bb4-adventure 'ludlow/ludlowScript.xml'</td>
+            <td style="vertical-align: top;">
+                <img src="adventure.jpg" title="adventure" alt="adventure" style="width: 285px; height: 185px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top;"><h3>Binary Tutorial (text version) </h3></td>
+            <td>bb4-text-adventure 'learnBinary/binaryScript.xml'</td>
+            <td style="vertical-align: top;"></td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top;"><h3>Binary Tutorial (graphical version)</h3></td>
+            <td>bb4-adventure 'learnBinary/binaryScript.xml'</td>
+            <td style="vertical-align: top;"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
