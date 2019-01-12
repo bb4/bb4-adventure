@@ -47,10 +47,11 @@ task runBinaryTutorial(type: JavaExec) {
     args = ['learnBinary/binaryScript.xml']
 }
 
-ext.appMap = new LinkedHashMap()
-appMap.put('adventure',
-    [include:['com/barrybecker4/puzzle/adventure/**'],
-     exclude:['com/barrybecker4/puzzle/adventure/**/*.pdf']])
+ext.jarMap = new LinkedHashMap()
+jarMap['adventure'] = [
+        include:['com/barrybecker4/puzzle/adventure/**'],
+        exclude:['com/barrybecker4/puzzle/adventure/**/*.pdf']
+]
 
 
 // The application is deployed to /build/distributions. Run scripts are in the bin directory.
@@ -73,3 +74,4 @@ applicationDistribution.into("bin") {
 
 
 apply from: 'https://raw.githubusercontent.com/bb4/bb4-common/master/bb4-publish.gradle'
+apply from: 'https://raw.githubusercontent.com/bb4/bb4-common/master/bb4-deploy.gradle'
