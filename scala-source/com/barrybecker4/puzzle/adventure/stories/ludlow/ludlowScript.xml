@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE script SYSTEM "http://barrybecker4.com/bb4-projects/schema/script.dtd">
+<!--DOCTYPE script SYSTEM "http://barrybecker4.com/bb4-projects/schema/script.dtd"-->
+<!DOCTYPE script SYSTEM "https://raw.githubusercontent.com/bb4/bb4-adventure/master/scala-source/com/barrybecker4/puzzle/adventure/script.dtd">
 <script author="Barry Becker" date="10/19/2006" name="ludlow" title="The Mansion of Professor Ludlow">
     <scene name="start">
         <description>
