@@ -21,8 +21,6 @@ class ParentTableModel(columnNames: Array[AnyRef], rowCount: Int)
       case list: List[_] => list(col).getClass
       case vec: java.util.Vector[_] => vec.get(col).getClass
     }
-    //val v = dataVector.elementAt(0).asInstanceOf[List[_]]
-    //v.get(col).getClass
   }
 
   override def isCellEditable(row: Int, column: Int): Boolean = column == ParentTable.NAVIGATE_INDEX

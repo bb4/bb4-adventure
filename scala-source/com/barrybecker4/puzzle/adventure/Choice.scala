@@ -8,7 +8,7 @@ import org.w3c.dom.Element
 
 
 /**
-  * A choice that you can make in a scene.
+  * A choice that you can make in a scene to select the next scene.
   * @author Barry Becker
   */
 case class Choice(description: String, var destinationScene: String) {
@@ -18,7 +18,7 @@ case class Choice(description: String, var destinationScene: String) {
       DomUtil.getAttribute(choiceNode, "resultScene"))
   }
 
-  /** Factory method to create a choice.
+  /** Factory method to create a choice DOM element.
     * @return the choice instance.
     */
   def createElement(document: Document): Element = {

@@ -10,7 +10,9 @@ import Story._
 
 
 object Story {
+
   private val ROOT_ELEMENT = "script"
+
   /** all the stories need to be stored at this location */
   val STORIES_ROOT = "com/barrybecker4/puzzle/adventure/stories/"
 
@@ -41,8 +43,8 @@ object Story {
 }
 
 /**
-  * Run your own adventure story.
-  * Just modify the script in SceneData and run.
+  * Run your own adventure story. It can actually represent anything that is in a graph.
+  * Just modify the script on disk and run. You can also edit with the StoryEditor UI.
   * This program is meant as a very simple example of how you can
   * approach creating a simple adventure game on a computer.
   * @param title  title of the story

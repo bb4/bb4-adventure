@@ -5,6 +5,7 @@ import scala.collection.{Set, mutable}
 
 
 /**
+  * Maps from a key to a Scene.
   * @author Barry Becker
   */
 class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHashMap[String, Scene]()) {
@@ -48,7 +49,7 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
     parentScenes
   }
 
-  /** make sure the set of scenes in internally consistent. */
+  /** make sure the set of scenes is internally consistent. */
   private def verifyScenes(): Unit = {
     for (scene <- map.values) {
       scene.verifyMedia
@@ -64,8 +65,6 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
   /** Since the name of one of the scenes has changed we need to update the sceneMap. */
   def sceneNameChanged(oldSceneName: String, newSceneName: String): Unit = {
     val changedScene = map.remove(oldSceneName)
-    //println("oldScene name=" + oldSceneName +
-    // "  newSceneName="+ newSceneName+"  changedScene=" + changedScene.getName())
     map.put(newSceneName, changedScene.get)
     // also need to update the references to named scenes in the choices.
     for (sceneName <- map.keySet) {

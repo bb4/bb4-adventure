@@ -79,7 +79,7 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
   }
 
   /** @param document the document to which to append this scene as a child. */
- def appendToDocument(document: Document): Unit = {
+  def appendToDocument(document: Document): Unit = {
     val sceneElem = document.createElement("scene")
     sceneElem.setAttribute("name", name)
     val descElem = document.createElement("description")
@@ -99,7 +99,6 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
 
   def isValidChoice(i: Int): Boolean =
     hasChoices && i > 0 && i <= getChoices.size
-
 
   def deleteChoice(choice: Int): Unit = choices.get.remove(choice)
 

@@ -3,17 +3,13 @@ package com.barrybecker4.puzzle.adventure.ui.editor
 
 import com.barrybecker4.puzzle.adventure.Scene
 import com.barrybecker4.puzzle.adventure.ui.StoryPanel
-import com.barrybecker4.ui.components.GradientButton
-import com.barrybecker4.ui.components.ScrollingTextArea
-import com.barrybecker4.ui.components.TextInput
+import com.barrybecker4.ui.components.{GradientButton, ImageListPanel, ScrollingTextArea, TextInput}
 import com.barrybecker4.ui.dialogs.ImagePreviewDialog
-import javax.swing.BorderFactory
-import javax.swing.JPanel
-import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.FlowLayout
+import javax.swing._
+import java.awt.{BorderLayout, Component, Dimension, FlowLayout}
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import java.awt.image.BufferedImage
 
 
 object SceneEditorPanel {
@@ -26,7 +22,7 @@ object SceneEditorPanel {
   * @author Barry Becker
   */
 class SceneEditorPanel(var scene: Scene) extends JPanel with ActionListener {
-  private var oldSceneName = scene.name
+  private val oldSceneName = scene.name
   private var showImageButton: GradientButton = _
   private var playSoundButton: GradientButton = _
   private var nameInput: TextInput = _
@@ -36,16 +32,27 @@ class SceneEditorPanel(var scene: Scene) extends JPanel with ActionListener {
 
   private[editor] def createUI(): Unit = {
     this.setLayout(new BorderLayout)
-    this.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 600))
+    //this.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 600))
     this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Edit current Scene"))
     nameInput = new TextInput("name:", scene.name)
-    nameInput.setColumns(50)
+    nameInput.setColumns(40)
+
     sceneText = new ScrollingTextArea
+    sceneText.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
     sceneText.setEditable(true)
     sceneText.setFont(StoryPanel.TEXT_FONT)
     sceneText.setText(scene.text)
-    add(nameInput, BorderLayout.NORTH)
-    add(sceneText, BorderLayout.CENTER)
+
+    val mainContent = new JPanel()
+    mainContent.setLayout(new BorderLayout)
+    mainContent.add(nameInput, BorderLayout.NORTH)
+    mainContent.add(sceneText, BorderLayout.CENTER)
+
+    add(mainContent, BorderLayout.CENTER)
+    if (scene.image.isDefined) {
+      val imageThumbnail = createImageThumbNail(scene.image.get)
+      add(imageThumbnail, BorderLayout.EAST)
+    }
     add(createMediaButtons, BorderLayout.SOUTH)
   }
 
@@ -63,6 +70,15 @@ class SceneEditorPanel(var scene: Scene) extends JPanel with ActionListener {
     buttonPanel.add(showImageButton)
     buttonPanel.add(playSoundButton)
     buttonPanel
+  }
+
+  private def createImageThumbNail(image: BufferedImage): JPanel = {
+    val imagePanel = new ImageListPanel
+    imagePanel.setBackground(this.getBackground)
+    imagePanel.setMaxNumSelections(1)
+    imagePanel.setPreferredSize(new Dimension(300, 400))
+    imagePanel.setSingleImage(image)
+    imagePanel
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
