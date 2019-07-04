@@ -12,7 +12,7 @@ import java.awt.Graphics
 
 object StoryPanel {
   val TEXT_FONT = new Font("Courier", Font.PLAIN, 12)
-  private val INITAL_LEFT_WIDTH = 600
+  private val INITIAL_LEFT_WIDTH = 600
 }
 
 /**
@@ -22,7 +22,7 @@ object StoryPanel {
   */
 class StoryPanel(var story: Story) extends JSplitPane {
   setContinuousLayout(true)
-  setDividerLocation(StoryPanel.INITAL_LEFT_WIDTH)
+  setDividerLocation(StoryPanel.INITIAL_LEFT_WIDTH)
   private var textArea = createTextArea
   private var imagePanel = createImagePanel
   add(imagePanel, JSplitPane.RIGHT)
@@ -34,7 +34,7 @@ class StoryPanel(var story: Story) extends JSplitPane {
     textArea.setWrapStyleWord(true)
     textArea.setLineWrap(true)
     textArea.setEditable(false)
-    textArea.setMinimumSize(new Dimension(StoryPanel.INITAL_LEFT_WIDTH / 2, 300))
+    textArea.setMinimumSize(new Dimension(StoryPanel.INITIAL_LEFT_WIDTH / 2, 300))
     textArea
   }
 

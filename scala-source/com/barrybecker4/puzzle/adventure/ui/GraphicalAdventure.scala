@@ -149,4 +149,3 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
     }
   }
 }
-
