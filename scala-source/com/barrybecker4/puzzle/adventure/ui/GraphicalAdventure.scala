@@ -63,7 +63,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   private var storyEdited: Boolean = false
 
   def this() {
-    this(Array[String](), new Story(Story.importStoryDocument(Array())))
+    this(Array[String](), new Story(Story.importStoryDocument(Array[String]())))
   }
 
   override def getName: String = story.getTitle

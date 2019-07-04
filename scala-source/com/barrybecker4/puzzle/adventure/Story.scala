@@ -22,19 +22,24 @@ object Story {
     * @return the loaded Document that contains the adventure.
     */
   def importStoryDocument(args: Array[String]): Document = {
+    if (args == null || args.isEmpty)
+      importStoryDocument()
+    else if (args.length == 1)
+      importStoryDocument(args(0))
+    else
+      importStoryDocument(args(0), args(1))
+  }
+
+  /**
+    * If args[0] does not have the name of the document to use, use a default.
+    * @param fileName the end of the file path. Something like "ludlow/ludlowScript.xml".
+    * @param fileRoot the beginning of the path. Something like "com/user/puzzle/adventure/stories/"
+    * @return the loaded Document that contains the adventure.
+    */
+  def importStoryDocument(fileName: String = "ludlow/ludlowScript.xml",
+                          fileRoot: String = STORIES_ROOT): Document = {
     var document: Document = null
-    assert(args != null)
-    // default story
-    var url = FileUtil.getURL(STORIES_ROOT + "ludlow/ludlowScript.xml")
-    if (args.length == 1) {
-      println("args[0]=" + args(0))
-      url = FileUtil.getURL(STORIES_ROOT + args(0))
-    }
-    else if (args.length > 1) {
-      println("importStoryDocument Args=" + args.mkString(", "))
-      url = FileUtil.getURL(STORIES_ROOT + args(1))
-    }
-    //throw new IllegalStateException("bad url=" + url + "args="+ args);
+    val url = FileUtil.getURL(fileRoot + fileName)
     println("about to parse url=" + url + "\n story file location")
     document = DomUtil.parseXML(url)
     //DomUtil.printTree(document, 0);
@@ -78,6 +83,10 @@ class Story(val title: String = "", val name: String = "",
 
     val root = document.getDocumentElement
     resourcePath = STORIES_ROOT + name + "/"
+
+    val schemaName: String = root.getTagName
+    println(s"schema name: ${root.getTagName}")
+
     val children = root.getChildNodes
     val scenes = new Array[Scene](children.getLength)
     var i = 0
