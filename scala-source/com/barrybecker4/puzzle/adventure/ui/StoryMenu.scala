@@ -80,8 +80,7 @@ class StoryMenu(var storyApp: GraphicalAdventure) extends JMenu("Story") with Ac
   }
 
   private def getDefaultDir = {
-    val defaultDir = FileUtil.getHomeDir + "source/" + Story.STORIES_ROOT
-    System.out.println("defaultDir = " + defaultDir)
+    val defaultDir = FileUtil.getHomeDir + "source/" + Story.DEFAULT_STORIES_ROOT
     new File(defaultDir)
   }
 

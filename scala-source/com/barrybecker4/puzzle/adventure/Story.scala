@@ -14,14 +14,14 @@ object Story {
   private val ROOT_ELEMENT = "script"
 
   /** all the stories need to be stored at this location */
-  val STORIES_ROOT = "com/barrybecker4/puzzle/adventure/stories/"
+  val DEFAULT_STORIES_ROOT = "com/barrybecker4/puzzle/adventure/stories/ludlow/"
 
   /**
     * If args[0] does not have the name of the document to use, use a default.
     * @param args command line args (0 or 1 if name of xml doc is specified.)
-    * @return the loaded Document that contains the adventure.
+    * @return (the loaded Document that contains the adventure, fileRoot).
     */
-  def importStoryDocument(args: Array[String]): Document = {
+  def importStoryDocument(args: Array[String]): (Document, String) = {
     if (args == null || args.isEmpty)
       importStoryDocument()
     else if (args.length == 1)
@@ -32,18 +32,36 @@ object Story {
 
   /**
     * If args[0] does not have the name of the document to use, use a default.
-    * @param fileName the end of the file path. Something like "ludlow/ludlowScript.xml".
-    * @param fileRoot the beginning of the path. Something like "com/user/puzzle/adventure/stories/"
-    * @return the loaded Document that contains the adventure.
+    * The media files are expected to be relative to the script file.
+    * @param fileName the end of the file path. Something like "ludlowScript.xml".
+    * @param fileRoot the beginning of the path. Something like "com/user/puzzle/adventure/stories/ludlow/"
+    * @return (the loaded Document that contains the adventure, resource root).
     */
-  def importStoryDocument(fileName: String = "ludlow/ludlowScript.xml",
-                          fileRoot: String = STORIES_ROOT): Document = {
+  def importStoryDocument(fileName: String = "ludlowScript.xml",
+                          fileRoot: String = DEFAULT_STORIES_ROOT): (Document, String) = {
     var document: Document = null
+    println("creating url from " + fileRoot + fileName)
     val url = FileUtil.getURL(fileRoot + fileName)
     println("about to parse url=" + url + "\n story file location")
     document = DomUtil.parseXML(url)
     //DomUtil.printTree(document, 0);
-    document
+    (document, fileRoot)
+  }
+
+  private def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene] = {
+    val root = document.getDocumentElement
+
+    val schemaName: String = root.getTagName
+    println(s"schema name: ${root.getTagName}")
+
+    val children = root.getChildNodes
+    val scenes = new Array[Scene](children.getLength)
+    var i = 0
+    while (i < children.getLength) {
+      scenes(i) = new Scene(children.item(i), resourcePath, i == 0)
+      i += 1
+    }
+    scenes
   }
 }
 
@@ -60,46 +78,42 @@ object Story {
   * @author Barry Becker
   */
 class Story(val title: String = "", val name: String = "",
-            val author: String = "", var date: String = "") {
+            val author: String = "", var date: String = "",
+            var resourcePath: String = "",
+            val scenes: Array[Scene]) {
 
+  assert(scenes.nonEmpty)
   /** The scene where the user is now. */
-  private var currentScene: Scene = _
-  private var resourcePath: String = _
+  private var currentScene: Scene = scenes(0)
   /** A stack of currently visited scenes. There may be duplicates if you visit the same scene twice. */
   private var visitedScenes: Seq[Scene] = Seq()
   /** Maps scene name to the scene. Preserves order of scenes. */
   private var sceneMap: SceneMap = new SceneMap()
+  sceneMap.initFromScenes(scenes)
 
   /** Construct an adventure given an xml document object
     * @param document containing the scene data
     */
-  def this(document: Document) {
+  def this(document: Document, resourcePath: String) {
     this(
       DomUtil.getAttribute(document.getDocumentElement, "title"),
       DomUtil.getAttribute(document.getDocumentElement, "name"),
       DomUtil.getAttribute(document.getDocumentElement, "author"),
       DomUtil.getAttribute(document.getDocumentElement, "date"),
+      resourcePath,
+      extractScenesFromDoc(document, resourcePath)
     )
+  }
 
-    val root = document.getDocumentElement
-    resourcePath = STORIES_ROOT + name + "/"
-
-    val schemaName: String = root.getTagName
-    println(s"schema name: ${root.getTagName}")
-
-    val children = root.getChildNodes
-    val scenes = new Array[Scene](children.getLength)
-    var i = 0
-    while (i < children.getLength) {
-      scenes(i) = new Scene(children.item(i), resourcePath, i == 0)
-      i += 1
-    }
-    sceneMap.initFromScenes(scenes)
-    currentScene = scenes(0)
+  /** Construct an adventure given an xml document object
+    * @param docAndPath (doc containing the scene data, resourcePath)
+    */
+  def this(docAndPath: (Document, String)) {
+    this(docAndPath._1, docAndPath._2)
   }
 
   def this(story: Story) {
-    this(story.title, story.name, story.author, story.date)
+    this(story.title, story.name, story.author, story.date, story.resourcePath, story.scenes)
     currentScene = story.currentScene
     initializeFrom(story)
   }
@@ -151,15 +165,6 @@ class Story(val title: String = "", val name: String = "",
       scene.appendToDocument(document)
     }
     document
-  }
-
-  /** Construct an adventure given a list of scenes.
-    * @param scenes array of scenes to use in this story.
-    */
-  def this(scenes: Array[Scene]) {
-    this()
-    initFromScenes(scenes)
-    currentScene = scenes(0)
   }
 
   /** must be ordered */

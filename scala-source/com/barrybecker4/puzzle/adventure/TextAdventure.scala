@@ -13,8 +13,7 @@ import java.util.Scanner
   */
 object TextAdventure extends App {
 
-  val document = Story.importStoryDocument(args)
-  val story = new Story(document)
+  val story = new Story(Story.importStoryDocument(args))
   val scanner = new Scanner(System.in).useDelimiter("\n")
   do {
     val currentScene = story.getCurrentScene

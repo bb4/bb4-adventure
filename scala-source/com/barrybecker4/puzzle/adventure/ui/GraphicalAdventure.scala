@@ -24,18 +24,7 @@ import java.io.File
   */
 object GraphicalAdventure extends App {
 
-  val document = Story.importStoryDocument(args)
-  new GraphicalAdventure(Array(), new Story(document))
-
-  /** @param file name of the xml document to import.
-    * @return the imported story xml document.
-    */
-  private def importStoryDocument(file: File): Document = {
-    var document: Document = null
-    // first try to load it as a file. If that doesn't work, try as a URL.
-    if (file.exists) document = DomUtil.parseXMLFile(file)
-    document
-  }
+  new GraphicalAdventure(Array(), new Story(Story.importStoryDocument(args)))
 }
 
 object GraphicalAdventureConsts {
@@ -119,7 +108,11 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   def isStoryEdited: Boolean = storyEdited
 
   def loadStory(file: File): Unit = {
-    val story = new Story(GraphicalAdventure.importStoryDocument(file))
+    println("parent = " + file.getParent)
+    val matchPrefix = "com" + File.separatorChar
+    val idx = file.getParent.indexOf(matchPrefix)
+    val folder = file.getParent.substring(idx)
+    val story = new Story(Story.importStoryDocument(file.getName, folder + File.separatorChar))
     setStory(story)
   }
 
