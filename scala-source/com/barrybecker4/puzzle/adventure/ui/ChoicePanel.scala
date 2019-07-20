@@ -1,8 +1,7 @@
 // Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui
 
-import com.barrybecker4.puzzle.adventure.Choice
-import com.barrybecker4.puzzle.adventure.ChoiceList
+import com.barrybecker4.puzzle.adventure.model.ChoiceList
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JButton
@@ -10,6 +9,8 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+
+import com.barrybecker4.puzzle.adventure.model.{Choice, ChoiceList}
 
 
 /**

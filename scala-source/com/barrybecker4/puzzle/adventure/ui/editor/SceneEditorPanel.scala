@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.Scene
 import com.barrybecker4.puzzle.adventure.ui.StoryPanel
 import com.barrybecker4.ui.components.{GradientButton, ImageListPanel, ScrollingTextArea, TextInput}
 import com.barrybecker4.ui.dialogs.ImagePreviewDialog
@@ -10,6 +9,8 @@ import java.awt.{BorderLayout, Component, Dimension, FlowLayout}
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.image.BufferedImage
+
+import com.barrybecker4.puzzle.adventure.model.Scene
 
 
 object SceneEditorPanel {

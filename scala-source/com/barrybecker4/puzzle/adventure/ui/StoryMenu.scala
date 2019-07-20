@@ -2,7 +2,6 @@
 package com.barrybecker4.puzzle.adventure.ui
 
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.puzzle.adventure.StoryImporter
 import com.barrybecker4.ui.file.ExtensionFileFilter
 import com.barrybecker4.ui.file.FileChooserUtil
 import javax.swing.BorderFactory
@@ -12,6 +11,8 @@ import javax.swing.JOptionPane
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.io.File
+
+import com.barrybecker4.puzzle.adventure.model.StoryImporter
 
 
 object StoryMenu {

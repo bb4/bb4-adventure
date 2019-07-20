@@ -1,8 +1,9 @@
-package com.barrybecker4.puzzle.adventure
+package com.barrybecker4.puzzle.adventure.model
 
+import com.barrybecker4.puzzle.adventure.model.ChoiceList._
 import org.w3c.dom.Node
+
 import scala.collection.mutable
-import ChoiceList._
 
 
 object ChoiceList {

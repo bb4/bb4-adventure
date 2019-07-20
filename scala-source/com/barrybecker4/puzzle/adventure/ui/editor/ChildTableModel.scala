@@ -1,10 +1,11 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.Scene
 import javax.swing.table.DefaultTableModel
+
 import scala.collection.mutable
 import ChildTable._
+import com.barrybecker4.puzzle.adventure.model.Scene
 
 
 /**

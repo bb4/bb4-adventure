@@ -1,13 +1,14 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui
 
-import com.barrybecker4.puzzle.adventure.Story
 import com.barrybecker4.ui.components.ImageListPanel
 import javax.swing.JSplitPane
 import javax.swing.JTextArea
 import java.awt.Dimension
 import java.awt.Font
 import java.awt.Graphics
+
+import com.barrybecker4.puzzle.adventure.model.Story
 
 
 object StoryPanel {

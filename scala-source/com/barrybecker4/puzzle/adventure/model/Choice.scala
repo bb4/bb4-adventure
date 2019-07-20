@@ -1,10 +1,8 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure
+package com.barrybecker4.puzzle.adventure.model
 
 import com.barrybecker4.common.xml.DomUtil
-import org.w3c.dom.Document
-import org.w3c.dom.Node
-import org.w3c.dom.Element
+import org.w3c.dom.{Document, Element, Node}
 
 
 /**

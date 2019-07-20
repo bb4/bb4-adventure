@@ -1,15 +1,15 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure
+package com.barrybecker4.puzzle.adventure.model
+
+import java.awt.image.BufferedImage
+import java.net.URL
 
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.common.xml.DomUtil
+import com.barrybecker4.puzzle.adventure.model.Scene._
 import com.barrybecker4.sound.SoundUtil
 import com.barrybecker4.ui.util.GUIUtil
-import org.w3c.dom.Document
-import org.w3c.dom.Node
-import java.awt.image.BufferedImage
-import java.net.URL
-import Scene._
+import org.w3c.dom.{Document, Node}
 
 
 object Scene {
@@ -47,7 +47,8 @@ object Scene {
   * choices which the actor chooses from to decide what to do next.
   * There is a "Return to last scene" choice automatically appended to all list of choices.
   * A scene may also have an associated sound and image.
-  * @param name name of the scene
+  * @param name name of the scene0452
+  *
   * @param text textual description of the scene
   * @param soundUrl optional URL to a sound for this scene
   * @param image optional image to display with this scene

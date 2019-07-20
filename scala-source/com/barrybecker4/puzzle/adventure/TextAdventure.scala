@@ -4,6 +4,8 @@ package com.barrybecker4.puzzle.adventure
 import java.util.InputMismatchException
 import java.util.Scanner
 
+import com.barrybecker4.puzzle.adventure.model.{Scene, StoryImporter}
+
 
 /**
   * Run your own adventure story.

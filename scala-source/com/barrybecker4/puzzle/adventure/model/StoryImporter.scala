@@ -1,11 +1,10 @@
 // Copyright by Barry G. Becker, 2018-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure
+package com.barrybecker4.puzzle.adventure.model
 
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.common.xml.DomUtil
-import com.barrybecker4.puzzle.adventure.StoryImporter._
 import org.w3c.dom.Document
-import scala.collection.{Set, mutable}
+import StoryImporter._
 
 
 object StoryImporter {

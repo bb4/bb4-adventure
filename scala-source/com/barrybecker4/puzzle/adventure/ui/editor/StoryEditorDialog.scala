@@ -1,8 +1,7 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.Story
-import com.barrybecker4.puzzle.adventure.Scene
+import com.barrybecker4.puzzle.adventure.model.Story
 import com.barrybecker4.ui.components.GradientButton
 import com.barrybecker4.ui.dialogs.AbstractDialog
 import com.barrybecker4.ui.table.TableButtonListener
@@ -22,6 +21,8 @@ import java.awt.FlowLayout
 import java.awt.Font
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+
+import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
 
 
 object StoryEditorDialog {

@@ -1,12 +1,13 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.Choice
-import com.barrybecker4.puzzle.adventure.ChoiceList
+import com.barrybecker4.puzzle.adventure.model.ChoiceList
 import com.barrybecker4.ui.table.{TableBase, TableButton, TableButtonListener, TableColumnMeta}
 import javax.swing.ListSelectionModel
+
 import scala.collection.Seq
 import ChildTable._
+import com.barrybecker4.puzzle.adventure.model.{Choice, ChoiceList}
 
 
 /**

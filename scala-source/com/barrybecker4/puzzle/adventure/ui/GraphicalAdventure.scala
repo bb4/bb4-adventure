@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui
 
-import com.barrybecker4.puzzle.adventure.{Story, StoryExporter, StoryImporter}
+import com.barrybecker4.puzzle.adventure.model.{StoryExporter, StoryImporter}
 import com.barrybecker4.puzzle.adventure.ui.editor.StoryEditorDialog
 import com.barrybecker4.ui.application.ApplicationApplet
 import com.barrybecker4.ui.dialogs.PasswordDialog
@@ -12,6 +12,8 @@ import javax.swing.JPanel
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.io.File
+
+import com.barrybecker4.puzzle.adventure.model.{Story, StoryExporter, StoryImporter}
 
 
 /**

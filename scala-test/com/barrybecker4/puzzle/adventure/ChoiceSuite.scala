@@ -1,5 +1,6 @@
 package com.barrybecker4.puzzle.adventure
 
+import com.barrybecker4.puzzle.adventure.model.Choice
 import org.scalatest.FunSuite
 
 class ChoiceSuite extends FunSuite {

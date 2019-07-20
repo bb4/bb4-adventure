@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2000-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure
+package com.barrybecker4.puzzle.adventure.model
 
 import scala.collection.Set
 

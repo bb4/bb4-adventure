@@ -1,14 +1,15 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.Scene
 import com.barrybecker4.ui.table.TableBase
 import com.barrybecker4.ui.table.TableButton
 import com.barrybecker4.ui.table.TableButtonListener
 import com.barrybecker4.ui.table.TableColumnMeta
+
 import scala.collection.Seq
 import javax.swing.table.DefaultTableModel
 import ParentTable._
+import com.barrybecker4.puzzle.adventure.model.Scene
 
 
 object ParentTable {
