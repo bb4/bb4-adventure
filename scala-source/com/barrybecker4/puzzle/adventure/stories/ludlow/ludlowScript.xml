@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--DOCTYPE script SYSTEM "http://barrybecker4.com/bb4-projects/schema/script.dtd"-->
 <!DOCTYPE script SYSTEM "https://raw.githubusercontent.com/bb4/bb4-adventure/master/scala-source/com/barrybecker4/puzzle/adventure/script.dtd">
 <script author="Barry Becker" date="10/19/2006" name="ludlow" title="The Mansion of Professor Ludlow">
     <scene name="start">
@@ -58,12 +57,11 @@ You find nothing in them except for leaves, dust, and 200 paperclips. ",
         </choices>
     </scene>
     <scene name="A.inside_entrance">
-        <description> The double door is unlocked and opens easily.
- The beam of your flashlight reveals an empty hallway with a mirror at the opposite end.
- There are openings that lead to rooms on the left and right.
- The hall has inch-thick red carpeting and walnut-paneled walls.
- The mirror at the end runs from the floor to the twenty-foot-high ceiling
- and covers the forty feet of wall section on that south face of the hall.
+        <description>The double door is unlocked and opens easily.
+The beam of your flashlight reveals an empty hallway with a mirror at the opposite end.
+There are openings that lead to rooms on the left and right.
+The hall has inch-thick red carpeting and walnut-paneled walls.
+The mirror at the end runs from the floor to the twenty-foot-high ceiling and covers the forty feet of wall section on that south face of the hall.
         </description>
         <choices>
             <choice description="Go through left (east) opening" resultScene="B.rat_room"/>
@@ -73,8 +71,7 @@ You find nothing in them except for leaves, dust, and 200 paperclips. ",
         </choices>
     </scene>
     <scene name="B.rat_room">
-        <description>The beams of the flashlights show a room paneled in redstained barn boards with a floor of the same substance.
-There is a couch in the northeast corner of the room and an opening out of theroom on the east wall.
+        <description>The beams of your flashlight show a room paneled in redstained barn boards with a floor of the same substance. There is a couch in the northeast corner of the room and an opening out of theroom on the east wall.
 
 There are leaves on the floor, and an old worn out couch in the north east corner.
 There is a musty smell to the room, and leaves are littered on the floor.

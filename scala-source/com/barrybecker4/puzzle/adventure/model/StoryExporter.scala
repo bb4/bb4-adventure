@@ -14,7 +14,8 @@ case class StoryExporter(story: Story) {
   def saveTo(destFileName: String): Unit = {
     try {
       val document = createStoryDocument
-      DomUtil.writeXMLFile(destFileName, document, story.rootElement + " .dtd")
+      // https://raw.githubusercontent.com/bb4/bb4-adventure/master/scala-source/com/barrybecker4/puzzle/adventure/
+      DomUtil.writeXMLFile(destFileName, document, story.rootElement + ".dtd")
       println("done saving.")
     } catch {
       case e: Exception => throw new IllegalStateException("Could not save. ", e)
