@@ -1,13 +1,11 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui
 
-import com.barrybecker4.common.xml.DomUtil
-import com.barrybecker4.puzzle.adventure.Story
+import com.barrybecker4.puzzle.adventure.{Story, StoryExporter, StoryImporter}
 import com.barrybecker4.puzzle.adventure.ui.editor.StoryEditorDialog
 import com.barrybecker4.ui.application.ApplicationApplet
 import com.barrybecker4.ui.dialogs.PasswordDialog
 import com.barrybecker4.ui.util.GUIUtil
-import org.w3c.dom.Document
 import javax.swing.JFrame
 import javax.swing.JMenuBar
 import javax.swing.JPanel
@@ -24,7 +22,8 @@ import java.io.File
   */
 object GraphicalAdventure extends App {
 
-  new GraphicalAdventure(Array(), new Story(Story.importStoryDocument(args)))
+  val theArgs = if (args == null) Array[String]() else args
+  new GraphicalAdventure(Array(), new StoryImporter(theArgs).getStory)
 }
 
 object GraphicalAdventureConsts {
@@ -52,7 +51,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   private var storyEdited: Boolean = false
 
   def this() {
-    this(Array[String](), new Story(Story.importStoryDocument(Array[String]())))
+    this(Array(), new StoryImporter(Array[String]()).getStory)
   }
 
   override def getName: String = story.getTitle
@@ -112,13 +111,13 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
     val matchPrefix = "com" + File.separatorChar
     val idx = file.getParent.indexOf(matchPrefix)
     val folder = file.getParent.substring(idx)
-    val story = new Story(Story.importStoryDocument(file.getName, folder + File.separatorChar))
+    val story = new StoryImporter(file.getName, folder + File.separatorChar).getStory
     setStory(story)
   }
 
   /** @param fPath fully qualified filename and path to save to.*/
   def saveStory(fPath: String): Unit = {
-    getStory.saveStoryDocument(fPath)
+    StoryExporter(getStory).saveTo(fPath)
     storyEdited = false
   }
 
@@ -136,8 +135,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   override def init(): Unit = {
     super.init()
     if (story == null) {
-      val document = Story.importStoryDocument(Array[String]())
-      val story = new Story(document)
+      val story = new StoryImporter(Array[String]()).getStory
       setStory(story)
     }
   }

@@ -2,7 +2,7 @@
 package com.barrybecker4.puzzle.adventure.ui
 
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.puzzle.adventure.Story
+import com.barrybecker4.puzzle.adventure.StoryImporter
 import com.barrybecker4.ui.file.ExtensionFileFilter
 import com.barrybecker4.ui.file.FileChooserUtil
 import javax.swing.BorderFactory
@@ -80,7 +80,7 @@ class StoryMenu(var storyApp: GraphicalAdventure) extends JMenu("Story") with Ac
   }
 
   private def getDefaultDir = {
-    val defaultDir = FileUtil.getHomeDir + "source/" + Story.DEFAULT_STORIES_ROOT
+    val defaultDir = FileUtil.getHomeDir + "source/" + StoryImporter.DEFAULT_STORIES_ROOT
     new File(defaultDir)
   }
 

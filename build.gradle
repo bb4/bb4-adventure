@@ -23,8 +23,8 @@ ext.appMap = new LinkedHashMap()
 appMap['adventure'] = [
         title: 'Ludlow Adventure',
         mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure',
-        command: "bb4-adventure 'ludlow/ludlowScript.xml'",
-        script: 'ludlow/ludlowScript.xml',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
+        script: 'ludlowScript.xml',
         description: 'Explore a haunted house.',
         longDescription: 'This started as a simple text based adventure. The scenes are stored in an xml file. ' +
             'I thought it would be cool to have images and sounds associated with the scenes, so I added a UI. ' +
@@ -36,8 +36,8 @@ appMap['adventure'] = [
 appMap['textAdventure'] = [
         title: 'Ludlow Text Adventure',
         mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
-        command: "bb4-text-adventure 'ludlow/ludlowScript.xml'",
-        script: 'ludlow/ludlowScript.xml',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
+        script: 'ludlowScript.xml',
         description: 'Explore a haunted house.',
         longDescription: 'The scenes are stored in an xml file. ' +
                 'This story is based on an adventure published by James M. Ward in Dragon Magazine back in 1980.'
@@ -45,8 +45,8 @@ appMap['textAdventure'] = [
 appMap['binaryTutorial'] = [
         title: 'Binary Tutorial',
         mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure',
-        command: "bb4-adventure 'learnBinary/binaryScript.xml'",
-        script: 'learnBinary/binaryScript.xml',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
+        script: 'binaryScript.xml',
         description: 'Learn about binary numbers.',
         longDescription: 'The same framework that is used to make adventure games ' +
                 'can also be used for pedagogical purposes. ' +
@@ -55,8 +55,8 @@ appMap['binaryTutorial'] = [
 appMap['textBinaryTutorial'] = [
         title: 'Binary Tutorial (text version)',
         mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
-        command: "bb4-text-adventure 'learnBinary/binaryScript.xml'",
-        script: 'learnBinary/binaryScript.xml',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
+        script: 'binaryScript.xml',
         description: 'Learn about binary numbers.',
         longDescription: 'The same framework that is used to make adventure games ' +
                 'can also be used for pedagogical purposes.'
@@ -71,7 +71,9 @@ appMap.each { appId, propMap ->
 
     def argsList = []
     if (propMap.containsKey('script'))
-        argsList = ["${propMap['script']}"]
+        argsList << "${propMap['script']}"
+    if (propMap.containsKey('resourcePath'))
+        argsList << "${propMap['resourcePath']}"
 
     tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
         group = 'application'
