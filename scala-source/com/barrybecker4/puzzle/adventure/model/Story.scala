@@ -8,6 +8,17 @@ import scala.collection.Set
   * Just modify the script on disk and run. You can also edit with the StoryEditor UI.
   * This program was originally meant as a very simple example of how you can
   * approach creating a simple adventure game on a computer, but its uses are much more general.
+  *
+  * Next steps
+  *
+  *  - In editor, add ability to show all paths from root to current scene without loops
+  *  -- in ui module, add ImageListsPanel.
+  *  -- create algorithm to generate all such paths from root using a priority queue. It will be a bit like A*.
+  *  -- add to scene editor
+  *  - point to aikido xml on disk and edit it
+  *  -- modify importer to read hierarchy. Probably need abstract factory to create correct kind of importer.
+  *  -- modify exporter to write hierarchy
+  *
   * @param title title of the story
   * @param name name of the story used as an identifier for by convention
   *             resolution of locations and things like that. e.g. "ludlow".
