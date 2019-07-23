@@ -5,8 +5,8 @@ import java.awt.event.ActionListener
 import java.awt.image.BufferedImage
 
 import com.barrybecker4.common.app.AppContext
-import com.barrybecker4.puzzle.adventure.model.Scene
-import com.barrybecker4.ui.components.ImageListPanel
+import com.barrybecker4.puzzle.adventure.model.{Scene, Story, UniquePathsFinder}
+import com.barrybecker4.ui.components.ImageListsScrollPanel
 import com.barrybecker4.ui.dialogs.AbstractDialog
 import com.barrybecker4.ui.util.{GUIUtil, ImageUtil}
 import javax.swing.{JComponent, JPanel}
@@ -15,6 +15,7 @@ import ShowUniquePathsDialog._
 
 object ShowUniquePathsDialog {
   val PLACEHOLDER_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 14)
+  val IMAGE_HT = 100
 }
 
 /**
@@ -23,29 +24,34 @@ object ShowUniquePathsDialog {
   *
   * @author Barry Becker
   */
-class ShowUniquePathsDialog(val currentScene: Scene, startScene: Scene)
+class ShowUniquePathsDialog(val currentScene: Scene, story: Story)
     extends AbstractDialog with ActionListener {
 
-  private val image =
-    if (currentScene.image.isEmpty) createPlaceholderImg(currentScene) else currentScene.image.get
+  private val pathsFinder = UniquePathsFinder(story)
+  private val paths = pathsFinder.findUniquePaths(currentScene)
+  //println(paths.mkString(", "))
+
+  private val image = getDisplayImage(currentScene)
 
   this.setResizable(true)
-  setTitle(AppContext.getLabel("IMAGE_PREVIEW"))
+  setTitle("All unique paths from the start") // AppContext.getLabel(...)
   this.setModal(true)
   showContent()
 
   override protected def createDialogContent: JComponent = {
     val mainPanel = new JPanel(new BorderLayout)
-    mainPanel.add(createImagePanel, BorderLayout.CENTER)
+    mainPanel.add(createImageListsPanel, BorderLayout.CENTER)
     mainPanel.add(createButtonsPanel, BorderLayout.SOUTH)
     mainPanel
   }
 
-  private def createImagePanel = {
-    val imagePanel = new ImageListPanel
-    imagePanel.setMaxNumSelections(1)
+  private def createImageListsPanel: JPanel = {
+    val imagePanel = new ImageListsScrollPanel(IMAGE_HT)
     imagePanel.setPreferredSize(new Dimension(700, 400))
-    imagePanel.setSingleImage(image)
+
+    val imageLists = paths.map(list => list.map(getDisplayImage))
+
+    imagePanel.setImageLists(imageLists)
     imagePanel
   }
 
@@ -55,6 +61,11 @@ class ShowUniquePathsDialog(val currentScene: Scene, startScene: Scene)
     initBottomButton(cancelButton, AppContext.getLabel("CANCEL"), "Cancel image prview")
     buttonsPanel.add(cancelButton)
     buttonsPanel
+  }
+
+  private def getDisplayImage(scene: Scene): BufferedImage = {
+    val img = scene.image
+    if (img.isDefined) img.get else createPlaceholderImg(scene)
   }
 
   private def createPlaceholderImg(scene: Scene): BufferedImage = {

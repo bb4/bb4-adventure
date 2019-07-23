@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.image.BufferedImage
 
-import com.barrybecker4.puzzle.adventure.model.Scene
+import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
 
 
 object SceneEditorPanel {
@@ -22,7 +22,7 @@ object SceneEditorPanel {
   * @param scene the scene to populate the editor with.
   * @author Barry Becker
   */
-class SceneEditorPanel(var scene: Scene, val startScene: Scene) extends JPanel with ActionListener {
+class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with ActionListener {
   private val oldSceneName = scene.name
   private var showImageButton: GradientButton = _
   private var playSoundButton: GradientButton = _
@@ -99,7 +99,7 @@ class SceneEditorPanel(var scene: Scene, val startScene: Scene) extends JPanel w
       }
       case psb if psb == playSoundButton => scene.playSound()
       case spb if spb == showPathsButton => {
-        val showUniquePathsDlg = new ShowUniquePathsDialog(scene, startScene)
+        val showUniquePathsDlg = new ShowUniquePathsDialog(scene, story)
         showUniquePathsDlg.showDialog
       }
     }

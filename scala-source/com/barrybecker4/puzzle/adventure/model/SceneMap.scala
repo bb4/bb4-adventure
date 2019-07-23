@@ -49,6 +49,10 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
     parentScenes
   }
 
+  def getChildScenes(scene: Scene): Seq[Scene] = {
+    scene.choices.get.choices.map(choice => this.get(choice.destinationScene))
+  }
+
   /** make sure the set of scenes is internally consistent. */
   private def verifyScenes(): Unit = {
     for (scene <- map.values) {
