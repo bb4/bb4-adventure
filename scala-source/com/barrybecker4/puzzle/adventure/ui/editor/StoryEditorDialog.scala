@@ -100,7 +100,7 @@ class StoryEditorDialog(val story: Story)
 
   private def createSceneEditingPanel = {
     val container = new JPanel(new BorderLayout)
-    sceneEditor = new SceneEditorPanel(story.getCurrentScene)
+    sceneEditor = new SceneEditorPanel(story.getCurrentScene, story.getFirstScene)
     container.add(sceneEditor, BorderLayout.CENTER)
     container.add(createChildTablePanel, BorderLayout.SOUTH)
     container

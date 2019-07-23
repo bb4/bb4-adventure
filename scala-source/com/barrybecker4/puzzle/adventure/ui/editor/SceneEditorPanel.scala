@@ -22,10 +22,11 @@ object SceneEditorPanel {
   * @param scene the scene to populate the editor with.
   * @author Barry Becker
   */
-class SceneEditorPanel(var scene: Scene) extends JPanel with ActionListener {
+class SceneEditorPanel(var scene: Scene, val startScene: Scene) extends JPanel with ActionListener {
   private val oldSceneName = scene.name
   private var showImageButton: GradientButton = _
   private var playSoundButton: GradientButton = _
+  private var showPathsButton: GradientButton = _
   private var nameInput: TextInput = _
   private var sceneText: ScrollingTextArea = _
   createUI()
@@ -62,14 +63,22 @@ class SceneEditorPanel(var scene: Scene) extends JPanel with ActionListener {
     */
   private def createMediaButtons = {
     val buttonPanel = new JPanel(new FlowLayout)
+
     showImageButton = new GradientButton("Image")
     showImageButton.addActionListener(this)
     showImageButton.setEnabled(scene.image != null)
+
     playSoundButton = new GradientButton("Sound")
     playSoundButton.addActionListener(this)
     playSoundButton.setEnabled(scene.hasSound)
+
+    showPathsButton = new GradientButton("Show paths")
+    showPathsButton.addActionListener(this)
+    showPathsButton.setEnabled(scene.image != null)
+
     buttonPanel.add(showImageButton)
     buttonPanel.add(playSoundButton)
+    buttonPanel.add(showPathsButton)
     buttonPanel
   }
 
@@ -83,12 +92,17 @@ class SceneEditorPanel(var scene: Scene) extends JPanel with ActionListener {
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
-    val source = e.getSource
-    if (source eq showImageButton) {
-      val imgPreviewDlg = new ImagePreviewDialog(scene.image.get)
-      imgPreviewDlg.showDialog
+    e.getSource match {
+      case ib if ib == showImageButton => {
+        val imgPreviewDlg = new ImagePreviewDialog(scene.image.get)
+        imgPreviewDlg.showDialog
+      }
+      case psb if psb == playSoundButton => scene.playSound()
+      case spb if spb == showPathsButton => {
+        val showUniquePathsDlg = new ShowUniquePathsDialog(scene, startScene)
+        showUniquePathsDlg.showDialog
+      }
     }
-    else if (source eq playSoundButton) scene.playSound()
   }
 
   def isSceneNameChanged: Boolean = !(oldSceneName == nameInput.getValue)

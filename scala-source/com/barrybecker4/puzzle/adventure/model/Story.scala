@@ -74,13 +74,8 @@ class Story(val title: String = "", val name: String = "",
   def sceneNameChanged(oldSceneName: String, newSceneName: String): Unit =
     sceneMap.sceneNameChanged(oldSceneName, newSceneName)
 
-  private def initFromScenes(scenes: Array[Scene]): Unit = {
-    sceneMap.initFromScenes(scenes)
-    currentScene = scenes(0)
-    visitedScenes = Seq()
-  }
-
   def getCurrentScene: Scene = currentScene
+  def getFirstScene: Scene = sceneMap.getFirst
   def isOver: Boolean = getCurrentScene == null
 
   /** Advance the story to the next scene based on the specified choice
