@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.io.File
 
-import com.barrybecker4.puzzle.adventure.model.StoryImporter
+import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
 
 
 object StoryMenu {

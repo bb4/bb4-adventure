@@ -1,10 +1,11 @@
 // Copyright by Barry G. Becker, 2018-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure.model
+package com.barrybecker4.puzzle.adventure.model.io
 
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.common.xml.DomUtil
+import com.barrybecker4.common.xml.{DomUtil, XmlErrorHandler}
+import com.barrybecker4.puzzle.adventure.model.io.StoryImporter._
+import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
 import org.w3c.dom.Document
-import StoryImporter._
 
 
 object StoryImporter {
@@ -12,20 +13,6 @@ object StoryImporter {
   /** all the stories need to be stored at this location */
   val DEFAULT_STORIES_ROOT = "com/barrybecker4/puzzle/adventure/stories/ludlow/"
   val DEFAULT_FILE = "ludlowScript.xml"
-
-  private def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene] = {
-    val root = document.getDocumentElement
-    println(s"schema name: ${root.getTagName}")
-
-    val children = root.getChildNodes
-    val scenes = new Array[Scene](children.getLength)
-    var i = 0
-    while (i < children.getLength) {
-      scenes(i) = new Scene(children.item(i), resourcePath, i == 0)
-      i += 1
-    }
-    scenes
-  }
 }
 
 /**
@@ -37,12 +24,16 @@ object StoryImporter {
   */
 case class StoryImporter(document: Document, resourcePath: String) {
 
-  private val story: Story = new Story(DomUtil.getAttribute(document.getDocumentElement, "title"),
-    DomUtil.getAttribute(document.getDocumentElement, "name"),
-    DomUtil.getAttribute(document.getDocumentElement, "author"),
-    DomUtil.getAttribute(document.getDocumentElement, "date"),
-    resourcePath, document.getDocumentElement.getTagName,
-    extractScenesFromDoc(document, resourcePath))
+  private val schemaType = document.getDocumentElement.getTagName
+
+  private val story: Story = schemaType match {
+    case XmlScriptImporter.DTD =>
+      XmlScriptImporter(document, resourcePath).getStory
+    case XmlHierarchyImporter.DTD =>
+      XmlHierarchyImporter(document, resourcePath).getStory
+    case _ =>
+      throw new IllegalArgumentException("Unexpected dtd: " + schemaType)
+  }
 
   /** Construct an adventure given an xml document object
     * @param docAndPath (doc containing the scene data, resourcePath)

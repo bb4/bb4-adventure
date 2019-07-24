@@ -8,7 +8,7 @@ version = '1.6-SNAPSHOT'
 apply from: 'https://raw.githubusercontent.com/bb4/bb4-common/master/bb4.gradle'
 
 project.archivesBaseName = 'bb4-adventure'
-mainClassName = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure"
+mainClassName = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp"
 
 
 dependencies {
@@ -22,7 +22,7 @@ dependencies {
 ext.appMap = new LinkedHashMap()
 appMap['adventure'] = [
         title: 'Ludlow Adventure',
-        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
         resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
         script: 'ludlowScript.xml',
         description: 'Explore a haunted house.',
@@ -44,7 +44,7 @@ appMap['textAdventure'] = [
 ]
 appMap['binaryTutorial'] = [
         title: 'Binary Tutorial',
-        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
         resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
         script: 'binaryScript.xml',
         description: 'Learn about binary numbers.',
@@ -65,7 +65,7 @@ appMap['textBinaryTutorial'] = [
 
 appMap.each { appId, propMap ->
 
-    def mainClass = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure"
+    def mainClass = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp"
     if (propMap.containsKey('mainClass'))
         mainClass = propMap['mainClass']
 
