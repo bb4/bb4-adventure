@@ -74,7 +74,7 @@ class ShowUniquePathsDialog(val currentScene: Scene, story: Story)
     g.setPaintMode()
     g.setFont(PLACEHOLDER_FONT)
     g.setColor(Color.YELLOW)
-    g.drawString(currentScene.name, 10, 80)
+    g.drawString(scene.name, 10, 80)
     placeHolderImg
   }
 }

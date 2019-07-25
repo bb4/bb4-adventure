@@ -4,11 +4,12 @@ package com.barrybecker4.puzzle.adventure.ui
 import com.barrybecker4.ui.components.ImageListPanel
 import javax.swing.JSplitPane
 import javax.swing.JTextArea
-import java.awt.Dimension
-import java.awt.Font
-import java.awt.Graphics
+import java.awt.{Color, Dimension, Font, Graphics}
+import java.awt.image.BufferedImage
 
-import com.barrybecker4.puzzle.adventure.model.Story
+import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
+import com.barrybecker4.puzzle.adventure.ui.editor.ShowUniquePathsDialog.PLACEHOLDER_FONT
+import com.barrybecker4.ui.util.ImageUtil
 
 
 object StoryPanel {
@@ -50,6 +51,20 @@ class StoryPanel(var story: Story) extends JSplitPane {
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
     textArea.setText(story.getCurrentScene.text)
-    imagePanel.setSingleImage(story.getCurrentScene.image.get)
+
+    val scene = story.getCurrentScene
+    val img = if (scene.image.isDefined) scene.image.get
+              else createPlaceholderImg(scene)
+    imagePanel.setSingleImage(img)
+  }
+
+  private def createPlaceholderImg(scene: Scene): BufferedImage = {
+    val placeHolderImg = ImageUtil.createCompatibleImage(200, 100)
+    val g = placeHolderImg.createGraphics()
+    g.setPaintMode()
+    g.setFont(PLACEHOLDER_FONT)
+    g.setColor(Color.YELLOW)
+    g.drawString(scene.name, 10, 80)
+    placeHolderImg
   }
 }

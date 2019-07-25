@@ -45,8 +45,7 @@ object Scene {
   * choices which the actor chooses from to decide what to do next.
   * There is a "Return to last scene" choice automatically appended to all list of choices.
   * A scene may also have an associated sound and image.
-  * @param name name of the scene0452
-  *
+  * @param name name of the scene
   * @param text textual description of the scene
   * @param soundUrl optional URL to a sound for this scene
   * @param image optional image to display with this scene
@@ -111,6 +110,9 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
     * @return false if something is missing.
     */
   def verifyMedia: Boolean = {
+    if (image == null) {
+      throw new IllegalStateException("Image is null for " + this.name)
+    }
     if (image.isDefined || !hasSound) {
       System.out.print("scene: " + name)
       if (image == null) System.out.print(" missing image")

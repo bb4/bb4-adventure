@@ -56,7 +56,7 @@ case class StoryImporter(document: Document, resourcePath: String) {
   }
 
   def this(file: File) {
-    this(DomUtil.parseXMLFile(file), file.getParent)
+    this(DomUtil.parseXMLFile(file), file.getParent + File.separator)
   }
 
   /**
