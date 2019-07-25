@@ -45,9 +45,9 @@ class ShowUniquePathsDialog(val currentScene: Scene, story: Story)
     val imagePanel = new ImageListsScrollPanel(IMAGE_HT)
     imagePanel.setPreferredSize(new Dimension(700, 400))
 
-    val imageLists = paths.map(list => list.map(_.getImage))
+    val imageLists = paths.map(list => list.map(scene => (scene.getImage, scene.name)))
 
-    imagePanel.setImageLists(imageLists)
+    imagePanel.setImageListsWithTips(imageLists)
     imagePanel
   }
 
