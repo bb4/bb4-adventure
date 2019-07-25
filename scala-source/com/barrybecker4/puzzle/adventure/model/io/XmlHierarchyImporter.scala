@@ -113,17 +113,9 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) {
     */
   private def getChoices(children: NodeList): Seq[Choice] = {
     var choices: Seq[Choice] = Seq()
-    if (children.getLength > 1) {
-      val choicesNode = children.item(1)
-      val choiceList = choicesNode.getChildNodes
-      val numChoices = choiceList.getLength
-      choices = Seq()
-      var i = 0
-      while (i < numChoices) {
-        assert(choiceList.item(i) != null)
-        choices :+= createChoice(choiceList.item(i))
-        i += 1
-      }
+    for (i <- 0 until children.getLength) {
+      val child = children.item(i)
+      choices :+= createChoice(child)
     }
     choices
   }

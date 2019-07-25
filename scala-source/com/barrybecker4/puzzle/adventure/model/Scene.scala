@@ -1,17 +1,21 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.model
 
+import java.awt.{Color, Font}
 import java.awt.image.BufferedImage
 import java.net.URL
+
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.puzzle.adventure.model.Scene._
 import com.barrybecker4.sound.SoundUtil
-import com.barrybecker4.ui.util.GUIUtil
+import com.barrybecker4.ui.util.{GUIUtil, ImageUtil}
 
 
 object Scene {
 
-   def loadSound(name: String, resourcePath: String): Option[URL] = {
+  val PLACEHOLDER_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 12)
+
+  def loadSound(name: String, resourcePath: String): Option[URL] = {
     var soundUrl: Option[URL] = None
     try {
       val soundPath = resourcePath + "sounds/" + name + ".au"
@@ -41,6 +45,10 @@ object Scene {
 }
 
 /**
+  *
+  *  - add ttips to unique paths
+  *  - export hierarchy xml
+  *
   * Every scene has a name, some text which describes the scene, and a list of
   * choices which the actor chooses from to decide what to do next.
   * There is a "Return to last scene" choice automatically appended to all list of choices.
@@ -92,6 +100,20 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
 
   def playSound(): Unit = {
     if (hasSound) SoundUtil.playSound(soundUrl.get)
+  }
+
+  def getImage: BufferedImage = {
+     if (image.isDefined) image.get else createPlaceholderImg()
+  }
+
+  private def createPlaceholderImg(): BufferedImage = {
+    val placeHolderImg = ImageUtil.createCompatibleImage(200, 100)
+    val g = placeHolderImg.createGraphics()
+    g.setPaintMode()
+    g.setFont(PLACEHOLDER_FONT)
+    g.setColor(Color.YELLOW)
+    g.drawString(name, 10, 50)
+    placeHolderImg
   }
 
   /** @param choice navigate to the scene indicated by this choice.
