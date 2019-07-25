@@ -1,8 +1,9 @@
 // Copyright by Barry G. Becker, 2018-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.model.io
 
+import java.io.File
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.common.xml.{DomUtil, XmlErrorHandler}
+import com.barrybecker4.common.xml.DomUtil
 import com.barrybecker4.puzzle.adventure.model.io.StoryImporter._
 import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
 import org.w3c.dom.Document
@@ -19,11 +20,11 @@ object StoryImporter {
   * Import a story from an XML document.
   * The XML document can either use script.dtd or hierarchy.dtd.
   * @param document containing the scene data
-  *
   * @author Barry Becker
   */
 case class StoryImporter(document: Document, resourcePath: String) {
 
+  println("The resource root is : " + resourcePath)
   private val schemaType = document.getDocumentElement.getTagName
 
   private val story: Story = schemaType match {
@@ -52,6 +53,10 @@ case class StoryImporter(document: Document, resourcePath: String) {
   def this(fileName: String = DEFAULT_FILE,
     fileRoot: String = DEFAULT_STORIES_ROOT) {
     this(DomUtil.parseXML(FileUtil.getURL(fileRoot + fileName)), fileRoot)
+  }
+
+  def this(file: File) {
+    this(DomUtil.parseXMLFile(file), file.getParent)
   }
 
   /**

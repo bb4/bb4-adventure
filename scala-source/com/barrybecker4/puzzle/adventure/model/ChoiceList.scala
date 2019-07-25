@@ -1,33 +1,7 @@
 package com.barrybecker4.puzzle.adventure.model
 
-import com.barrybecker4.puzzle.adventure.model.ChoiceList._
-import org.w3c.dom.Node
-
 import scala.collection.mutable
 
-
-object ChoiceList {
-
-  /** @return extracted choices from a sceneNode */
-  private def getChoices(sceneNode: Node): Seq[Choice] = {
-    // if there are choices they will be the second element (right after description).
-    val children = sceneNode.getChildNodes
-    var choices: Seq[Choice] = Seq()
-    if (children.getLength > 1) {
-      val choicesNode = children.item(1)
-      val choiceList = choicesNode.getChildNodes
-      val numChoices = choiceList.getLength
-      choices = Seq()
-      var i = 0
-      while (i < numChoices) {
-        assert(choiceList.item(i) != null)
-        choices :+= new Choice(choiceList.item(i))
-        i += 1
-      }
-    }
-    choices
-  }
-}
 
 /**
   * A list of choices that you can make in a scene.
@@ -38,11 +12,6 @@ class ChoiceList(var choices: Seq[Choice]) {
   /** @param scene use the choices from this scene to initialize from. */
   def this(scene: Scene) {
     this(scene.getChoices)
-  }
-
-  /** @param sceneNode to initialize from. */
-  def this(sceneNode: Node) {
-    this(getChoices(sceneNode))
   }
 
   /** @param sceneName sceneName to look for as a destination.

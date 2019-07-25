@@ -11,10 +11,6 @@ import scala.collection.Set
   *
   * Next steps
   *
-  *  - In editor, add ability to show all paths from root to current scene without loops
-  *  -- in ui module, add ImageListsPanel.
-  *  -- create algorithm to generate all such paths from root using a priority queue. It will be a bit like A*.
-  *  -- add to scene editor
   *  - point to aikido xml on disk and edit it
   *  -- modify importer to read hierarchy. Probably need abstract factory to create correct kind of importer.
   *  -- modify exporter to write hierarchy
@@ -25,14 +21,14 @@ import scala.collection.Set
   * @param author person who created the story document.
   * @param date date story was created.
   * @param resourcePath where the images and sounds will come from
-  * @param rootElement the root tag name. Either script or hierarchy depending on which sort of XML dtd we have.
+  * @param rootTag the root tag name. Either script or hierarchy depending on which sort of XML dtd we have.
   *                    This is used for exporting, and determining of cycles are allowed.
   * @param scenes the array of scenes that can be used to construct the scene map
   * @author Barry Becker
   */
 class Story(val title: String = "", val name: String = "",
             val author: String = "", var date: String = "",
-            var resourcePath: String = "", val rootElement: String,
+            var resourcePath: String = "", val rootTag: String,
             val scenes: Array[Scene]) {
 
   assert(scenes.nonEmpty)
@@ -49,7 +45,7 @@ class Story(val title: String = "", val name: String = "",
   sceneMap.initFromScenes(scenes)
 
   def this(story: Story) {
-    this(story.title, story.name, story.author, story.date, story.resourcePath, story.rootElement, story.scenes)
+    this(story.title, story.name, story.author, story.date, story.resourcePath, story.rootTag, story.scenes)
     currentScene = story.currentScene
     initializeFrom(story)
   }

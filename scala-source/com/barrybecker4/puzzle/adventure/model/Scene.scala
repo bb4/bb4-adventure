@@ -3,22 +3,19 @@ package com.barrybecker4.puzzle.adventure.model
 
 import java.awt.image.BufferedImage
 import java.net.URL
-
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.common.xml.DomUtil
 import com.barrybecker4.puzzle.adventure.model.Scene._
 import com.barrybecker4.sound.SoundUtil
 import com.barrybecker4.ui.util.GUIUtil
-import org.w3c.dom.{Document, Node}
 
 
 object Scene {
 
-  private def loadSound(name: String, resourcePath: String): Option[URL] = {
+   def loadSound(name: String, resourcePath: String): Option[URL] = {
     var soundUrl: Option[URL] = None
     try {
       val soundPath = resourcePath + "sounds/" + name + ".au"
-      soundUrl = Option(FileUtil.getURL(soundPath, false))
+      soundUrl = Option(FileUtil.getURL(soundPath, failIfNotFound = false))
     } catch {
       case e: NoClassDefFoundError =>
         System.err.println("You are trying to load sound when only text scenes are supported.")
@@ -26,7 +23,7 @@ object Scene {
     soundUrl
   }
 
-  private def loadImage(name: String, resourcePath: String): Option[BufferedImage] = {
+  def loadImage(name: String, resourcePath: String): Option[BufferedImage] = {
     var image: Option[BufferedImage] = None
     val imagePath = resourcePath + "images/" + name + ".jpg"
     try {
@@ -64,39 +61,12 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
     this(name, text, None, loadSound(name, resourcePath), loadImage(name, "name"))
   }
 
-  def this(sceneNode: Node, resourcePath: String, isFirst: Boolean) {
-    this(DomUtil.getAttribute(sceneNode, "name"),
-      sceneNode.getFirstChild.getTextContent, Some(new ChoiceList(sceneNode)),
-      loadSound(DomUtil.getAttribute(sceneNode, "name"), resourcePath),
-      loadImage(DomUtil.getAttribute(sceneNode, "name"), resourcePath),
-      isFirst)
-  }
-
   /** Copy constructor.
     * @param scene the scene to initialize from.
     */
   def this(scene: Scene) {
     this(scene.name, scene.text, Some(new ChoiceList(scene)),
       scene.soundUrl, scene.image, scene.isFirst)
-  }
-
-  /** @param document the document to which to append this scene as a child. */
-  def appendToDocument(document: Document): Unit = {
-    val sceneElem = document.createElement("scene")
-    sceneElem.setAttribute("name", name)
-    val descElem = document.createElement("description")
-    descElem.setTextContent(text)
-    sceneElem.appendChild(descElem)
-    val choicesElem = document.createElement("choices")
-    sceneElem.appendChild(choicesElem)
-    var i = 0
-    while (i < choices.get.size) {
-      val choice: Choice = getChoices(i)
-      choicesElem.appendChild(choice.createElement(document))
-      i += 1
-    }
-    val rootElement = document.getDocumentElement
-    rootElement.appendChild(sceneElem)
   }
 
   def isValidChoice(i: Int): Boolean =

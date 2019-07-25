@@ -2,12 +2,51 @@
 package com.barrybecker4.puzzle.adventure.model.io
 
 import com.barrybecker4.common.xml.DomUtil
-import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
-import org.w3c.dom.Document
-import XmlHierarchyImporter.DTD
+import com.barrybecker4.puzzle.adventure.model.{Choice, ChoiceList, Scene, Story}
+import org.w3c.dom.{Document, Node}
+import com.barrybecker4.puzzle.adventure.model.Scene.{loadImage, loadSound}
+import XmlHierarchyImporter._
 
 object XmlHierarchyImporter {
   val DTD = "hierarchy"
+
+  // TODO: this needs to be updated for hierarchy doc
+  def createScene(sceneNode: Node, resourcePath: String, isFirst: Boolean): Scene = {
+    val name = DomUtil.getAttribute(sceneNode, "name")
+
+    new Scene(name,
+      sceneNode.getFirstChild.getTextContent,
+      Some(new ChoiceList(getChoices(sceneNode))),
+      loadSound(name, resourcePath),
+      loadImage(name, resourcePath),
+      isFirst)
+  }
+
+  /** if there are choices they will be the second element (right after description).
+    * @return extracted choices from a sceneNode.
+    */
+  private def getChoices(sceneNode: Node): Seq[Choice] = {
+    val children = sceneNode.getChildNodes
+    var choices: Seq[Choice] = Seq()
+    if (children.getLength > 1) {
+      val choicesNode = children.item(1)
+      val choiceList = choicesNode.getChildNodes
+      val numChoices = choiceList.getLength
+      choices = Seq()
+      var i = 0
+      while (i < numChoices) {
+        assert(choiceList.item(i) != null)
+        choices :+= createChoice(choiceList.item(i))
+        i += 1
+      }
+    }
+    choices
+  }
+
+  private def createChoice(choiceNode: Node): Choice = {
+    Choice(DomUtil.getAttribute(choiceNode, "description"),
+      DomUtil.getAttribute(choiceNode, "resultScene"))
+  }
 }
 
 /**
@@ -36,7 +75,7 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) {
     val scenes = new Array[Scene](children.getLength)
     var i = 0
     while (i < children.getLength) {
-      scenes(i) = new Scene(children.item(i), resourcePath, i == 0)
+      scenes(i) = createScene(children.item(i), resourcePath, i == 0)
       i += 1
     }
     scenes

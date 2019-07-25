@@ -61,7 +61,15 @@ appMap['textBinaryTutorial'] = [
         longDescription: 'The same framework that is used to make adventure games ' +
                 'can also be used for pedagogical purposes.'
 ]
-
+appMap['aikidoEditor'] = [
+        title: 'Aikido Editor',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.AikidoEditor',
+        resourcePath: '../../bb4-aikido-app/deployment/',
+        script: 'techniques.xml',
+        description: 'Edit library of aikido techniques for builder application.',
+        longDescription: 'The same framework that is used to make adventure games ' +
+                'can also be used for editing aikido techniques.'
+]
 
 appMap.each { appId, propMap ->
 
