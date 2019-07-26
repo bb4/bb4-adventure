@@ -5,24 +5,25 @@ import com.barrybecker4.common.xml.DomUtil
 import com.barrybecker4.puzzle.adventure.model.{Choice, Scene, Story}
 import org.w3c.dom.{Document, Element}
 
-
-class XmlHierarchyExporter(story: Story) {
-
-  /** Write the story document back to xml.
-    * @param destFileName file to write to.
-    */
-  def saveTo(destFileName: String): Unit = {
-    try {
-      val document = createStoryDocument
-      DomUtil.writeXMLFile(destFileName, document, story.rootTag + ".dtd")
-      println("done saving.")
-    } catch {
-      case e: Exception => throw new IllegalStateException("Could not save. ", e)
-    }
-  }
+/**
+  * Export to a structure like this:
+  * <node id="yonkyo_entrance" label="yonkyo entrance" description="foo">
+  *   <node id="yonkyo_ura" label="yonkyo ura">
+  *     <node id="yonkyo_pin_standing" label="yonkyo pin (standing)"/>
+  *     </node>
+  *   <node id="yonkyo_omote" label="yonkyo omote">
+  *     <use ref="yonkyo_pin_standing" />
+  *   </node>
+  *   <use ref="sankyo_like_continuance_omote"/>
+  * </node>
+  * Note that "use" nodes refer to existing nodes in the hierarchy
+  * Note that the description is optional. Use label if not specified.
+  * @param story the story to export to XML format with "hierarchy" dtd.
+  */
+class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
 
   /** @return the story document based on the current state of the story. */
-  private def createStoryDocument = {
+  override protected def createStoryDocument: Document = {
     val document = DomUtil.createNewDocument
     val rootElement = document.createElement(story.rootTag)
     rootElement.setAttribute("author", story.author)
@@ -36,7 +37,6 @@ class XmlHierarchyExporter(story: Story) {
     }
     document
   }
-
 
   /** @param document the document to which to append this scene as a child. */
   private def appendSceneToDocument(document: Document, scene: Scene): Unit = {

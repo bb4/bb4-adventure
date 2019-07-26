@@ -28,7 +28,7 @@ object XmlHierarchyImporter {
   * @param document containing the scene data
   * @author Barry Becker
   */
-case class XmlHierarchyImporter(document: Document, resourcePath: String) {
+case class XmlHierarchyImporter(document: Document, resourcePath: String) extends XmlImporter {
 
   private var idToLabelMap = Map[String, String]()
 
@@ -59,7 +59,7 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) {
     * @param resourcePath where the media is
     * @return all the scenes in a flat array
     */
-  private def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene] = {
+  protected def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene] = {
     val root = document.getDocumentElement
     val children = root.getChildNodes
     val scenes = new ArrayBuffer[Scene]()

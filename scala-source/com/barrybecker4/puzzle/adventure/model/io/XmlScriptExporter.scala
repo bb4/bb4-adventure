@@ -6,22 +6,10 @@ import com.barrybecker4.puzzle.adventure.model.{Choice, Scene, Story}
 import org.w3c.dom.{Document, Element}
 
 
-class XmlScriptExporter(story: Story) {
-
-  /** Write the story document back to xml.
-    * @param destFileName file to write to.
-    */
-  def saveTo(destFileName: String): Unit = {
-    try {
-      val document = createStoryDocument
-      DomUtil.writeXMLFile(destFileName, document, story.rootTag + ".dtd")
-    } catch {
-      case e: Exception => throw new IllegalStateException("Could not save. ", e)
-    }
-  }
+class XmlScriptExporter(story: Story) extends XmlExporter(story) {
 
   /** @return the story document based on the current state of the story. */
-  private def createStoryDocument = {
+  override protected def createStoryDocument: Document = {
     val document = DomUtil.createNewDocument
     val rootElement = document.createElement(story.rootTag)
     rootElement.setAttribute("author", story.author)

@@ -55,7 +55,7 @@ object XmlScriptImporter {
   * @param document containing the scene data
   * @author Barry Becker
   */
-case class XmlScriptImporter(document: Document, resourcePath: String) {
+case class XmlScriptImporter(document: Document, resourcePath: String) extends XmlImporter {
 
   private val story: Story = new Story(
     DomUtil.getAttribute(document.getDocumentElement, "title"),
@@ -67,7 +67,7 @@ case class XmlScriptImporter(document: Document, resourcePath: String) {
 
   def getStory: Story = story
 
-  private def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene] = {
+  protected def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene] = {
     val root = document.getDocumentElement
     val children = root.getChildNodes
     val scenes = new Array[Scene](children.getLength)
