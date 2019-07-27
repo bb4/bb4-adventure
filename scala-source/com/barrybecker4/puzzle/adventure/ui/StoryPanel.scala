@@ -46,7 +46,7 @@ class StoryPanel(var story: Story) extends JSplitPane {
   /** Render the Environment on the screen. */
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
-    textArea.setText(story.getCurrentScene.text)
+    textArea.setText(story.getCurrentScene.description)
 
     val scene = story.getCurrentScene
     imagePanel.setSingleImage(scene.getImage)

@@ -43,7 +43,7 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
     sceneText.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
     sceneText.setEditable(true)
     sceneText.setFont(StoryPanel.TEXT_FONT)
-    sceneText.setText(scene.text)
+    sceneText.setText(scene.description)
 
     val mainContent = new JPanel()
     mainContent.setLayout(new BorderLayout)
@@ -93,15 +93,13 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
 
   override def actionPerformed(e: ActionEvent): Unit = {
     e.getSource match {
-      case ib if ib == showImageButton => {
+      case ib if ib == showImageButton =>
         val imgPreviewDlg = new ImagePreviewDialog(scene.image.get)
         imgPreviewDlg.showDialog
-      }
       case psb if psb == playSoundButton => scene.playSound()
-      case spb if spb == showPathsButton => {
+      case spb if spb == showPathsButton =>
         val showUniquePathsDlg = new ShowUniquePathsDialog(scene, story)
         showUniquePathsDlg.showDialog
-      }
     }
   }
 
@@ -112,6 +110,6 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
   /** Persist the scene changes to the story. */
   def doSave(): Unit = {
     if (isSceneNameChanged) scene.setName(nameInput.getValue)
-    scene.text = sceneText.getText
+    scene.description = sceneText.getText
   }
 }

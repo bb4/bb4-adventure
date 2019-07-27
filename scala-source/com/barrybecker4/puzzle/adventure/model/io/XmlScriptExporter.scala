@@ -31,7 +31,7 @@ class XmlScriptExporter(story: Story) extends XmlExporter(story) {
     val name = scene.name
     sceneElem.setAttribute("name", name)
     val descElem = document.createElement("description")
-    descElem.setTextContent(scene.text)
+    descElem.setTextContent(scene.description)
     sceneElem.appendChild(descElem)
     val choicesElem = document.createElement("choices")
     sceneElem.appendChild(choicesElem)

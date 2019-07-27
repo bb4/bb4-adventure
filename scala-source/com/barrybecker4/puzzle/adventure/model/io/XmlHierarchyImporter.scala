@@ -68,7 +68,7 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
     // child at the root, add a fake parent for those nodes.
     if (children.getLength > 1) {
       val rootNode = new Scene(FAKE_ROOT,
-        "-", Some(new ChoiceList(getChoices(children))),
+        "-", None, Some(new ChoiceList(getChoices(children))),
         None, None,
         true)
       scenes.append(rootNode)
@@ -90,13 +90,15 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
                            scenes: ArrayBuffer[Scene], isFirst: Boolean) {
     // first append the root node
     val name = DomUtil.getAttribute(sceneNode, "id")
+    val label = DomUtil.getAttribute(sceneNode, "label")
     val rootScene = new Scene(name,
       getNodeDesc(sceneNode),
+      Some(label),
       Some(new ChoiceList(getChoices(sceneNode.getChildNodes))),
       loadSound(name, resourcePath),
       loadImage(name, resourcePath),
       isFirst)
-    idToLabelMap += name -> DomUtil.getAttribute(sceneNode, "label")
+    idToLabelMap += name -> label
     scenes.append(rootScene)
 
     // then append all of its children

@@ -4,7 +4,6 @@ package com.barrybecker4.puzzle.adventure.model
 import java.awt.{Color, Font}
 import java.awt.image.BufferedImage
 import java.net.URL
-
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.puzzle.adventure.model.Scene._
 import com.barrybecker4.sound.SoundUtil
@@ -45,34 +44,33 @@ object Scene {
 }
 
 /**
-  *
-  *  - add ttips to unique paths
-  *  - export hierarchy xml
-  *
   * Every scene has a name, some text which describes the scene, and a list of
   * choices which the actor chooses from to decide what to do next.
   * There is a "Return to last scene" choice automatically appended to all list of choices.
   * A scene may also have an associated sound and image.
-  * @param name name of the scene
-  * @param text textual description of the scene
+  * @param name id/name of the scene
+  * @param description textual description of the scene
+  * @param label optional label for the scene
   * @param soundUrl optional URL to a sound for this scene
   * @param image optional image to display with this scene
   * @param isFirst if true, then this is the first scene in the story
   * @author Barry Becker
   */
-class Scene(var name: String, var text: String, val choices: Option[ChoiceList] = None,
+class Scene(var name: String, var description: String, val label: Option[String] = None,
+            val choices: Option[ChoiceList] = None,
             val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None,
             val isFirst: Boolean = false) {
 
-  def this(name: String, text: String, resourcePath: String) {
-    this(name, text, None, loadSound(name, resourcePath), loadImage(name, "name"))
+  def this(name: String, description: String, resourcePath: String) {
+    this(name, description, None, None,
+      loadSound(name, resourcePath), loadImage(name, "name"))
   }
 
   /** Copy constructor.
     * @param scene the scene to initialize from.
     */
   def this(scene: Scene) {
-    this(scene.name, scene.text, Some(new ChoiceList(scene)),
+    this(scene.name, scene.description, scene.label, Some(new ChoiceList(scene)),
       scene.soundUrl, scene.image, scene.isFirst)
   }
 
@@ -81,7 +79,8 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
 
   def deleteChoice(choice: Int): Unit = choices.get.remove(choice)
 
-  /** When changing the name we must call sceneNameChanged on the listeners that are interested in the change.
+  /** When changing the name we must call sceneNameChanged on
+    * the listeners that are interested in the change.
     * @param name new scene name
     */
   def setName(name: String): Unit = {
@@ -124,7 +123,7 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
     getChoices(choice).destinationScene
   }
 
-  /** @return true if there are more than one coice for the user to select from.*/
+  /** @return true if there are more than one choice for the user to select from. */
   def hasChoices: Boolean = choices.isDefined
   def getChoices: Seq[Choice] = choices.get.choices
 
@@ -146,7 +145,7 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
   }
 
   def print: String = {
-    var s: String = s"\n $text\n"
+    var s: String = s"\n $description\n"
     if (choices.isDefined) {
       s += choices.get.choices.zipWithIndex.map {
         case (c, i) => (i + 1) + ") " + c.description

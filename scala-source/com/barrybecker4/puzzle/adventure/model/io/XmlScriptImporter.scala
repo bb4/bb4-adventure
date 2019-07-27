@@ -15,7 +15,7 @@ object XmlScriptImporter {
     val name = DomUtil.getAttribute(sceneNode, "name")
 
     new Scene(name,
-      sceneNode.getFirstChild.getTextContent,
+      sceneNode.getFirstChild.getTextContent, None,
       Some(new ChoiceList(getChoices(sceneNode))),
       loadSound(name, resourcePath),
       loadImage(name, resourcePath),
