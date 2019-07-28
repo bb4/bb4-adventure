@@ -219,7 +219,7 @@ class StoryEditorDialog(val story: Story)
       story.advanceScene(row)
     else if (ParentTable.NAVIGATE_TO_PARENT_BUTTON_ID == buttonId)
       story.advanceToScene(parentScenes(row).name)
-    else assert(false, "unexpected id =" + buttonId)
+    else assert(assertion = false, "unexpected id =" + buttonId)
     selectedChildRow = -1
     showContent()
   }
@@ -240,7 +240,7 @@ class StoryEditorDialog(val story: Story)
   }
 
   /** Show a dialog that allows selecting the new child scene destination.
-    * This will be either an exisiting scene or a new one.
+    * This will be either an existing scene or a new one.
     * A new row is automatically added to the table.
     * @param newRow row of the new choice in the child table.
     */

@@ -72,7 +72,9 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
     map.put(newSceneName, changedScene.get)
     // also need to update the references to named scenes in the choices.
     for (sceneName <- map.keySet) {
-      map(sceneName).choices.get.sceneNameChanged(oldSceneName, newSceneName)
+      val choices = map(sceneName).choices
+      if (choices.isDefined) choices.get.sceneNameChanged(oldSceneName, newSceneName)
+      else println("No choices defined for scene: " + sceneName)
     }
   }
 }

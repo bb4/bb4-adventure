@@ -2,10 +2,9 @@
 package com.barrybecker4.puzzle.adventure.ui.editor
 
 import javax.swing.table.DefaultTableModel
-
 import scala.collection.mutable
 import ChildTable._
-import com.barrybecker4.puzzle.adventure.model.Scene
+import com.barrybecker4.puzzle.adventure.model.{Choice, Scene}
 
 
 /**
@@ -58,4 +57,11 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
   }
 
   override def isCellEditable(row: Int, column: Int) = true
+
+  override def setValueAt(aValue: Any, rowIndex: Int, columnIndex: Int): Unit = {
+    assert(columnIndex == CHOICE_DESCRIPTION_INDEX)
+    val rowVector = dataVector.elementAt(rowIndex).asInstanceOf[java.util.Vector[String]]
+    rowVector.set(columnIndex, aValue.asInstanceOf[String])
+    fireTableCellUpdated(rowIndex, columnIndex)
+  }
 }

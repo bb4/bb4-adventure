@@ -37,7 +37,7 @@ object Scene {
         System.err.println("You are trying to load image when only text scenes are supported. " +
           "If you need this to work, add the jai library to your classpath.")
       case ise: IllegalStateException =>
-        System.err.println("Could not load image from " + imagePath)
+        System.err.println("Could not load image from: " + imagePath)
     }
     image
   }
@@ -56,7 +56,7 @@ object Scene {
   * @param isFirst if true, then this is the first/root scene in the story
   * @author Barry Becker
   */
-class Scene(var name: String, var description: String, val label: Option[String] = None,
+class Scene(var name: String, var description: String, var label: Option[String] = None,
             val choices: Option[ChoiceList] = None,
             val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None,
             val isFirst: Boolean = false) {
@@ -92,7 +92,7 @@ class Scene(var name: String, var description: String, val label: Option[String]
     */
   def isParentOf(scene: Scene): Boolean = {
     val sName = scene.name
-    choices.get.isDestination(sName)
+    choices.isDefined && choices.get.isDestination(sName)
   }
 
   def hasSound: Boolean = soundUrl.isDefined
@@ -125,7 +125,9 @@ class Scene(var name: String, var description: String, val label: Option[String]
 
   /** @return true if there are more than one choice for the user to select from. */
   def hasChoices: Boolean = choices.isDefined
-  def getChoices: Seq[Choice] = choices.get.choices
+
+  def getChoices: Seq[Choice] =
+    if (choices.isDefined) choices.get.choices else Seq[Choice]()
 
   /** Prints what is missing, if anything, for this scene.
     * @return false if something is missing.

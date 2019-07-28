@@ -1,10 +1,8 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.model.ChoiceList
 import com.barrybecker4.ui.table.{TableBase, TableButton, TableButtonListener, TableColumnMeta}
 import javax.swing.ListSelectionModel
-
 import scala.collection.Seq
 import ChildTable._
 import com.barrybecker4.puzzle.adventure.model.{Choice, ChoiceList}
@@ -59,11 +57,12 @@ class ChildTable(val choices: ChoiceList, var tableButtonListener: TableButtonLi
     navigateCol.setCellEditor(navCellEditor)
     navigateCol.setPreferredWidth(200)
     navigateCol.setMaxWidth(400)
-    columnMeta(ChildTable.CHOICE_DESCRIPTION_INDEX).setPreferredWidth(500)
+    columnMeta(CHOICE_DESCRIPTION_INDEX).setPreferredWidth(500)
   }
 
   override def createTableModel(columnNames: Array[String]) =
     new ChildTableModel(columnNames.asInstanceOf[Array[AnyRef]], 0)
 
-  private[editor] def getChildTableModel = table.getModel.asInstanceOf[ChildTableModel]
+  private[editor] def getChildTableModel =
+    table.getModel.asInstanceOf[ChildTableModel]
 }

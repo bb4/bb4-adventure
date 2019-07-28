@@ -9,7 +9,6 @@ import java.awt.{BorderLayout, Component, Dimension, FlowLayout}
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.image.BufferedImage
-
 import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
 
 
@@ -28,27 +27,36 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
   private var playSoundButton: GradientButton = _
   private var showPathsButton: GradientButton = _
   private var nameInput: TextInput = _
-  private var sceneText: ScrollingTextArea = _
+  private var labelInput: TextInput = _
+  private var sceneDescription: ScrollingTextArea = _
   createUI()
 
 
   private[editor] def createUI(): Unit = {
     this.setLayout(new BorderLayout)
-    //this.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 600))
     this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Edit current Scene"))
+
+    val topInputs = new JPanel(new BorderLayout)
     nameInput = new TextInput("name:", scene.name)
     nameInput.setColumns(40)
+    topInputs.add(nameInput, BorderLayout.NORTH)
 
-    sceneText = new ScrollingTextArea
-    sceneText.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
-    sceneText.setEditable(true)
-    sceneText.setFont(StoryPanel.TEXT_FONT)
-    sceneText.setText(scene.description)
+    if (scene.label.isDefined) {
+      labelInput = new TextInput("label:", scene.label.get)
+      labelInput.setColumns(45)
+      topInputs.add(labelInput, BorderLayout.CENTER)
+    }
+
+    sceneDescription = new ScrollingTextArea
+    sceneDescription.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
+    sceneDescription.setEditable(true)
+    sceneDescription.setFont(StoryPanel.TEXT_FONT)
+    sceneDescription.setText(scene.description)
 
     val mainContent = new JPanel()
     mainContent.setLayout(new BorderLayout)
-    mainContent.add(nameInput, BorderLayout.NORTH)
-    mainContent.add(sceneText, BorderLayout.CENTER)
+    mainContent.add(topInputs, BorderLayout.NORTH)
+    mainContent.add(sceneDescription, BorderLayout.CENTER)
 
     add(mainContent, BorderLayout.CENTER)
     if (scene.image.isDefined) {
@@ -110,6 +118,9 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
   /** Persist the scene changes to the story. */
   def doSave(): Unit = {
     if (isSceneNameChanged) scene.setName(nameInput.getValue)
-    scene.description = sceneText.getText
+    scene.description = sceneDescription.getText
+    if (scene.label.isDefined) {
+      scene.label = Some(labelInput.getValue)
+    }
   }
 }
