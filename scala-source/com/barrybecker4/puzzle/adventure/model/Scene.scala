@@ -48,12 +48,12 @@ object Scene {
   * choices which the actor chooses from to decide what to do next.
   * There is a "Return to last scene" choice automatically appended to all list of choices.
   * A scene may also have an associated sound and image.
-  * @param name id/name of the scene
+  * @param name unique id/name of the scene. No spaces should be in it.
   * @param description textual description of the scene
   * @param label optional label for the scene
   * @param soundUrl optional URL to a sound for this scene
   * @param image optional image to display with this scene
-  * @param isFirst if true, then this is the first scene in the story
+  * @param isFirst if true, then this is the first/root scene in the story
   * @author Barry Becker
   */
 class Scene(var name: String, var description: String, val label: Option[String] = None,
@@ -127,7 +127,7 @@ class Scene(var name: String, var description: String, val label: Option[String]
   def hasChoices: Boolean = choices.isDefined
   def getChoices: Seq[Choice] = choices.get.choices
 
-  /** Prints what is missing if anything for this scene.
+  /** Prints what is missing, if anything, for this scene.
     * @return false if something is missing.
     */
   def verifyMedia: Boolean = {

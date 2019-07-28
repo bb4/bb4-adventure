@@ -38,21 +38,23 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
   }
 
   /**
-    * Export to a structure like this:
-    * * <node id="yonkyo_entrance" label="yonkyo entrance" description="foo">
-    * *   <node id="yonkyo_ura" label="yonkyo ura">
-    * *     <node id="yonkyo_pin_standing" label="yonkyo pin (standing)"/>
-    * *     </node>
-    * *   <node id="yonkyo_omote" label="yonkyo omote">
-    * *     <use ref="yonkyo_pin_standing" />
-    * *   </node>
-    * *   <use ref="sankyo_like_continuance_omote"/>
-    * * </node>
+    * Export to a structure containing nodes like this:
+    * :
+    * <node id="yonkyo_entrance" label="yonkyo entrance" description="foo">
+    *   <node id="yonkyo_ura" label="yonkyo ura">
+    *     <node id="yonkyo_pin_standing" label="yonkyo pin (standing)"/>
+    *     </node>
+    *   <node id="yonkyo_omote" label="yonkyo omote">
+    *     <use ref="yonkyo_pin_standing" />
+    *   </node>
+    *   <use ref="sankyo_like_continuance_omote"/>
+    * </node>
+    * :
     * * Note that "use" nodes refer to existing nodes in the hierarchy
     * * Note that the description is optional. Use label if not specified.
     *
-    * // for each scene, recursively create child nodes corresponding to choices
-    * //   if a scene has already been added earlier, add a "ref" node for it
+    * For each scene, recursively create child nodes corresponding to choices.
+    * if a scene has already been added earlier, add a "use" node for it
     *
     * @param parentElement the parent to add child scenes to
     * @param document the document to which to append this scene as a child.
@@ -66,18 +68,10 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
     val sceneMap = story.getSceneMap
 
     if (visitedScenes.contains(scene)) {
-      val refElem = document.createElement("use")
-      refElem.setAttribute("ref", scene.name)
-      parentElement.appendChild(refElem)
-    } else {
-      val sceneElem = document.createElement("node")
-      val name = scene.name
-      sceneElem.setAttribute("id", name)
-      if (scene.label.isEmpty) {
-        throw new IllegalStateException("Could not find label for scene " + name)
-      } else sceneElem.setAttribute("label", scene.label.get)
-      sceneElem.setAttribute("description", scene.description)
-
+      parentElement.appendChild(createUseElement(scene, document))
+    }
+    else {
+      val sceneElem = createSceneElement(scene, document)
       var i = 0
       while (i < scene.choices.get.size) {
         val choice: Choice = scene.getChoices(i)
@@ -89,14 +83,20 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
     }
   }
 
-  /** Factory method to create a choice DOM element.
-    * @return the choice instance.
-    */
-  private def createChoiceElement(document: Document, choice: Choice): Element = {
-    val choiceElem = document.createElement("choice")
-    choiceElem.setAttribute("description", choice.description)
-    choiceElem.setAttribute("resultScene", choice.destinationScene)
-    choiceElem
+  private def createUseElement(scene: Scene, document: Document): Element = {
+    val refElem = document.createElement("use")
+    refElem.setAttribute("ref", scene.name)
+    refElem
   }
 
+  private def createSceneElement(scene: Scene, document: Document): Element = {
+    val sceneElem = document.createElement("node")
+    val name = scene.name
+    sceneElem.setAttribute("id", name)
+    if (scene.label.isEmpty) {
+      throw new IllegalStateException("Could not find label for scene " + name)
+    } else sceneElem.setAttribute("label", scene.label.get)
+    sceneElem.setAttribute("description", scene.description)
+    sceneElem
+  }
 }

@@ -9,12 +9,6 @@ import scala.collection.Set
   * This program was originally meant as a very simple example of how you can
   * approach creating a simple adventure game on a computer, but its uses are much more general.
   *
-  * Next steps
-  *
-  *  - point to aikido xml on disk and edit it
-  *  -- modify importer to read hierarchy. Probably need abstract factory to create correct kind of importer.
-  *  -- modify exporter to write hierarchy
-  *
   * @param title title of the story
   * @param name name of the story used as an identifier for by convention
   *             resolution of locations and things like that. e.g. "ludlow".
