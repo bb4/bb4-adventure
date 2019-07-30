@@ -52,6 +52,7 @@ class StoryEditorDialog(val story: Story)
   private val moveDownButton = new GradientButton
   private var sceneSelector: JComboBox[String] = _
   private var selectedChildRow = -1
+  private var lastVisitedScene: Option[Scene] = None
 
   this.setResizable(true)
   setTitle("Story Editor")
@@ -87,7 +88,7 @@ class StoryEditorDialog(val story: Story)
   private def createParentTablePanel = {
     val parentContainer = new JPanel(new BorderLayout)
     parentScenes = story.getParentScenes
-    val parentTable = new ParentTable(parentScenes, this)
+    val parentTable = new ParentTable(parentScenes, lastVisitedScene, this)
     val tableHolder = new JPanel
     tableHolder.setMaximumSize(new Dimension(500, 300))
     parentContainer.setBorder(
@@ -212,12 +213,13 @@ class StoryEditorDialog(val story: Story)
   }
 
   /**
-    * @param row      table row
-    * @param col      table column
+    * @param row table row
+    * @param col table column
     * @param buttonId id of buttonEditor clicked.
     */
   override def tableButtonClicked(row: Int, col: Int, buttonId: String): Unit = {
     commitSceneChanges()
+    lastVisitedScene = Some(story.getCurrentScene)
     if (ChildTable.NAVIGATE_TO_CHILD_BUTTON_ID.equals(buttonId))
       story.advanceScene(row)
     else if (ParentTable.NAVIGATE_TO_PARENT_BUTTON_ID == buttonId)

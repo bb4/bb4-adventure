@@ -23,5 +23,5 @@ class ParentTableModel(columnNames: Array[AnyRef], rowCount: Int)
     }
   }
 
-  override def isCellEditable(row: Int, column: Int): Boolean = column == ParentTable.NAVIGATE_INDEX
+  override def isCellEditable(row: Int, column: Int): Boolean = column == ParentTable.NAVIGATE_TO_INDEX
 }
