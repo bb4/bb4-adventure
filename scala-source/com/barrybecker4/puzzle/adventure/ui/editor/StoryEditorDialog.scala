@@ -109,13 +109,16 @@ class StoryEditorDialog(val story: Story)
   /** @return table of child scene choices.*/
   private def createChildTablePanel = {
     val childContainer = new JPanel(new BorderLayout)
-    childTable = new ChildTable(story.getCurrentScene.choices.get, this)
-    childTable.addListSelectionListener(this)
-    childContainer.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder,
-      "Choices (to navigate to child scenes)"))
-    childContainer.add(new JScrollPane(childTable.getTable), BorderLayout.CENTER)
-    childContainer.add(createChildRowEditButtons, BorderLayout.SOUTH)
-    childContainer.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 240))
+    if (story.getCurrentScene.hasChoices) {
+      childTable = new ChildTable(story.getCurrentScene.choices.get, this)
+      childTable.addListSelectionListener(this)
+      childContainer.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder,
+        "Choices (to navigate to child scenes)"))
+      childContainer.add(new JScrollPane(childTable.getTable), BorderLayout.CENTER)
+      childContainer.add(createChildRowEditButtons, BorderLayout.SOUTH)
+      childContainer.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 240))
+    }
+
     childContainer
   }
 
@@ -229,7 +232,6 @@ class StoryEditorDialog(val story: Story)
     */
   override def valueChanged(e: ListSelectionEvent): Unit = {
     selectedChildRow = childTable.getSelectedRow
-    //System.out.println("selected row now " + selectedChildRow);
     removeButton.setEnabled(true)
     updateMoveButtons()
   }
@@ -252,7 +254,11 @@ class StoryEditorDialog(val story: Story)
     val canceled = newChoiceDlg.showDialog
     if (!canceled) {
       val addedSceneName = newChoiceDlg.getSelectedDestinationScene
-      childModel.addNewChildChoice(row, addedSceneName)
+      val initialLabel: String =
+        if (story.getSceneMap.contains(addedSceneName))
+          story.getSceneMap.get(addedSceneName).label.getOrElse(ChildTable.DEFAULT_CHOICE_DESC_LABEL)
+        else ChildTable.DEFAULT_CHOICE_DESC_LABEL
+      childModel.addNewChildChoice(row, addedSceneName, initialLabel)
       val choiceDescription = childModel.getChoiceDescription(row)
       story.addChoiceToCurrentScene(addedSceneName, choiceDescription)
       newChoiceDlg.close()

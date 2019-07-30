@@ -16,6 +16,5 @@ case class StoryExporter(story: Story) {
       case XmlHierarchyImporter.DTD => new XmlHierarchyExporter(story).saveTo(destFileName)
       case _ => throw new IllegalArgumentException("Unexpected root tag name" + story.rootTag)
     }
-    println("done saving.")
   }
 }

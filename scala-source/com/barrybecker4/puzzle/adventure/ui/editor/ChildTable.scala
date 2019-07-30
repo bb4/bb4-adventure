@@ -14,7 +14,7 @@ import com.barrybecker4.puzzle.adventure.model.{Choice, ChoiceList}
   * @author Barry Becker
   */
 object ChildTable {
-  val NEW_CHOICE_DESC_LABEL = " - Put your choice description here -"
+  val DEFAULT_CHOICE_DESC_LABEL = " - Put your choice description here -"
   val NAVIGATE_TO_CHILD_BUTTON_ID = "navToChild"
   private[editor] val NAVIGATE_INDEX = 0
   private[editor] val CHOICE_DESCRIPTION_INDEX = 1

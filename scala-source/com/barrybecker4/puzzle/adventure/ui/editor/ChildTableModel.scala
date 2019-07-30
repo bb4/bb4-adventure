@@ -41,10 +41,10 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
     * @param row            location to add the new choice
     * @param addedSceneName name pf the scene to add.
     */
-  def addNewChildChoice(row: Int, addedSceneName: String): Unit = {
+  def addNewChildChoice(row: Int, addedSceneName: String, initialLabel: String): Unit = {
     val d = new Array[AnyRef](this.getColumnCount)
     d(NAVIGATE_INDEX) = addedSceneName
-    d(CHOICE_DESCRIPTION_INDEX) = NEW_CHOICE_DESC_LABEL
+    d(CHOICE_DESCRIPTION_INDEX) = initialLabel
     this.insertRow(row, d)
     this.fireTableRowsInserted(row, row) // need this
   }
