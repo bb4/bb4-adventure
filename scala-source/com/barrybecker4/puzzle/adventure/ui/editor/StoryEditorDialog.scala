@@ -111,7 +111,7 @@ class StoryEditorDialog(val story: Story)
   private def createChildTablePanel = {
     val childContainer = new JPanel(new BorderLayout)
     if (story.getCurrentScene.hasChoices) {
-      childTable = new ChildTable(story.getCurrentScene.choices.get, this)
+      childTable = new ChildTable(story.getCurrentScene.choices, this)
       childTable.addListSelectionListener(this)
       childContainer.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder,
         "Choices (to navigate to child scenes)"))

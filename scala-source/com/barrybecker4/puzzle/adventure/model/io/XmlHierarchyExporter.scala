@@ -73,7 +73,7 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
     else {
       val sceneElem = createSceneElement(scene, document)
       var i = 0
-      while (i < scene.choices.get.size) {
+      while (i < scene.choices.size) {
         val choice: Choice = scene.getChoices(i)
         addSceneToDom(sceneElem, document, sceneMap.get(choice.destinationScene), visitedScenes)
         i += 1

@@ -31,7 +31,7 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
       choiceMap += dest -> getValueAt(i, CHOICE_DESCRIPTION_INDEX).toString
       i += 1
     }
-    currentScene.choices.get.update(choiceMap)
+    currentScene.choices.update(choiceMap)
   }
 
   def getChoiceDescription(row: Int): String =

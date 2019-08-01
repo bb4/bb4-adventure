@@ -16,7 +16,7 @@ object XmlScriptImporter {
 
     new Scene(name,
       sceneNode.getFirstChild.getTextContent, None,
-      Some(new ChoiceList(getChoices(sceneNode))),
+      new ChoiceList(getChoices(sceneNode)),
       loadSound(name, resourcePath),
       loadImage(name, resourcePath),
       isFirst)

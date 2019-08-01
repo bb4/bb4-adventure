@@ -31,10 +31,9 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
 
   def initFromScenes(scenes: Array[Scene]): Unit = {
     map.clear()
-    for (scene <- scenes) {
-      assert(scene.choices.isDefined)
+    for (scene <- scenes)
       map.put(scene.name, scene)
-    }
+
     verifyScenes()
   }
 
@@ -50,7 +49,7 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
   }
 
   def getChildScenes(scene: Scene): Seq[Scene] = {
-    scene.choices.get.choices.map(choice => this.get(choice.destinationScene))
+    scene.choices.choices.map(choice => this.get(choice.destinationScene))
   }
 
   /** make sure the set of scenes is internally consistent. */
@@ -73,8 +72,7 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
     // also need to update the references to named scenes in the choices.
     for (sceneName <- map.keySet) {
       val choices = map(sceneName).choices
-      if (choices.isDefined) choices.get.sceneNameChanged(oldSceneName, newSceneName)
-      else println("No choices defined for scene: " + sceneName)
+      choices.sceneNameChanged(oldSceneName, newSceneName)
     }
   }
 }

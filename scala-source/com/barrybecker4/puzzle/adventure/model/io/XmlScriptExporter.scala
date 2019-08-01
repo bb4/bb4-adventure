@@ -36,7 +36,7 @@ class XmlScriptExporter(story: Story) extends XmlExporter(story) {
     val choicesElem = document.createElement("choices")
     sceneElem.appendChild(choicesElem)
     var i = 0
-    while (i < scene.choices.get.size) {
+    while (i < scene.choices.size) {
       val choice: Choice = scene.getChoices(i)
       choicesElem.appendChild(createChoiceElement(document, choice))
       i += 1

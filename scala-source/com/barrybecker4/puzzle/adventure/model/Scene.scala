@@ -57,12 +57,12 @@ object Scene {
   * @author Barry Becker
   */
 class Scene(var name: String, var description: String, var label: Option[String] = None,
-            val choices: Option[ChoiceList] = None,
+            val choices: ChoiceList = new ChoiceList(),
             val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None,
             val isFirst: Boolean = false) {
 
   def this(name: String, description: String, resourcePath: String) {
-    this(name, description, None, None,
+    this(name, description, None, new ChoiceList(),
       loadSound(name, resourcePath), loadImage(name, "name"))
   }
 
@@ -70,14 +70,14 @@ class Scene(var name: String, var description: String, var label: Option[String]
     * @param scene the scene to initialize from.
     */
   def this(scene: Scene) {
-    this(scene.name, scene.description, scene.label, Some(new ChoiceList(scene)),
+    this(scene.name, scene.description, scene.label, new ChoiceList(scene),
       scene.soundUrl, scene.image, scene.isFirst)
   }
 
   def isValidChoice(i: Int): Boolean =
     hasChoices && i > 0 && i <= getChoices.size
 
-  def deleteChoice(choice: Int): Unit = choices.get.remove(choice)
+  def deleteChoice(choice: Int): Unit = choices.remove(choice)
 
   /** When changing the name we must call sceneNameChanged on
     * the listeners that are interested in the change.
@@ -92,7 +92,7 @@ class Scene(var name: String, var description: String, var label: Option[String]
     */
   def isParentOf(scene: Scene): Boolean = {
     val sName = scene.name
-    choices.isDefined && choices.get.isDestination(sName)
+    choices.isDestination(sName)
   }
 
   def hasSound: Boolean = soundUrl.isDefined
@@ -124,10 +124,8 @@ class Scene(var name: String, var description: String, var label: Option[String]
   }
 
   /** @return true if there are more than one choice for the user to select from. */
-  def hasChoices: Boolean = choices.isDefined
-
-  def getChoices: Seq[Choice] =
-    if (choices.isDefined) choices.get.choices else Seq[Choice]()
+  def hasChoices: Boolean = !choices.isEmpty
+  def getChoices: Seq[Choice] = choices.choices
 
   /** Prints what is missing, if anything, for this scene.
     * @return false if something is missing.
@@ -148,8 +146,8 @@ class Scene(var name: String, var description: String, var label: Option[String]
 
   def print: String = {
     var s: String = s"\n $description\n"
-    if (choices.isDefined) {
-      s += choices.get.choices.zipWithIndex.map {
+    if (!choices.isEmpty) {
+      s += choices.choices.zipWithIndex.map {
         case (c, i) => (i + 1) + ") " + c.description
       }.mkString("\n")
     }
