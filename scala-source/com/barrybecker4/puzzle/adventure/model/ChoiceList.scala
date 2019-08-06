@@ -7,7 +7,7 @@ import scala.collection.mutable
   * A list of choices that you can make in a scene.
   * @author Barry Becker
   */
-class ChoiceList(var choices: Seq[Choice]) {
+class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
 
   /** @param scene use the choices from this scene to initialize from. */
   def this(scene: Scene) {
@@ -30,7 +30,9 @@ class ChoiceList(var choices: Seq[Choice]) {
     */
   def update(choiceMap: mutable.LinkedHashMap[String, String]): Unit = {
     assert(choiceMap.size == choices.size,
-      "choiceMap.size()=" + choiceMap.size + " not equal choices.size()=" + choices.size)
+      "\nchoiceMap.size()=" + choiceMap.size + " not equal choices.size()=" + choices.size + "\nchoiceMap\n" +
+      choiceMap.mkString("\n") + "\nchoices\n" + choices.mkString(" ") +"\n"
+    )
     var newChoices = Seq[Choice]()
     for (dest <- choiceMap.keySet) {
       newChoices :+= Choice(choiceMap(dest), dest)

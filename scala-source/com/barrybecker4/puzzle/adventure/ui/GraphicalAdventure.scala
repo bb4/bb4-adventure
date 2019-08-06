@@ -56,7 +56,7 @@ final class GraphicalAdventure(args: Array[String],
     this.story = story
     val storyPanel = new StoryPanel(this.story)
     // setup for initial scene
-    choicePanel = new ChoicePanel(story.getCurrentScene.choices.get)
+    choicePanel = new ChoicePanel(story.getCurrentScene.choices)
     story.getCurrentScene.playSound()
     choicePanel.addSceneChangeListener(this)
     mainPanel.add(storyPanel, BorderLayout.CENTER)
@@ -113,7 +113,7 @@ final class GraphicalAdventure(args: Array[String],
   override def sceneChanged(selectedChoiceIndex: Int): Unit = {
     story.advanceScene(selectedChoiceIndex)
     refresh()
-    choicePanel.setChoices(story.getCurrentScene.choices.get)
+    choicePanel.setChoices(story.getCurrentScene.choices)
     story.getCurrentScene.playSound()
   }
 

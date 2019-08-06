@@ -30,7 +30,7 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
       if (sceneName != XmlHierarchyImporter.FAKE_ROOT) {
         val scene: Scene = sceneMap.get(sceneName)
         if (!visitedScenes.contains(scene)) {
-          addSceneToDom(rootElement, document, scene, visitedScenes)
+          addSceneToDom(rootElement, document, scene, "-", visitedScenes)
         }
       }
     }
@@ -63,6 +63,7 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
     */
   private def addSceneToDom(parentElement: Element,
                           document: Document, scene: Scene,
+                          fallBackLabel: String,
                           visitedScenes: mutable.Set[Scene]): Unit = {
 
     val sceneMap = story.getSceneMap
@@ -71,11 +72,12 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
       parentElement.appendChild(createUseElement(scene, document))
     }
     else {
-      val sceneElem = createSceneElement(scene, document)
+      val sceneElem = createSceneElement(scene, document, fallBackLabel)
       var i = 0
-      while (i < scene.choices.get.size) {
+      while (i < scene.choices.size) {
         val choice: Choice = scene.getChoices(i)
-        addSceneToDom(sceneElem, document, sceneMap.get(choice.destinationScene), visitedScenes)
+        addSceneToDom(sceneElem, document,
+          sceneMap.get(choice.destinationScene), choice.description, visitedScenes)
         i += 1
       }
       parentElement.appendChild(sceneElem)
@@ -89,13 +91,11 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
     refElem
   }
 
-  private def createSceneElement(scene: Scene, document: Document): Element = {
+  private def createSceneElement(scene: Scene, document: Document, fallBackLabel: String): Element = {
     val sceneElem = document.createElement("node")
     val name = scene.name
     sceneElem.setAttribute("id", name)
-    if (scene.label.isEmpty) {
-      throw new IllegalStateException("Could not find label for scene " + name)
-    } else sceneElem.setAttribute("label", scene.label.get)
+    sceneElem.setAttribute("label", scene.label.getOrElse(fallBackLabel))
     sceneElem.setAttribute("description", scene.description)
     sceneElem
   }

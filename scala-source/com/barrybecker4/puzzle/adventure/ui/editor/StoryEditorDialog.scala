@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.model.Story
 import com.barrybecker4.ui.components.GradientButton
 import com.barrybecker4.ui.dialogs.AbstractDialog
 import com.barrybecker4.ui.table.TableButtonListener
@@ -110,16 +109,15 @@ class StoryEditorDialog(val story: Story)
   /** @return table of child scene choices.*/
   private def createChildTablePanel = {
     val childContainer = new JPanel(new BorderLayout)
-    if (story.getCurrentScene.hasChoices) {
-      childTable = new ChildTable(story.getCurrentScene.choices.get, this)
+    //if (story.getCurrentScene.hasChoices) {
+      childTable = new ChildTable(story.getCurrentScene.choices, this)
       childTable.addListSelectionListener(this)
       childContainer.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder,
         "Choices (to navigate to child scenes)"))
       childContainer.add(new JScrollPane(childTable.getTable), BorderLayout.CENTER)
       childContainer.add(createChildRowEditButtons, BorderLayout.SOUTH)
       childContainer.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 240))
-    }
-
+    //}
     childContainer
   }
 
@@ -185,29 +183,29 @@ class StoryEditorDialog(val story: Story)
     val source = e.getSource
     val row = selectedChildRow
     val childModel = childTable.getChildTableModel
-    if (source eq okButton) ok()
-    else if (source eq addButton) addNewChoice(row)
-    else if (source eq removeButton) { //System.out.println("remove row");
-      val answer = JOptionPane.showConfirmDialog(this,
-        "Are you sure you want to delete choice " + childModel.getValueAt(row, ChildTable.NAVIGATE_INDEX) + "?")
-      if (answer == JOptionPane.YES_OPTION) {
-        childModel.removeRow(row)
-        story.getCurrentScene.deleteChoice(row)
-      }
+
+    source match {
+      case okB if okB eq okButton => ok()
+      case add if add eq addButton => addNewChoice(row)
+      case remove if remove eq removeButton =>
+        val answer = JOptionPane.showConfirmDialog(this,
+          "Are you sure you want to delete choice " + childModel.getValueAt(row, ChildTable.NAVIGATE_INDEX) + "?")
+        if (answer == JOptionPane.YES_OPTION) {
+          childModel.removeChildChoice(row)
+          story.getCurrentScene.deleteChoice(row)
+        }
+      case moveUp if moveUp eq moveUpButton =>
+        selectedChildRow = childTable.moveRow(row, row - 1)
+        updateMoveButtons()
+      case moveDown if moveDown eq moveDownButton =>
+        selectedChildRow = childTable.moveRow(row, row + 1)
+        updateMoveButtons()
+      case sel if sel eq sceneSelector =>
+        commitSceneChanges()
+        story.advanceToScene(sceneSelector.getSelectedItem.toString)
+        showContent()
     }
-    else if (source eq moveUpButton) {
-      selectedChildRow = childTable.moveRow(row, row - 1)
-      updateMoveButtons()
-    }
-    else if (source eq moveDownButton) {
-      selectedChildRow = childTable.moveRow(row, row + 1)
-      updateMoveButtons()
-    }
-    else if (source eq sceneSelector) {
-      commitSceneChanges()
-      story.advanceToScene(sceneSelector.getSelectedItem.toString)
-      showContent()
-    }
+
     // This will prevent this handler from being called multiple times. Don't know why.
     e.setSource(null)
   }

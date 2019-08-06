@@ -106,7 +106,7 @@ class Story(val title: String = "", val name: String = "",
       val newScene = new Scene(newSceneName, " --- describe the scene here ---", resourcePath)
       sceneMap.put(newSceneName, newScene)
     }
-    this.getCurrentScene.choices.get.add(Choice(choiceDescription, newSceneName))
+    this.getCurrentScene.choices.add(Choice(choiceDescription, newSceneName))
   }
 
   /** @return a list of all the existing scenes that we could navigate to
@@ -115,7 +115,7 @@ class Story(val title: String = "", val name: String = "",
   def getCandidateDestinationSceneNames: Seq[String] = {
     var candidateSceneNames: Seq[String] = Seq()
     for (sceneName <- sceneMap.sceneNames) {
-      if (!getCurrentScene.choices.get.isDestination(sceneName)) candidateSceneNames :+= sceneName
+      if (!getCurrentScene.choices.isDestination(sceneName)) candidateSceneNames :+= sceneName
     }
     candidateSceneNames
   }
