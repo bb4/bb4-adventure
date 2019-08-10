@@ -21,6 +21,7 @@ object ChildTable {
   private val NAVIGATE = "Navigate to"
   private val CHOICE_DESCRIPTION = "Choice Description"
   private val CHILD_COLUMN_NAMES = Array(NAVIGATE, CHOICE_DESCRIPTION)
+  private val ROW_HEIGHT = 22
 }
 
 class ChildTable(val choices: ChoiceList, var tableButtonListener: TableButtonListener)
@@ -28,6 +29,7 @@ class ChildTable(val choices: ChoiceList, var tableButtonListener: TableButtonLi
 
   initColumnMeta(ChildTable.CHILD_COLUMN_NAMES)
   initializeTable(choices.choices.asInstanceOf[Seq[AnyRef]])
+  table.setRowHeight(ROW_HEIGHT)
   getTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 
   def moveRow(oldRow: Int, newRow: Int): Int = {
