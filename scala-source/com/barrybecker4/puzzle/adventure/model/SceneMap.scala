@@ -31,9 +31,9 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
 
   def initFromScenes(scenes: Array[Scene]): Unit = {
     map.clear()
-    for (scene <- scenes) {
+    for (scene <- scenes)
       map.put(scene.name, scene)
-    }
+
     verifyScenes()
   }
 
@@ -72,8 +72,7 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
     // also need to update the references to named scenes in the choices.
     for (sceneName <- map.keySet) {
       val choices = map(sceneName).choices
-      if (!choices.isEmpty) choices.sceneNameChanged(oldSceneName, newSceneName)
-      else println("No choices defined for scene: " + sceneName)
+      choices.sceneNameChanged(oldSceneName, newSceneName)
     }
   }
 }

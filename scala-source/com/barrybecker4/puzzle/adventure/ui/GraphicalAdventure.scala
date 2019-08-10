@@ -33,10 +33,6 @@ final class GraphicalAdventure(args: Array[String],
   private var mainPanel: JPanel = _
   private var storyEdited: Boolean = false
 
-//  def this() {
-//    this(Array(), new StoryImporter(Array[String]()).getStory, null )
-//  }
-
   override def getName: String = story.getTitle
 
   /** Build the user interface with parameter input controls at the top. */

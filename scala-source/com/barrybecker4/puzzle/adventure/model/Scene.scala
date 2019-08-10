@@ -57,7 +57,7 @@ object Scene {
   * @author Barry Becker
   */
 class Scene(var name: String, var description: String, var label: Option[String] = None,
-            val choices: ChoiceList,
+            val choices: ChoiceList = new ChoiceList(),
             val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None,
             val isFirst: Boolean = false) {
 
@@ -125,7 +125,6 @@ class Scene(var name: String, var description: String, var label: Option[String]
 
   /** @return true if there are more than one choice for the user to select from. */
   def hasChoices: Boolean = !choices.isEmpty
-
   def getChoices: Seq[Choice] = choices.choices
 
   /** Prints what is missing, if anything, for this scene.

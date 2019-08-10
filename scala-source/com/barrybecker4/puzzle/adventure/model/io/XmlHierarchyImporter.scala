@@ -93,10 +93,8 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
     val label = DomUtil.getAttribute(sceneNode, "label")
     val rootScene = new Scene(name,
       getNodeDesc(sceneNode),
-      Some(label),
-      new ChoiceList(getChoices(sceneNode.getChildNodes)),
-      loadSound(name, resourcePath),
-      loadImage(name, resourcePath),
+      Some(label), new ChoiceList(getChoices(sceneNode.getChildNodes)),
+      loadSound(name, resourcePath), loadImage(name, resourcePath),
       isFirst)
     idToLabelMap += name -> label
     scenes.append(rootScene)

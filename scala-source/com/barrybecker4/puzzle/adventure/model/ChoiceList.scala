@@ -29,10 +29,10 @@ class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
     * @param choiceMap new order and descriptions to update with.
     */
   def update(choiceMap: mutable.LinkedHashMap[String, String]): Unit = {
-    assert(choiceMap.size == choices.size,
-      "\nchoiceMap.size()=" + choiceMap.size + " not equal choices.size()=" + choices.size + "\nchoiceMap\n" +
-      choiceMap.mkString("\n") + "\nchoices\n" + choices.mkString(" ") +"\n"
-    )
+    if (choiceMap.size != choices.size) {
+      println("Old choices: " + choices.mkString(", "))
+      println("New choices: " + choiceMap.mkString(", "))
+    }
     var newChoices = Seq[Choice]()
     for (dest <- choiceMap.keySet) {
       newChoices :+= Choice(choiceMap(dest), dest)
