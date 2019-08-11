@@ -55,7 +55,7 @@ class StoryEditorDialog(val story: Story)
 
   override def createDialogContent: JComponent = {
     val mainPanel = new JPanel(new BorderLayout)
-    mainPanel.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 700))
+    mainPanel.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 800))
     val editingPane = createEditingPane
     val title = new JLabel("Navigate through the scene heirarchy and change values for scenes.")
     title.setBorder(BorderFactory.createEmptyBorder(5, 4, 20, 4))
@@ -89,7 +89,7 @@ class StoryEditorDialog(val story: Story)
       BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Parent Scenes")
     )
     parentContainer.add(new JScrollPane(parentTable.getTable), BorderLayout.WEST)
-    parentContainer.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 120))
+    parentContainer.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 130))
     parentContainer
   }
 

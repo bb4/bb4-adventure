@@ -42,7 +42,7 @@ class ChildTablePanel(val story: Story, tableButtonListener: TableButtonListener
     "Choices (to navigate to child scenes)"))
   add(new JScrollPane(childTable.getTable), BorderLayout.CENTER)
   add(createChildRowEditButtons, BorderLayout.SOUTH)
-  setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 240))
+  setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 300))
 
   def updateSceneChoices(): Unit = {
     childTable.getChildTableModel.updateSceneChoices(story.getCurrentScene)

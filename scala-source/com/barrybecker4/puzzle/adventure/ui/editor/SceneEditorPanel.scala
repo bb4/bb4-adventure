@@ -74,7 +74,7 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
 
     showImageButton = new GradientButton("Image")
     showImageButton.addActionListener(this)
-    showImageButton.setEnabled(scene.image != null)
+    showImageButton.setEnabled(scene.image.isDefined)
 
     playSoundButton = new GradientButton("Sound")
     playSoundButton.addActionListener(this)
@@ -82,7 +82,7 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
 
     showPathsButton = new GradientButton("Show paths")
     showPathsButton.addActionListener(this)
-    showPathsButton.setEnabled(scene.image != null)
+    showPathsButton.setEnabled(scene.image.isDefined)
 
     buttonPanel.add(showImageButton)
     buttonPanel.add(playSoundButton)
