@@ -11,7 +11,6 @@ import javax.swing.JOptionPane
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.io.File
-
 import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
 
 
@@ -43,11 +42,15 @@ class StoryMenu(var storyApp: GraphicalAdventure) extends JMenu("Story") with Ac
     */
   override def actionPerformed(e: ActionEvent): Unit = {
     val item = e.getSource.asInstanceOf[JMenuItem]
-    if (item eq openItem) openStory()
-    else if (item eq saveItem) saveStory()
-    else if (item eq editItem) storyApp.editStory()
-    else if (item eq exitItem) if (confirmExit) System.exit(0)
-    else assert(false, "unexpected menuItem = " + item.getName)
+
+    item match {
+      case open if open eq openItem => openStory()
+      case edit if item eq editItem => storyApp.editStory()
+      case save if save eq saveItem => saveStory()
+      case exit if exit eq exitItem  =>
+        if (confirmExit) System.exit(0)
+      case _ => throw new IllegalArgumentException("Unexpected menuItem = " + item.getName)
+    }
   }
 
   /** If there are modifications, confirm before exiting.
