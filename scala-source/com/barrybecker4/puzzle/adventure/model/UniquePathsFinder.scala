@@ -20,9 +20,7 @@ case class UniquePathsFinder(story: Story) {
     def getNextScenes: Seq[Scene] = story.getSceneMap.getChildScenes(getLast)
     def asSceneList: Seq[Scene] = pathList
     def contains(scene: Scene): Boolean = visited.contains(scene)
-    def add(scene: Scene): Path = {
-      Path(visited + scene, pathList :+ scene)
-    }
+    def add(scene: Scene): Path = Path(visited + scene, pathList :+ scene)
   }
 
   val startScene: Scene = story.getFirstScene

@@ -4,7 +4,7 @@ package com.barrybecker4.puzzle.adventure.ui.editor
 import javax.swing.table.DefaultTableModel
 import scala.collection.mutable
 import ChildTable._
-import com.barrybecker4.puzzle.adventure.model.{Choice, Scene}
+import com.barrybecker4.puzzle.adventure.model.Scene
 
 
 /**
@@ -47,6 +47,11 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
     d(CHOICE_DESCRIPTION_INDEX) = initialLabel
     this.insertRow(row, d)
     this.fireTableRowsInserted(row, row) // need this
+  }
+
+  def removeChildChoice(row: Int): Unit = {
+    this.removeRow(row)
+    this.fireTableRowsDeleted(row, row)
   }
 
   override def getColumnClass(col: Int): Class[_] = {

@@ -16,6 +16,7 @@ object AikidoEditor extends App {
 
   val aikidoResourceRoot = "../bb4-aikido-app/deployment/techniques/"
   println("homeDir = " + FileUtil.getHomeDir )
+
   val techniqueXmlFile: File =
     new File(FileUtil.getHomeDir  + aikidoResourceRoot + "techniques.xml")
 

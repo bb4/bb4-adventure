@@ -21,6 +21,7 @@ object ParentTable {
   private val NAVIGATE_TO = "Navigate to"
   private val NUM_CHILDREN = "Child Scenes"
   private val PARENT_COLUMN_NAMES = Array(NAVIGATED_FROM, NAVIGATE_TO, NUM_CHILDREN)
+  private val ROW_HEIGHT = 22
 }
 
 /** Shows a list of the parent scenes and allows navigating to them.
@@ -33,6 +34,7 @@ class ParentTable(val scenes: Seq[Scene], val prevScene: Option[Scene],
                   var tableButtonListener: TableButtonListener) extends TableBase {
   initColumnMeta(PARENT_COLUMN_NAMES)
   initializeTable(scenes.asInstanceOf[Seq[_]])
+  table.setRowHeight(ROW_HEIGHT)
 
   /** Add a row based on a player object
     * @param scene scene to add
