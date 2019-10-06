@@ -5,8 +5,6 @@ import com.barrybecker4.ui.table.TableBase
 import com.barrybecker4.ui.table.TableButton
 import com.barrybecker4.ui.table.TableButtonListener
 import com.barrybecker4.ui.table.TableColumnMeta
-
-import scala.collection.Seq
 import javax.swing.table.DefaultTableModel
 import ParentTable._
 import com.barrybecker4.puzzle.adventure.model.Scene
@@ -34,7 +32,7 @@ object ParentTable {
 class ParentTable(val scenes: Seq[Scene], val prevScene: Option[Scene],
                   var tableButtonListener: TableButtonListener) extends TableBase {
   initColumnMeta(PARENT_COLUMN_NAMES)
-  initializeTable(scenes.asInstanceOf[Seq[AnyRef]])
+  initializeTable(scenes.asInstanceOf[Seq[_]])
 
   /** Add a row based on a player object
     * @param scene scene to add

@@ -148,7 +148,7 @@ class Scene(var name: String, var description: String, var label: Option[String]
     var s: String = s"\n $description\n"
     if (!choices.isEmpty) {
       s += choices.choices.zipWithIndex.map {
-        case (c, i) => (i + 1) + ") " + c.description
+        case (c, i) => s"${i + 1}) ${c.description}"
       }.mkString("\n")
     }
     s

@@ -87,7 +87,7 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
   /** Append the scene for the specified sceneNode and all of its children.
     */
   def appendScenesRootedAt(sceneNode: Node,
-                           scenes: ArrayBuffer[Scene], isFirst: Boolean) {
+                           scenes: ArrayBuffer[Scene], isFirst: Boolean): Unit = {
     // first append the root node
     val name = DomUtil.getAttribute(sceneNode, "id")
     val label = DomUtil.getAttribute(sceneNode, "label")
