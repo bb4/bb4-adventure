@@ -1,54 +1,25 @@
-// Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2000-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui
 
-import com.barrybecker4.common.xml.DomUtil
-import com.barrybecker4.puzzle.adventure.Story
 import com.barrybecker4.puzzle.adventure.ui.editor.StoryEditorDialog
 import com.barrybecker4.ui.application.ApplicationApplet
 import com.barrybecker4.ui.dialogs.PasswordDialog
 import com.barrybecker4.ui.util.GUIUtil
-import org.w3c.dom.Document
 import javax.swing.JFrame
 import javax.swing.JMenuBar
 import javax.swing.JPanel
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.io.File
+import com.barrybecker4.puzzle.adventure.model.io.{StoryExporter, StoryImporter}
+import com.barrybecker4.puzzle.adventure.model.Story
 
-
-/**
-  * Run your own adventure story.
-  * This version runs the adventure in Graphical mode (with images and sound).
-  * @see TextAdventure
-  * @author Barry Becker
-  */
-object GraphicalAdventure extends App {
-
-  val document = Story.importStoryDocument(args)
-  new GraphicalAdventure(Array(), new Story(document))
-
-  /** @param file name of the xml document to import.
-    * @return the imported story xml document.
-    */
-  private def importStoryDocument(file: File): Document = {
-    var document: Document = null
-    // first try to load it as a file. If that doesn't work, try as a URL.
-    if (file.exists) document = DomUtil.parseXMLFile(file)
-    document
-  }
-}
-
-object GraphicalAdventureConsts {
-  /** The top secret password - don't tell anyone.
-    * This could be Base64 encoded or encrypted to make more secure.
-    */
-  private[ui] val PASSWORD = "ludlow" //NON-NLS
-}
 
 /**
   * @param story initial story to show.
   */
-final class GraphicalAdventure(args: Array[String], var story: Story)
+final class GraphicalAdventure(args: Array[String],
+                               var story: Story, editPassword: String = null)
   extends ApplicationApplet(args) with SceneChangeListener {
 
   val frame: JFrame = GUIUtil.showApplet(this)
@@ -61,10 +32,6 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   private var choicePanel: ChoicePanel = _
   private var mainPanel: JPanel = _
   private var storyEdited: Boolean = false
-
-  def this() {
-    this(Array[String](), new Story(Story.importStoryDocument(Array())))
-  }
 
   override def getName: String = story.getTitle
 
@@ -85,7 +52,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
     this.story = story
     val storyPanel = new StoryPanel(this.story)
     // setup for initial scene
-    choicePanel = new ChoicePanel(story.getCurrentScene.choices.get)
+    choicePanel = new ChoicePanel(story.getCurrentScene.choices)
     story.getCurrentScene.playSound()
     choicePanel.addSceneChangeListener(this)
     mainPanel.add(storyPanel, BorderLayout.CENTER)
@@ -101,11 +68,16 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
     mainPanel.repaint()
   }
 
-  /** Allow user to edit the current story if they know the password. */
-  def editStory(): Unit = { // show password dialog.
-    val pwDlg = new PasswordDialog(GraphicalAdventureConsts.PASSWORD)
-    val canceled = pwDlg.showDialog
-    if (canceled) return
+  /** Allow user to edit the current story if they know the password.
+    * If expected pw is null, they do not need to enter one.
+    */
+  def editStory(): Unit = {
+    if (editPassword != null) {
+      val pwDlg = new PasswordDialog(editPassword)
+      val canceled = pwDlg.showDialog
+      if (canceled) return
+    }
+
     val storyEditor = new StoryEditorDialog(new Story(story))
     val editingCanceled = storyEditor.showDialog
     if (!editingCanceled) { // show the edited version.
@@ -119,13 +91,17 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   def isStoryEdited: Boolean = storyEdited
 
   def loadStory(file: File): Unit = {
-    val story = new Story(GraphicalAdventure.importStoryDocument(file))
+    println("parent = " + file.getParent)
+    val matchPrefix = "com" + File.separatorChar
+    val idx = file.getParent.indexOf(matchPrefix)
+    val folder = file.getParent.substring(idx)
+    val story = new StoryImporter(file.getName, folder + File.separatorChar).getStory
     setStory(story)
   }
 
   /** @param fPath fully qualified filename and path to save to.*/
   def saveStory(fPath: String): Unit = {
-    getStory.saveStoryDocument(fPath)
+    StoryExporter(getStory).saveTo(fPath)
     storyEdited = false
   }
 
@@ -133,7 +109,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   override def sceneChanged(selectedChoiceIndex: Int): Unit = {
     story.advanceScene(selectedChoiceIndex)
     refresh()
-    choicePanel.setChoices(story.getCurrentScene.choices.get)
+    choicePanel.setChoices(story.getCurrentScene.choices)
     story.getCurrentScene.playSound()
   }
 
@@ -143,8 +119,7 @@ final class GraphicalAdventure(args: Array[String], var story: Story)
   override def init(): Unit = {
     super.init()
     if (story == null) {
-      val document = Story.importStoryDocument(Array[String]())
-      val story = new Story(document)
+      val story = new StoryImporter(Array[String]()).getStory
       setStory(story)
     }
   }

@@ -8,23 +8,21 @@ version = '1.6-SNAPSHOT'
 apply from: 'https://raw.githubusercontent.com/bb4/bb4-common/master/bb4.gradle'
 
 project.archivesBaseName = 'bb4-adventure'
-mainClassName = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure"
+mainClassName = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp"
 
 
 dependencies {
     compile 'com.barrybecker4:bb4-sound:1.6-SNAPSHOT'
     compile 'com.barrybecker4:bb4-ui:1.6-SNAPSHOT'
-    // Used to generate html unit test report
-    testRuntime 'org.pegdown:pegdown:1.6.0'
 }
 
 // The appMap is used to create the list of available application in the html index page and to generate the app tasks.
 ext.appMap = new LinkedHashMap()
 appMap['adventure'] = [
         title: 'Ludlow Adventure',
-        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure',
-        command: "bb4-adventure 'ludlow/ludlowScript.xml'",
-        script: 'ludlow/ludlowScript.xml',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
+        script: 'ludlowScript.xml',
         description: 'Explore a haunted house.',
         longDescription: 'This started as a simple text based adventure. The scenes are stored in an xml file. ' +
             'I thought it would be cool to have images and sounds associated with the scenes, so I added a UI. ' +
@@ -36,17 +34,17 @@ appMap['adventure'] = [
 appMap['textAdventure'] = [
         title: 'Ludlow Text Adventure',
         mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
-        command: "bb4-text-adventure 'ludlow/ludlowScript.xml'",
-        script: 'ludlow/ludlowScript.xml',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
+        script: 'ludlowScript.xml',
         description: 'Explore a haunted house.',
         longDescription: 'The scenes are stored in an xml file. ' +
                 'This story is based on an adventure published by James M. Ward in Dragon Magazine back in 1980.'
 ]
 appMap['binaryTutorial'] = [
         title: 'Binary Tutorial',
-        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure',
-        command: "bb4-adventure 'learnBinary/binaryScript.xml'",
-        script: 'learnBinary/binaryScript.xml',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
+        script: 'binaryScript.xml',
         description: 'Learn about binary numbers.',
         longDescription: 'The same framework that is used to make adventure games ' +
                 'can also be used for pedagogical purposes. ' +
@@ -55,23 +53,33 @@ appMap['binaryTutorial'] = [
 appMap['textBinaryTutorial'] = [
         title: 'Binary Tutorial (text version)',
         mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
-        command: "bb4-text-adventure 'learnBinary/binaryScript.xml'",
-        script: 'learnBinary/binaryScript.xml',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
+        script: 'binaryScript.xml',
         description: 'Learn about binary numbers.',
         longDescription: 'The same framework that is used to make adventure games ' +
                 'can also be used for pedagogical purposes.'
 ]
-
+appMap['aikidoEditor'] = [
+        title: 'Aikido Editor',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.AikidoEditor',
+        resourcePath: '../../bb4-aikido-app/deployment/',
+        script: 'techniques.xml',
+        description: 'Edit library of aikido techniques for builder application.',
+        longDescription: 'The same framework that is used to make adventure games ' +
+                'can also be used for editing aikido techniques.'
+]
 
 appMap.each { appId, propMap ->
 
-    def mainClass = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure"
+    def mainClass = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp"
     if (propMap.containsKey('mainClass'))
         mainClass = propMap['mainClass']
 
     def argsList = []
     if (propMap.containsKey('script'))
-        argsList = ["${propMap['script']}"]
+        argsList << "${propMap['script']}"
+    if (propMap.containsKey('resourcePath'))
+        argsList << "${propMap['resourcePath']}"
 
     tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
         group = 'application'

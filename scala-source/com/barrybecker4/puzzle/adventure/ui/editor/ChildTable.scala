@@ -1,11 +1,10 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.Choice
-import com.barrybecker4.puzzle.adventure.ChoiceList
 import com.barrybecker4.ui.table.{TableBase, TableButton, TableButtonListener, TableColumnMeta}
 import javax.swing.ListSelectionModel
 import ChildTable._
+import com.barrybecker4.puzzle.adventure.model.{Choice, ChoiceList}
 
 
 /**
@@ -14,13 +13,14 @@ import ChildTable._
   * @author Barry Becker
   */
 object ChildTable {
-  val NEW_CHOICE_DESC_LABEL = " - Put your choice description here -"
+  val DEFAULT_CHOICE_DESC_LABEL = " - Put your choice description here -"
   val NAVIGATE_TO_CHILD_BUTTON_ID = "navToChild"
   private[editor] val NAVIGATE_INDEX = 0
   private[editor] val CHOICE_DESCRIPTION_INDEX = 1
   private val NAVIGATE = "Navigate to"
   private val CHOICE_DESCRIPTION = "Choice Description"
   private val CHILD_COLUMN_NAMES = Array(NAVIGATE, CHOICE_DESCRIPTION)
+  private val ROW_HEIGHT = 22
 }
 
 class ChildTable(val choices: ChoiceList, var tableButtonListener: TableButtonListener)
@@ -28,6 +28,7 @@ class ChildTable(val choices: ChoiceList, var tableButtonListener: TableButtonLi
 
   initColumnMeta(ChildTable.CHILD_COLUMN_NAMES)
   initializeTable(choices.choices.asInstanceOf[Seq[_]])
+  table.setRowHeight(ROW_HEIGHT)
   getTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 
   def moveRow(oldRow: Int, newRow: Int): Int = {
@@ -57,11 +58,12 @@ class ChildTable(val choices: ChoiceList, var tableButtonListener: TableButtonLi
     navigateCol.setCellEditor(navCellEditor)
     navigateCol.setPreferredWidth(200)
     navigateCol.setMaxWidth(400)
-    columnMeta(ChildTable.CHOICE_DESCRIPTION_INDEX).setPreferredWidth(500)
+    columnMeta(CHOICE_DESCRIPTION_INDEX).setPreferredWidth(500)
   }
 
   override def createTableModel(columnNames: Array[String]) =
     new ChildTableModel(columnNames.asInstanceOf[Array[AnyRef]], 0)
 
-  private[editor] def getChildTableModel = table.getModel.asInstanceOf[ChildTableModel]
+  private[editor] def getChildTableModel =
+    table.getModel.asInstanceOf[ChildTableModel]
 }

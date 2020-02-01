@@ -1,10 +1,10 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
-import com.barrybecker4.puzzle.adventure.Scene
 import javax.swing.table.DefaultTableModel
 import scala.collection.mutable
 import ChildTable._
+import com.barrybecker4.puzzle.adventure.model.Scene
 
 
 /**
@@ -31,7 +31,7 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
       choiceMap += dest -> getValueAt(i, CHOICE_DESCRIPTION_INDEX).toString
       i += 1
     }
-    currentScene.choices.get.update(choiceMap)
+    currentScene.choices.update(choiceMap)
   }
 
   def getChoiceDescription(row: Int): String =
@@ -41,12 +41,17 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
     * @param row            location to add the new choice
     * @param addedSceneName name pf the scene to add.
     */
-  def addNewChildChoice(row: Int, addedSceneName: String): Unit = {
+  def addNewChildChoice(row: Int, addedSceneName: String, initialLabel: String): Unit = {
     val d = new Array[AnyRef](this.getColumnCount)
     d(NAVIGATE_INDEX) = addedSceneName
-    d(CHOICE_DESCRIPTION_INDEX) = NEW_CHOICE_DESC_LABEL
+    d(CHOICE_DESCRIPTION_INDEX) = initialLabel
     this.insertRow(row, d)
     this.fireTableRowsInserted(row, row) // need this
+  }
+
+  def removeChildChoice(row: Int): Unit = {
+    this.removeRow(row)
+    this.fireTableRowsDeleted(row, row)
   }
 
   override def getColumnClass(col: Int): Class[_] = {
@@ -57,4 +62,11 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
   }
 
   override def isCellEditable(row: Int, column: Int) = true
+
+  override def setValueAt(aValue: Any, rowIndex: Int, columnIndex: Int): Unit = {
+    assert(columnIndex == CHOICE_DESCRIPTION_INDEX)
+    val rowVector = dataVector.elementAt(rowIndex).asInstanceOf[java.util.Vector[String]]
+    rowVector.set(columnIndex, aValue.asInstanceOf[String])
+    fireTableCellUpdated(rowIndex, columnIndex)
+  }
 }

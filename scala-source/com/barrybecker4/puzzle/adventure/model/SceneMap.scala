@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure
+package com.barrybecker4.puzzle.adventure.model
 
 import scala.collection.{Set, mutable}
 
@@ -31,10 +31,9 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
 
   def initFromScenes(scenes: Array[Scene]): Unit = {
     map.clear()
-    for (scene <- scenes) {
-      assert(scene.choices.isDefined)
+    for (scene <- scenes)
       map.put(scene.name, scene)
-    }
+
     verifyScenes()
   }
 
@@ -47,6 +46,10 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
       if (s.isParentOf(scene)) parentScenes :+= s
     }
     parentScenes
+  }
+
+  def getChildScenes(scene: Scene): Seq[Scene] = {
+    scene.choices.choices.map(choice => this.get(choice.destinationScene))
   }
 
   /** make sure the set of scenes is internally consistent. */
@@ -68,7 +71,8 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
     map.put(newSceneName, changedScene.get)
     // also need to update the references to named scenes in the choices.
     for (sceneName <- map.keySet) {
-      map(sceneName).choices.get.sceneNameChanged(oldSceneName, newSceneName)
+      val choices = map(sceneName).choices
+      choices.sceneNameChanged(oldSceneName, newSceneName)
     }
   }
 }

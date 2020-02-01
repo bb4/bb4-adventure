@@ -1,24 +1,24 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.puzzle.adventure
+package com.barrybecker4.puzzle.adventure.model
 
-import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.common.xml.DomUtil
-import com.barrybecker4.sound.SoundUtil
-import com.barrybecker4.ui.util.GUIUtil
-import org.w3c.dom.Document
-import org.w3c.dom.Node
+import java.awt.{Color, Font}
 import java.awt.image.BufferedImage
 import java.net.URL
-import Scene._
+import com.barrybecker4.common.util.FileUtil
+import com.barrybecker4.puzzle.adventure.model.Scene._
+import com.barrybecker4.sound.SoundUtil
+import com.barrybecker4.ui.util.{GUIUtil, ImageUtil}
 
 
 object Scene {
 
-  private def loadSound(name: String, resourcePath: String): Option[URL] = {
+  val PLACEHOLDER_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 12)
+
+  def loadSound(name: String, resourcePath: String): Option[URL] = {
     var soundUrl: Option[URL] = None
     try {
       val soundPath = resourcePath + "sounds/" + name + ".au"
-      soundUrl = Option(FileUtil.getURL(soundPath, false))
+      soundUrl = Option(FileUtil.getURL(soundPath, failIfNotFound = false))
     } catch {
       case e: NoClassDefFoundError =>
         System.err.println("You are trying to load sound when only text scenes are supported.")
@@ -26,7 +26,7 @@ object Scene {
     soundUrl
   }
 
-  private def loadImage(name: String, resourcePath: String): Option[BufferedImage] = {
+  def loadImage(name: String, resourcePath: String): Option[BufferedImage] = {
     var image: Option[BufferedImage] = None
     val imagePath = resourcePath + "images/" + name + ".jpg"
     try {
@@ -38,7 +38,7 @@ object Scene {
         System.err.println("You are trying to load image when only text scenes are supported. " +
           "If you need this to work, add the jai library to your classpath.")
       case ise: IllegalStateException =>
-        System.err.println("Unable to load " + imagePath)
+        System.err.println("Could not load image from: " + imagePath)
     }
     image
   }
@@ -49,62 +49,39 @@ object Scene {
   * choices which the actor chooses from to decide what to do next.
   * There is a "Return to last scene" choice automatically appended to all list of choices.
   * A scene may also have an associated sound and image.
-  * @param name name of the scene
-  * @param text textual description of the scene
+  * @param name unique id/name of the scene. No spaces should be in it.
+  * @param description textual description of the scene
+  * @param label optional label for the scene
   * @param soundUrl optional URL to a sound for this scene
   * @param image optional image to display with this scene
-  * @param isFirst if true, then this is the first scene in the story
+  * @param isFirst if true, then this is the first/root scene in the story
   * @author Barry Becker
   */
-class Scene(var name: String, var text: String, val choices: Option[ChoiceList] = None,
+class Scene(var name: String, var description: String, var label: Option[String] = None,
+            val choices: ChoiceList = new ChoiceList(),
             val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None,
             val isFirst: Boolean = false) {
 
-  def this(name: String, text: String, resourcePath: String) {
-    this(name, text, None, loadSound(name, resourcePath), loadImage(name, "name"))
-  }
-
-  def this(sceneNode: Node, resourcePath: String, isFirst: Boolean) {
-    this(DomUtil.getAttribute(sceneNode, "name"),
-      sceneNode.getFirstChild.getTextContent, Some(new ChoiceList(sceneNode)),
-      loadSound(DomUtil.getAttribute(sceneNode, "name"), resourcePath),
-      loadImage(DomUtil.getAttribute(sceneNode, "name"), resourcePath),
-      isFirst)
+  def this(name: String, description: String, resourcePath: String) {
+    this(name, description, None, new ChoiceList(),
+      loadSound(name, resourcePath), loadImage(name, "name"))
   }
 
   /** Copy constructor.
     * @param scene the scene to initialize from.
     */
   def this(scene: Scene) {
-    this(scene.name, scene.text, Some(new ChoiceList(scene)),
+    this(scene.name, scene.description, scene.label, new ChoiceList(scene),
       scene.soundUrl, scene.image, scene.isFirst)
-  }
-
-  /** @param document the document to which to append this scene as a child. */
-  def appendToDocument(document: Document): Unit = {
-    val sceneElem = document.createElement("scene")
-    sceneElem.setAttribute("name", name)
-    val descElem = document.createElement("description")
-    descElem.setTextContent(text)
-    sceneElem.appendChild(descElem)
-    val choicesElem = document.createElement("choices")
-    sceneElem.appendChild(choicesElem)
-    var i = 0
-    while (i < choices.get.size) {
-      val choice: Choice = getChoices(i)
-      choicesElem.appendChild(choice.createElement(document))
-      i += 1
-    }
-    val rootElement = document.getDocumentElement
-    rootElement.appendChild(sceneElem)
   }
 
   def isValidChoice(i: Int): Boolean =
     hasChoices && i > 0 && i <= getChoices.size
 
-  def deleteChoice(choice: Int): Unit = choices.get.remove(choice)
+  def deleteChoice(choice: Int): Unit = choices.remove(choice)
 
-  /** When changing the name we must call sceneNameChanged on the listeners that are interested in the change.
+  /** When changing the name we must call sceneNameChanged on
+    * the listeners that are interested in the change.
     * @param name new scene name
     */
   def setName(name: String): Unit = {
@@ -116,13 +93,27 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
     */
   def isParentOf(scene: Scene): Boolean = {
     val sName = scene.name
-    choices.get.isDestination(sName)
+    choices.isDestination(sName)
   }
 
   def hasSound: Boolean = soundUrl.isDefined
 
   def playSound(): Unit = {
     if (hasSound) SoundUtil.playSound(soundUrl.get)
+  }
+
+  def getImage: BufferedImage = {
+     if (image.isDefined) image.get else createPlaceholderImg()
+  }
+
+  private def createPlaceholderImg(): BufferedImage = {
+    val placeHolderImg = ImageUtil.createCompatibleImage(200, 100)
+    val g = placeHolderImg.createGraphics()
+    g.setPaintMode()
+    g.setFont(PLACEHOLDER_FONT)
+    g.setColor(Color.YELLOW)
+    g.drawString(name, 10, 50)
+    placeHolderImg
   }
 
   /** @param choice navigate to the scene indicated by this choice.
@@ -133,14 +124,17 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
     getChoices(choice).destinationScene
   }
 
-  /** @return true if there are more than one coice for the user to select from.*/
-  def hasChoices: Boolean = choices.isDefined
-  def getChoices: Seq[Choice] = choices.get.choices
+  /** @return true if there are more than one choice for the user to select from. */
+  def hasChoices: Boolean = !choices.isEmpty
+  def getChoices: Seq[Choice] = choices.choices
 
-  /** Prints what is missing if anything for this scene.
+  /** Prints what is missing, if anything, for this scene.
     * @return false if something is missing.
     */
   def verifyMedia: Boolean = {
+    if (image == null) {
+      throw new IllegalStateException("Image is null for " + this.name)
+    }
     if (image.isDefined || !hasSound) {
       System.out.print("scene: " + name)
       if (image == null) System.out.print(" missing image")
@@ -152,10 +146,10 @@ class Scene(var name: String, var text: String, val choices: Option[ChoiceList] 
   }
 
   def print: String = {
-    var s: String = s"\n $text\n"
-    if (choices.isDefined) {
-      s += choices.get.choices.zipWithIndex.map {
-        case (c, i) => (i + 1) + ") " + c.description
+    var s: String = s"\n $description\n"
+    if (!choices.isEmpty) {
+      s += choices.choices.zipWithIndex.map {
+        case (c, i) => s"${i + 1}) ${c.description}"
       }.mkString("\n")
     }
     s

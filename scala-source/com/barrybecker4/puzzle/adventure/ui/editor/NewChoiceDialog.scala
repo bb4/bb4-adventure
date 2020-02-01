@@ -40,7 +40,7 @@ class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDi
     val mainPanel = new JPanel
     val layout = new BoxLayout(mainPanel, BoxLayout.Y_AXIS)
     mainPanel.setLayout(layout)
-    sceneSelector = new JComboBox[String](candidateDestinations.toArray)
+    sceneSelector = new JComboBox[String](candidateDestinations.sorted.toArray)
     sceneSelector.setAlignmentX(Component.LEFT_ALIGNMENT)
     sceneSelector.setBorder(BorderFactory.createTitledBorder(
       "Select an existing scene or type in the name for a new scene.")
@@ -83,8 +83,10 @@ class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDi
 
   private[editor] def ok(): Unit = {
     val customSceneName = sceneTextInput.getValue
-    if (!(customSceneName == "")) selectedDestinationScene = customSceneName
-    else selectedDestinationScene = sceneSelector.getSelectedItem.toString
+    if (customSceneName != "")
+      selectedDestinationScene = customSceneName
+    else
+      selectedDestinationScene = sceneSelector.getSelectedItem.toString
     this.setVisible(false)
   }
 }

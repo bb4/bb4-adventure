@@ -2,7 +2,6 @@
 package com.barrybecker4.puzzle.adventure.ui
 
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.puzzle.adventure.Story
 import com.barrybecker4.ui.file.ExtensionFileFilter
 import com.barrybecker4.ui.file.FileChooserUtil
 import javax.swing.BorderFactory
@@ -12,6 +11,7 @@ import javax.swing.JOptionPane
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.io.File
+import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
 
 
 object StoryMenu {
@@ -42,11 +42,15 @@ class StoryMenu(var storyApp: GraphicalAdventure) extends JMenu("Story") with Ac
     */
   override def actionPerformed(e: ActionEvent): Unit = {
     val item = e.getSource.asInstanceOf[JMenuItem]
-    if (item eq openItem) openStory()
-    else if (item eq saveItem) saveStory()
-    else if (item eq editItem) storyApp.editStory()
-    else if (item eq exitItem) if (confirmExit) System.exit(0)
-    else assert(false, "unexpected menuItem = " + item.getName)
+
+    item match {
+      case open if open eq openItem => openStory()
+      case edit if item eq editItem => storyApp.editStory()
+      case save if save eq saveItem => saveStory()
+      case exit if exit eq exitItem  =>
+        if (confirmExit) System.exit(0)
+      case _ => throw new IllegalArgumentException("Unexpected menuItem = " + item.getName)
+    }
   }
 
   /** If there are modifications, confirm before exiting.
@@ -80,8 +84,7 @@ class StoryMenu(var storyApp: GraphicalAdventure) extends JMenu("Story") with Ac
   }
 
   private def getDefaultDir = {
-    val defaultDir = FileUtil.getHomeDir + "source/" + Story.STORIES_ROOT
-    System.out.println("defaultDir = " + defaultDir)
+    val defaultDir = FileUtil.getHomeDir + "source/" + StoryImporter.DEFAULT_STORIES_ROOT
     new File(defaultDir)
   }
 

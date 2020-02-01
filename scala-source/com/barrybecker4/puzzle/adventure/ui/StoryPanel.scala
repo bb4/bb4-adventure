@@ -1,13 +1,11 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui
 
-import com.barrybecker4.puzzle.adventure.Story
 import com.barrybecker4.ui.components.ImageListPanel
 import javax.swing.JSplitPane
 import javax.swing.JTextArea
-import java.awt.Dimension
-import java.awt.Font
-import java.awt.Graphics
+import java.awt.{Color, Dimension, Font, Graphics}
+import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
 
 
 object StoryPanel {
@@ -48,7 +46,9 @@ class StoryPanel(var story: Story) extends JSplitPane {
   /** Render the Environment on the screen. */
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
-    textArea.setText(story.getCurrentScene.text)
-    imagePanel.setSingleImage(story.getCurrentScene.image.get)
+    textArea.setText(story.getCurrentScene.description)
+
+    val scene = story.getCurrentScene
+    imagePanel.setSingleImage(scene.getImage)
   }
 }

@@ -4,6 +4,9 @@ package com.barrybecker4.puzzle.adventure
 import java.util.InputMismatchException
 import java.util.Scanner
 
+import com.barrybecker4.puzzle.adventure.model.Scene
+import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
+
 
 /**
   * Run your own adventure story.
@@ -13,8 +16,7 @@ import java.util.Scanner
   */
 object TextAdventure extends App {
 
-  val document = Story.importStoryDocument(args)
-  val story = new Story(document)
+  val story = new StoryImporter(args).getStory
   val scanner = new Scanner(System.in).useDelimiter("\n")
   do {
     val currentScene = story.getCurrentScene

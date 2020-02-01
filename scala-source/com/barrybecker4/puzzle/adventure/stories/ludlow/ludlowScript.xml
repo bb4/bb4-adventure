@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--DOCTYPE script SYSTEM "http://barrybecker4.com/bb4-projects/schema/script.dtd"-->
 <!DOCTYPE script SYSTEM "https://raw.githubusercontent.com/bb4/bb4-adventure/master/scala-source/com/barrybecker4/puzzle/adventure/script.dtd">
+<!--DOCTYPE script SYSTEM "http://barrybecker4.com/bb4-projects/schema/script.dtd"-->
 <script author="Barry Becker" date="10/19/2006" name="ludlow" title="The Mansion of Professor Ludlow">
     <scene name="start">
         <description>
@@ -58,12 +58,11 @@ You find nothing in them except for leaves, dust, and 200 paperclips. ",
         </choices>
     </scene>
     <scene name="A.inside_entrance">
-        <description> The double door is unlocked and opens easily.
- The beam of your flashlight reveals an empty hallway with a mirror at the opposite end.
- There are openings that lead to rooms on the left and right.
- The hall has inch-thick red carpeting and walnut-paneled walls.
- The mirror at the end runs from the floor to the twenty-foot-high ceiling
- and covers the forty feet of wall section on that south face of the hall.
+        <description>The double door is unlocked and opens easily.
+The beam of your flashlight reveals an empty hallway with a mirror at the opposite end.
+There are openings that lead to rooms on the left and right.
+The hall has inch-thick red carpeting and walnut-paneled walls.
+The mirror at the end runs from the floor to the twenty-foot-high ceiling and covers the forty feet of wall section on that south face of the hall.
         </description>
         <choices>
             <choice description="Go through left (east) opening" resultScene="B.rat_room"/>
@@ -73,8 +72,7 @@ You find nothing in them except for leaves, dust, and 200 paperclips. ",
         </choices>
     </scene>
     <scene name="B.rat_room">
-        <description>The beams of the flashlights show a room paneled in redstained barn boards with a floor of the same substance.
-There is a couch in the northeast corner of the room and an opening out of theroom on the east wall.
+        <description>The beams of your flashlight show a room paneled in redstained barn boards with a floor of the same substance. There is a couch in the northeast corner of the room and an opening out of theroom on the east wall.
 
 There are leaves on the floor, and an old worn out couch in the north east corner.
 There is a musty smell to the room, and leaves are littered on the floor.
@@ -275,7 +273,7 @@ west and forty feet to the north and south.</description>
         <choices/>
     </scene>
     <scene name="A.mirror">
-        <description>You find that the mirror lifts easily. There is a secrete door behind it.</description>
+        <description>You find that the mirror lifts easily. There is a secret door behind it.</description>
         <choices>
             <choice description="Try to open the secret door." resultScene="P.plant_room"/>
         </choices>
@@ -348,7 +346,8 @@ You find a golden key under the pile of leaves.
         <description> The beams of the flashlights show a room covered in small
 furs of some type and a spiral staircase leading up through the
 ceiling.
- The fur seems to be rat fur. It has lice and smells of rotten meat.
+
+The fur seems to be rat fur. It has lice and smells of rotten meat.
 It covers the walls, floor and ceiling and when cut it shows bare
 cement floor and metal walls underneath. If the room is paced out,
 it is sixty feet square. The staircase is made of metal and painted
@@ -362,14 +361,16 @@ with black enamel paint and is located in the northwest corner of the room.</des
 heads hanging on the walls and large animals mounted fully on
 stands. There are many of these all over the room. There are exits on
 the east and west walls.
-  This is a trophy room of some type with stuffed felines of all
+
+This is a trophy room of some type with stuffed felines of all
 different descriptions along the brown painted walls. On the north
 wall is a cabinet with three long rifles that are very heavy, and two
 shorter rifles that have two barrels apiece. There is a drawer under these rifles,
 containing two boxes of what must be shells. Besides the triggers,
 there are two levers on each gun; one is large and on the stock and one
 is small and near the trigger.
-   If paced out, the room is forty feet east and west and sixty feet north and south.</description>
+
+ If paced out, the room is forty feet east and west and sixty feet north and south.</description>
         <choices>
             <choice description="Take one of the guns." resultScene="K.trophyRoom"/>
             <choice description="Proceed through the exit to the west." resultScene="L.upStaircase"/>
@@ -380,7 +381,9 @@ is small and near the trigger.
 various types. There is also'an exit out of the area on a side wall.
 The furs are all very thick and there are some recognizable ones including:
 zebra, lion, leopard, and polar bear.
- Each fur is worth at least fifty gold pieces
+
+ Each fur is worth 0 to fifty gold pieces (1D6).
+
 and easily detachable from its mounting. When more than one
 character walks onto the furs, the characters are attacked by four
 giant centipedes (HP: 2,2,1,2; #AT: 1; 0: Nil; AC: 9; SA: Save versus
