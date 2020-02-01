@@ -28,15 +28,17 @@ object Scene {
 
   private def loadImage(name: String, resourcePath: String): Option[BufferedImage] = {
     var image: Option[BufferedImage] = None
+    val imagePath = resourcePath + "images/" + name + ".jpg"
     try {
       println("Scene load resources path = " + resourcePath)
-      val imagePath = resourcePath + "images/" + name + ".jpg"
       println("reading image from " + imagePath)
       image = Some(GUIUtil.getBufferedImage(imagePath))
     } catch {
       case e: NoClassDefFoundError =>
         System.err.println("You are trying to load image when only text scenes are supported. " +
           "If you need this to work, add the jai library to your classpath.")
+      case ise: IllegalStateException =>
+        System.err.println("Unable to load " + imagePath)
     }
     image
   }

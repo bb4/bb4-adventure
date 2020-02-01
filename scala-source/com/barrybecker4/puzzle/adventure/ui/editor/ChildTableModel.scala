@@ -51,7 +51,7 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
 
   override def getColumnClass(col: Int): Class[_] = {
     dataVector.elementAt(0) match {
-      case list: List[_] => list(col).getClass
+      // case list: List[_] => list(col).getClass
       case vec: java.util.Vector[_] => vec.get(col).getClass
     }
   }
