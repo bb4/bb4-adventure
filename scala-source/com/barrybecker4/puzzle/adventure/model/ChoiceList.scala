@@ -10,7 +10,7 @@ import scala.collection.mutable
 class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
 
   /** @param scene use the choices from this scene to initialize from. */
-  def this(scene: Scene) {
+  def this(scene: Scene) = {
     this(scene.getChoices)
   }
 

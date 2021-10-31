@@ -39,7 +39,7 @@ case class StoryImporter(document: Document, resourcePath: String) {
   /** Construct an adventure given an xml document object
     * @param docAndPath (doc containing the scene data, resourcePath)
     */
-  def this(docAndPath: (Document, String)) {
+  def this(docAndPath: (Document, String)) = {
     this(docAndPath._1, docAndPath._2)
   }
 
@@ -50,12 +50,11 @@ case class StoryImporter(document: Document, resourcePath: String) {
     * @param fileRoot the beginning of the path. Something like "com/user/puzzle/adventure/stories/ludlow/"
     * @return (the loaded Document that contains the adventure, resource root).
     */
-  def this(fileName: String = DEFAULT_FILE,
-    fileRoot: String = DEFAULT_STORIES_ROOT) {
+  def this(fileName: String = DEFAULT_FILE, fileRoot: String = DEFAULT_STORIES_ROOT) = {
     this(DomUtil.parseXML(FileUtil.getURL(fileRoot + fileName)), fileRoot)
   }
 
-  def this(file: File) {
+  def this(file: File) = {
     this(DomUtil.parseXMLFile(file), file.getParent + File.separator)
   }
 
@@ -64,7 +63,7 @@ case class StoryImporter(document: Document, resourcePath: String) {
     * @param args command line args (0 or 1 if name of xml doc is specified.)
     * @return (the loaded Document that contains the adventure, fileRoot).
     */
-  def this(args: Array[String]) {
+  def this(args: Array[String]) = {
     this(
       if (args != null && args.length > 0) args(0) else DEFAULT_FILE,
       if (args != null && args.length > 1) args(1) else DEFAULT_STORIES_ROOT

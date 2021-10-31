@@ -12,7 +12,7 @@ case class UniquePathsFinder(story: Story) {
 
   case class Path(visited: Set[Scene], pathList: Seq[Scene]) {
 
-    def this(startScene: Scene) {
+    def this(startScene: Scene) = {
       this(Set(startScene), Seq[Scene](startScene))
     }
 

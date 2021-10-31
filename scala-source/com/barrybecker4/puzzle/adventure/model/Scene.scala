@@ -62,7 +62,7 @@ class Scene(var name: String, var description: String, var label: Option[String]
             val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None,
             val isFirst: Boolean = false) {
 
-  def this(name: String, description: String, resourcePath: String) {
+  def this(name: String, description: String, resourcePath: String) = {
     this(name, description, None, new ChoiceList(),
       loadSound(name, resourcePath), loadImage(name, "name"))
   }
@@ -70,7 +70,7 @@ class Scene(var name: String, var description: String, var label: Option[String]
   /** Copy constructor.
     * @param scene the scene to initialize from.
     */
-  def this(scene: Scene) {
+  def this(scene: Scene) = {
     this(scene.name, scene.description, scene.label, new ChoiceList(scene),
       scene.soundUrl, scene.image, scene.isFirst)
   }

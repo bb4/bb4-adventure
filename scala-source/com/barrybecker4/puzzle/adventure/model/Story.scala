@@ -38,7 +38,7 @@ class Story(val title: String = "", val name: String = "",
 
   sceneMap.initFromScenes(scenes)
 
-  def this(story: Story) {
+  def this(story: Story) = {
     this(story.title, story.name, story.author, story.date, story.resourcePath, story.rootTag, story.scenes)
     currentScene = story.currentScene
     initializeFrom(story)

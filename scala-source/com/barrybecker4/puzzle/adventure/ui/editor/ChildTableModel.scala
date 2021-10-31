@@ -14,7 +14,7 @@ import com.barrybecker4.puzzle.adventure.model.Scene
 class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
   extends DefaultTableModel(columnNames, rowCount) {
 
-  def this(data: Array[Array[AnyRef]], columnNames: Array[AnyRef]) {
+  def this(data: Array[Array[AnyRef]], columnNames: Array[AnyRef]) = {
     this(columnNames, 0)
     throw new UnsupportedOperationException("This constructor is not supported")
   }
