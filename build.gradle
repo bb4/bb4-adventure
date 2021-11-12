@@ -1,22 +1,21 @@
-// Copyright by Barry G. Becker, 2016 - 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016 - 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
 buildscript {
     repositories {
-        // retrieve the shared gradle build scripts from here
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/"}
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
     dependencies {
-        classpath 'com.barrybecker4:bb4-gradle:1.6.5'
+        classpath 'com.barrybecker4:bb4-gradle:1.7-SNAPSHOT'
     }
 }
 
 plugins {
-    id "com.github.maiflai.scalatest" version "0.26" // needed to run scala tests
+    id "com.github.maiflai.scalatest" version "0.31" // needed to run scala tests
 }
 description = 'A framework for creating adventure games. It could also be used for other educational purposes.'
 group = 'com.barrybecker4'
-version = '1.6-SNAPSHOT'
+version = '1.7-SNAPSHOT'
 ext {
     archivesBaseName = 'bb4-adventure'
     mainClass = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp"
@@ -24,8 +23,9 @@ ext {
 apply from: project.buildscript.classLoader.getResource('bb4.gradle').toURI()
 
 dependencies {
-    implementation 'com.barrybecker4:bb4-sound:1.6'
-    implementation 'com.barrybecker4:bb4-ui:1.6'
+    implementation 'com.barrybecker4:bb4-sound:1.7-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-ui:1.7-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-common:1.7-SNAPSHOT'
 }
 
 // The appMap is used to create the list of available application in the html index page and to generate the app tasks.
@@ -114,7 +114,7 @@ jarMap['adventure'] = [
 // Additional script to run text version.
 // It can take parameters like 'ludlow/ludlowScript.xml' or 'learnBinary/binaryScript.xml'
 task createTextAdventureApp(type: CreateStartScripts) {
-    mainClassName = "com.barrybecker4.puzzle.adventure.TextAdventure"
+    mainClass.set("com.barrybecker4.puzzle.adventure.TextAdventure")
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-text-adventure'

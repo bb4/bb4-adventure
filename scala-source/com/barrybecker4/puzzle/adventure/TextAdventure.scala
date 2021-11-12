@@ -18,12 +18,12 @@ object TextAdventure extends App {
 
   val story = new StoryImporter(args).getStory
   val scanner = new Scanner(System.in).useDelimiter("\n")
-  do {
+  while (!story.isOver) {
     val currentScene = story.getCurrentScene
     println(currentScene.print)
     val nextSceneIndex = getNextSceneIndex(currentScene, scanner)
     story.advanceScene(nextSceneIndex)
-  } while (!story.isOver)
+  }
   scanner.close()
 
   /** Retrieve the selection from the player using the scanner.

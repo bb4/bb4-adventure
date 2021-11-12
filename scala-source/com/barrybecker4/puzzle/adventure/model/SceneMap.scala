@@ -24,7 +24,7 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
     map += name -> scene
 
   def get(name: String): Scene = map(name)
-  def getFirst: Scene = map.values.iterator.next
+  def getFirst: Scene = map.values.iterator.next()
   def contains(name: String): Boolean = map.contains(name)
   def sceneNames: Set[String] = map.keySet
   override def toString: String = map.keySet.mkString(", ")
