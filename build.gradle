@@ -28,10 +28,11 @@ dependencies {
     implementation 'com.barrybecker4:bb4-common:1.7'
 }
 
-// The appMap is used to create the list of available application in the html index page and to generate the app tasks.
+// The appMap is used to create the list of available applications in the html index page and to generate the app tasks.
 ext.appMap = new LinkedHashMap()
 appMap['adventure'] = [
         title: 'Ludlow Adventure',
+        command: 'bb4-adventure ludlowScript.xml',
         mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
         resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
         script: 'ludlowScript.xml',
@@ -45,6 +46,7 @@ appMap['adventure'] = [
 ]
 appMap['textAdventure'] = [
         title: 'Ludlow Text Adventure',
+        command: 'bb4-text-adventure ludlowScript.xml',
         mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
         resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
         script: 'ludlowScript.xml',
@@ -54,6 +56,7 @@ appMap['textAdventure'] = [
 ]
 appMap['binaryTutorial'] = [
         title: 'Binary Tutorial',
+        command: 'bb4-adventure binaryScript.xml com/barrybecker4/puzzle/adventure/stories/learnBinary/',
         mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
         resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
         script: 'binaryScript.xml',
@@ -64,6 +67,7 @@ appMap['binaryTutorial'] = [
 ]
 appMap['textBinaryTutorial'] = [
         title: 'Binary Tutorial (text version)',
+        command: 'bb4-text-adventure binaryScript.xml com/barrybecker4/puzzle/adventure/stories/learnBinary/',
         mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
         resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
         script: 'binaryScript.xml',
@@ -73,8 +77,10 @@ appMap['textBinaryTutorial'] = [
 ]
 appMap['aikidoEditor'] = [
         title: 'Aikido Editor',
+        command: 'bb4-adventure techniques.xml  com/barrybecker4/puzzle/adventure/stories/aikido/',
         mainClass: 'com.barrybecker4.puzzle.adventure.ui.AikidoEditor',
-        resourcePath: '../../bb4-aikido-app/deployment/',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/aikido/',
+        //resourcePath: '../../bb4-aikido-app/deployment/techniques/',
         script: 'techniques.xml',
         description: 'Edit library of aikido techniques for builder application.',
         longDescription: 'The same framework that is used to make adventure games ' +
@@ -95,7 +101,7 @@ appMap.each { appId, propMap ->
 
     tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
         group = 'application'
-        main = "${mainClass}"
+        mainClassName = "${mainClass}"
         standardInput = System.in
         args = argsList
         classpath = sourceSets.main.runtimeClasspath

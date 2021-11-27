@@ -1,8 +1,7 @@
-// Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2000-2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui
 
 import java.io.File
-
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.puzzle.adventure.model.io.{StoryExporter, StoryImporter}
 
@@ -12,14 +11,19 @@ import com.barrybecker4.puzzle.adventure.model.io.{StoryExporter, StoryImporter}
   * See https://github.com/bb4/bb4-aikido-app.
   * @author Barry Becker
   */
-object AikidoEditor extends App {
+object AikidoEditor {
 
-  val aikidoResourceRoot = "../bb4-aikido-app/deployment/techniques/"
-  println("homeDir = " + FileUtil.getHomeDir )
+  def main(args: Array[String]): Unit = {
 
-  val techniqueXmlFile: File =
-    new File(FileUtil.getHomeDir  + aikidoResourceRoot + "techniques.xml")
+    // Use this "../bb4-aikido-app/deployment/techniques/" if you want images to show too
+    val AIKIDP_RESOURCE_ROOT = "com/barrybecker4/puzzle/adventure/stories/aikido/"
 
-  new GraphicalAdventure(Array(),
-    new StoryImporter(techniqueXmlFile).getStory, null)
+    val theArgs =
+      if (args == null || args.isEmpty) Array[String]("techniques.xml", "com/barrybecker4/puzzle/adventure/stories/aikido/")
+      else args
+
+    new GraphicalAdventure(Array(),
+      new StoryImporter(theArgs).getStory, null)
+  }
+
 }

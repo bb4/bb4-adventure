@@ -1,8 +1,9 @@
-// Copyright by Barry G. Becker, 2000-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2000-2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui
 
 import GraphicalAdventureConsts.PASSWORD
 import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
+import com.barrybecker4.puzzle.adventure.ui.GraphicalAdventure
 
 /**
   * Run your own adventure story.
@@ -10,10 +11,13 @@ import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
   * @see TextAdventure
   * @author Barry Becker
   */
-object GraphicalAdventureApp extends App {
+object GraphicalAdventureApp {
 
-  val theArgs = if (args == null) Array[String]() else args
-  new GraphicalAdventure(Array(), new StoryImporter(theArgs).getStory, PASSWORD)
+  def main(args: Array[String]): Unit = {
+    val theArgs = if (args == null) Array[String]() else args
+    new GraphicalAdventure(Array(), new StoryImporter(theArgs).getStory, PASSWORD)
+  }
+
 }
 
 object GraphicalAdventureConsts {

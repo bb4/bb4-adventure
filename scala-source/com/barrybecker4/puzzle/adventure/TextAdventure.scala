@@ -14,17 +14,20 @@ import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
   * @see GraphicalAdventure
   * @author Barry Becker
   */
-object TextAdventure extends App {
+object TextAdventure {
 
-  val story = new StoryImporter(args).getStory
-  val scanner = new Scanner(System.in).useDelimiter("\n")
-  while (!story.isOver) {
-    val currentScene = story.getCurrentScene
-    println(currentScene.print)
-    val nextSceneIndex = getNextSceneIndex(currentScene, scanner)
-    story.advanceScene(nextSceneIndex)
+  def main(args: Array[String] ): Unit = {
+    val story = new StoryImporter(args).getStory
+    val scanner = new Scanner(System.in).useDelimiter("\n")
+    while (!story.isOver) {
+      val currentScene = story.getCurrentScene
+      println(currentScene.print)
+      val nextSceneIndex = getNextSceneIndex(currentScene, scanner)
+      story.advanceScene(nextSceneIndex)
+    }
+    scanner.close()
   }
-  scanner.close()
+
 
   /** Retrieve the selection from the player using the scanner.
     * @return the next scene to advance to.
