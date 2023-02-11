@@ -16,10 +16,10 @@ object AikidoEditor {
   def main(args: Array[String]): Unit = {
 
     // Use this "../bb4-aikido-app/deployment/techniques/" if you want images to show too
-    val AIKIDP_RESOURCE_ROOT = "com/barrybecker4/puzzle/adventure/stories/aikido/"
+    val AIKIDO_RESOURCE_ROOT = "com/barrybecker4/puzzle/adventure/stories/aikido/"
 
     val theArgs =
-      if (args == null || args.isEmpty) Array[String]("techniques.xml", "com/barrybecker4/puzzle/adventure/stories/aikido/")
+      if (args == null || args.isEmpty) Array[String]("techniques.xml", AIKIDO_RESOURCE_ROOT)
       else args
 
     new GraphicalAdventure(Array(),
