@@ -9,7 +9,7 @@
 ***************************************************
       Adapted from a D&amp;D module by James Ward
 
-You are on a camping trip with a large group of boyscouts.
+You are on a camping trip with a large group of boy scouts.
 During a nighttime hike, you get separated from the rest of the group.
 You stumble upon a meadow. There in front of you is a large mansion.
 You hear an eary plea for help coming from inside.
@@ -35,8 +35,8 @@ A few minutes pass. Still nothing.
     </scene>
     <scene name="open_crates">
         <description>
-It takes you a really long time, but you finally open and inspect all the crates." +
-You find nothing in them except for leaves, dust, and 200 paperclips. ",
+It takes you a really long time, but you finally open and inspect all the crates.
+You find nothing in them except for leaves, dust, and stray paperclips.
         </description>
         <choices>
             <choice description="Continue." resultScene="D.crate_room"/>
@@ -44,7 +44,9 @@ You find nothing in them except for leaves, dust, and 200 paperclips. ",
     </scene>
     <scene name="sky_falls">
         <description>The sky falls on you. Game over.</description>
-        <choices/>
+        <choices>
+            <choice description="Start over" resultScene="start"/>
+        </choices>
     </scene>
     <scene name="stub">
         <description>TBD</description>
@@ -144,16 +146,19 @@ another way out of the room.</description>
             <choice description="Head south and climb the stairs." resultScene="F.stairway"/>
             <choice description="Exit to the east using the opening at the base of the stairs." resultScene="J.Bathroom"/>
             <choice description="Inspect the rocks on the shelves." resultScene="F.rocks"/>
-            <choice description="Exit tot the west into the passageway at the north corner of the room" resultScene="G.passageway"/>
+            <choice description="Exit to the west into the passageway at the north corner of the room" resultScene="G.passageway"/>
             <choice description="Go back to gray storage room." resultScene="E.gray_storage_room"/>
         </choices>
     </scene>
     <scene name="E.crazy_man_attacks">
         <description>When you enter the room, you are immediately attacked by an incredibly old man dressed in rags and carrying a butcher knife
-(HP: 7; #AT: 1; 0: 1-6; AC: 10; SA:None).
-This old man leaps out from behind some of the boxes and surprises you.
+(HP: 7; #AT: 1; damage: 1-6; AC: 10; SA: None).
+He leaps out from behind some of the boxes and surprises you.
 He will never follow a retreating group out of the room, but will act dangerously at all other times and will never listen to any type of reason.</description>
-        <choices/>
+        <choices>
+            <choice description="Retreat to the crate room" resultScene="D.crate_room"/>
+            <choice description="If you survive or subdue him, continue searching the storeroom" resultScene="E.gray_storage_room"/>
+        </choices>
     </scene>
     <scene name="E.gray_storage_room">
         <description>The beam of your flashlight shows a room with gray painted walls and a cement floor.
@@ -197,9 +202,11 @@ Flails-2-7 pts.</description>
         </choices>
     </scene>
     <scene name="F.stairway">
-        <description> A creaky old stairway leads up to level 2.</description>
+        <description>A creaky wooden stairway climbs from the south end of the oak-walled rock gallery.
+Cold air drifts down from above. You can make out a landing and a closed door at the top.</description>
         <choices>
-            <choice description=" - Put your choice description here -" resultScene="VII.chunksRoom"/>
+            <choice description="Climb the stairs to the second floor" resultScene="VII.chunksRoom"/>
+            <choice description="Go back down into the oak room" resultScene="F.oak_room"/>
         </choices>
     </scene>
     <scene name="F.rocks">
@@ -210,7 +217,7 @@ wall. They will all be on the highest shelves and above the
 normal eye level of any scout. There are no crystal samples in the
 entire room.</description>
         <choices>
-            <choice description=" - Put your choice description here -" resultScene="F.oak_room"/>
+            <choice description="Return to the oak room" resultScene="F.oak_room"/>
         </choices>
     </scene>
     <scene name="H.fur_room">
@@ -241,8 +248,13 @@ south.</description>
         </choices>
     </scene>
     <scene name="H.spiral_staircase">
-        <description> --- describe the scene here ---</description>
-        <choices/>
+        <description>The purple-enameled metal spiral is steep and narrow. It groans under your weight
+but holds steady. After many steps the air grows close and furred—until you step out into
+another chamber lined with heavy animal pelts, warmer and brighter than the purple room below.</description>
+        <choices>
+            <choice description="Explore the fur-lined room at the top" resultScene="X.spiralStaircase"/>
+            <choice description="Climb back down to the purple fur room" resultScene="H.fur_room"/>
+        </choices>
     </scene>
     <scene name="I.statue_room">
         <description>The beams of the flashlights show a room filled with statues of
@@ -258,7 +270,8 @@ their hands. The room is paced out to be sixty feet to the east and
 west and forty feet to the north and south.</description>
         <choices>
             <choice description="Attempt to speak with the statues" resultScene="I.talk_to_statues"/>
-            <choice description="Attack the statues." resultScene="I.attack_statues"/>
+            <choice description="Attack the statues" resultScene="I.attack_statues"/>
+            <choice description="Slip back through the secret door to the fur room" resultScene="H.fur_room"/>
         </choices>
     </scene>
     <scene name="I.talk_to_statues">
@@ -269,13 +282,18 @@ west and forty feet to the north and south.</description>
         </choices>
     </scene>
     <scene name="I.attack_statues">
-        <description> --- describe the scene here ---</description>
-        <choices/>
+        <description>Your blows clang uselessly against solid stone. The figures do not move to defend themselves.
+The module notes that these are people—not statues—trapped in petrification; they are aware but cannot speak or act.
+You accomplish nothing except noise and a growing sense of shame.</description>
+        <choices>
+            <choice description="Stop and look for another way to help them" resultScene="I.statue_room"/>
+        </choices>
     </scene>
     <scene name="A.mirror">
         <description>You find that the mirror lifts easily. There is a secret door behind it.</description>
         <choices>
-            <choice description="Try to open the secret door." resultScene="P.plant_room"/>
+            <choice description="Open the secret door" resultScene="P.plant_room"/>
+            <choice description="Lower the mirror and return to the entrance hall" resultScene="A.inside_entrance"/>
         </choices>
     </scene>
     <scene name="P.plant_room">
@@ -290,29 +308,36 @@ towards any people entering the area. Some of them bear fruit and
 berries. The room cannot be paced out because of the plants, but the
 path from exit to exit is eighty feet.
 
-</description>
+Dense thorny brambles block the professor&apos;s secret door until they are cut away—disturbing the growth risks stirring what lives among the leaves.
+        </description>
         <choices>
-            <choice description="Inspect the plants" resultScene="P.inspect_plants"/>
-            <choice description="Go back to foyer." resultScene="A.inside_entrance"/>
+            <choice description="Inspect or cut the plants (risk attacks)" resultScene="P.inspect_plants"/>
+            <choice description="Pick your way carefully toward the far exit without cutting" resultScene="Q.skeleton_room"/>
+            <choice description="Return to the entrance hall" resultScene="A.inside_entrance"/>
         </choices>
     </scene>
     <scene name="P.inspect_plants">
-        <description>Seven stirges fly out and attack. Their pointy beaks suck your blood.</description>
-        <choices/>
+        <description>The moment you cut or seriously disturb the foliage, seven stirges burst from the growth and dive at you.
+(HP 5 each; #AT 1; damage 1-3; AC 8; special: blood drain.)</description>
+        <choices>
+            <choice description="Fight or flee back toward the secret door" resultScene="P.plant_room"/>
+        </choices>
     </scene>
     <scene name="J.Bathroom">
-        <description> The beams of the flashlights show a bathroom with all the
+        <description>The beams of the flashlights show a bathroom with all the
 things one would expect to find in such a place. There is a sink with a
 mirror above it, a stool, and a bathtub. The floor, walls, ceiling, and all
+fixtures are of black marble.
 The water works fine in this area, except when it is about to overflow any sink or tub or stool for any
-reason. It will cut itself off first. There are hinges on the door frame but
-no other sign that there ever was a door there. If paced out the main
+reason—it cuts itself off first. There are hinges on the door frame but
+no other sign that there ever was a door there. If paced out, the main
 room is forty feet by forty feet, plus a hall section that has the tub at its
-end. This hall section starts on the south wall and is ten feet wide
-(east and west) and twenty feet long.</description>
+end. This hall section starts on the south wall and is twenty feet wide
+(east and west) and forty feet long.</description>
         <choices>
-            <choice description="Examine the sink. Turn on water" resultScene="J.turnOnWater"/>
-            <choice description="Open the medicine cabinet." resultScene="J.medicine_cabinet"/>
+            <choice description="Examine the sink and turn on the water" resultScene="J.turnOnWater"/>
+            <choice description="Open the medicine cabinet" resultScene="J.medicine_cabinet"/>
+            <choice description="Return to the oak rock gallery" resultScene="F.oak_room"/>
         </choices>
     </scene>
     <scene name="J.medicine_cabinet">
@@ -322,16 +347,18 @@ In it are two small plastic bottles of pills:
    One has twenty pink pills.
 </description>
         <choices>
-            <choice description=" - Put your choice description here -" resultScene="J.takeGreenPill"/>
-            <choice description="Swallow one of the green pills." resultScene="J.takePinkPill"/>
+            <choice description="Swallow one of the green pills" resultScene="J.takeGreenPill"/>
+            <choice description="Swallow one of the pink pills" resultScene="J.takePinkPill"/>
+            <choice description="Close the cabinet" resultScene="J.Bathroom"/>
         </choices>
     </scene>
     <scene name="B.rat_attack">
-        <description>Rats com out from under the couch and attack you.
-One bites you and gives you a terrible disease.
-(Suggestion: maybe we should have generated melee combat here so the outcome is random.)
+        <description>Three giant rats boil out from under the couch and attack whoever is nearest
+(HP 4,3,2; #AT 1; damage 1-3; AC 7; bite has a 5% chance of disease—save versus poison).
         </description>
-        <choices/>
+        <choices>
+            <choice description="Back away from the couch and regroup" resultScene="B.rat_room"/>
+        </choices>
     </scene>
     <scene name="B.key">
         <description>
@@ -377,49 +404,61 @@ is small and near the trigger.
         </choices>
     </scene>
     <scene name="X.spiralStaircase">
-        <description> The beams of the flashlights reveal a room covered in furs of
-various types. There is also'an exit out of the area on a side wall.
+        <description>The beams of the flashlights reveal a room covered in furs of
+various types. There is also an exit out of the area on a side wall.
 The furs are all very thick and there are some recognizable ones including:
 zebra, lion, leopard, and polar bear.
-
- Each fur is worth 0 to fifty gold pieces (1D6).
-
-and easily detachable from its mounting. When more than one
-character walks onto the furs, the characters are attacked by four
-giant centipedes (HP: 2,2,1,2; #AT: 1; 0: Nil; AC: 9; SA: Save versus
-poison). These creatures are hidden under furs until movement
-rouses them.</description>
-        <choices/>
+Each fur is worth tens of gold pieces (module suggests at least 50 gp each, or roll 1D6 × value as treasure).
+They are easily detachable from their mounting. When more than one
+person walks onto the furs, four giant centipedes scuttle out from underneath
+(HP: 2,2,1,2; #AT: 1; damage: nil; AC: 9; SA: save versus poison).</description>
+        <choices>
+            <choice description="Descend the spiral toward the rat-fur room and trophy hall" resultScene="L.upStaircase"/>
+            <choice description="Descend the spiral toward the purple fur chamber" resultScene="H.fur_room"/>
+        </choices>
     </scene>
     <scene name="VII.chunksRoom">
-        <description> The beams of the flashlights show a room with a number of
+        <description>The beams of the flashlights show a room with a number of
 metal chunks littering the floor. There are three doors, each one on a
 different wall.
-When you enter the room, metal chunks fall from the ceiling, and characters can see that the ceiling is
-massed with millions of these chunks stuck to it.
- After a character or party enters
-the room, every melee round 3-18 of these chunks will fall. They
-weigh fifteen ounces each and do 1-6 points of damage when hitting
-a player. There is only a 15% chance that any given one will hit, since
-, they fall throughout the general area of the player. The doors are all
-fake and while the handles will turn, they can't open. They appear to
-be made from oak, but are metal like everything else.</description>
-        <choices/>
+When you enter, more chunks shower from the ceiling—you can see millions of them stuck overhead.
+After anyone enters, every melee round 3-18 chunks drop. Each weighs fifteen ounces and does 1-6 damage if it hits;
+only about a 15% chance per chunk actually strikes anyone in the open area. The three doors are fake:
+the handles turn but nothing opens. They look like oak but are metal like the rest of the mansion.</description>
+        <choices>
+            <choice description="Give up on the doors and retreat down the stairs" resultScene="F.stairway"/>
+        </choices>
     </scene>
     <scene name="J.turnOnWater">
-        <description>The water works fine in this area,
-except when it is about to overflow any sink or tub or stool for any
-reason. It will cut itself off first.</description>
-        <choices/>
+        <description>The water runs clear and shuts off on its own before anything can overflow.</description>
+        <choices>
+            <choice description="Step back from the sink" resultScene="J.Bathroom"/>
+        </choices>
     </scene>
     <scene name="J.takeGreenPill">
-        <description>Everything around you seems to move in slow motion.
-(time  sped up to twice normal for three melee rounds)
+        <description>Your heart hammers—your reflexes feel doubled; everything else seems to crawl by.
+(Effect per module: your speed is doubled for three melee rounds.)
 </description>
-        <choices/>
+        <choices>
+            <choice description="Put the bottle back" resultScene="J.medicine_cabinet"/>
+        </choices>
     </scene>
     <scene name="J.takePinkPill">
-        <description>Healing.  Up to ten lost hit points per pill are restored.</description>
-        <choices/>
+        <description>Warmth spreads through you; wounds knit slightly—up to ten lost hit points restored per pink pill.</description>
+        <choices>
+            <choice description="Put the bottle back" resultScene="J.medicine_cabinet"/>
+        </choices>
+    </scene>
+    <scene name="Q.skeleton_room">
+        <description>The beams of the flashlights show a room with stone walls,
+floor, and ceiling. The body of a skeleton lies in the middle of the
+room and its head is in a far corner. There is another exit.
+On closer inspection the bones are old and yellow, child-sized. A golden ring glints on one finger.
+If paced out, the space is about forty feet east–west by seventy feet north–south.
+
+(Referee: bringing the skull within two feet of the body animates the skeleton—HP 10; AC 7; damage 1-6; it may chase you outside. The ring holds three wishes but cannot be used until the skeleton is destroyed.)</description>
+        <choices>
+            <choice description="Leave through the way you came (plant gallery)" resultScene="P.plant_room"/>
+        </choices>
     </scene>
 </script>
