@@ -4,8 +4,8 @@ package com.barrybecker4.puzzle.adventure.ui
 import com.barrybecker4.ui.components.ImageListPanel
 import javax.swing.JSplitPane
 import javax.swing.JTextArea
-import java.awt.{Color, Dimension, Font, Graphics}
-import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
+import java.awt.{Dimension, Font, Graphics}
+import com.barrybecker4.puzzle.adventure.model.Story
 
 
 object StoryPanel {
@@ -26,6 +26,15 @@ class StoryPanel(var story: Story) extends JSplitPane {
   add(imagePanel, JSplitPane.RIGHT)
   add(textArea, JSplitPane.LEFT)
 
+  refreshFromStory()
+
+  /** Update text and image for the current scene (call after navigation, not from paint). */
+  def refreshFromStory(): Unit = {
+    val sc = story.getCurrentScene
+    textArea.setText(sc.description)
+    imagePanel.setSingleImage(sc.getImage)
+  }
+
   private def createTextArea = {
     val textArea = new JTextArea
     textArea.setFont(StoryPanel.TEXT_FONT)
@@ -43,12 +52,6 @@ class StoryPanel(var story: Story) extends JSplitPane {
     imagePanel
   }
 
-  /** Render the Environment on the screen. */
-  override def paintComponent(g: Graphics): Unit = {
+  override def paintComponent(g: Graphics): Unit =
     super.paintComponent(g)
-    textArea.setText(story.getCurrentScene.description)
-
-    val scene = story.getCurrentScene
-    imagePanel.setSingleImage(scene.getImage)
-  }
 }

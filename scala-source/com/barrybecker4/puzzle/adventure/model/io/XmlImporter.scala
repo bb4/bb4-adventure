@@ -11,6 +11,7 @@ trait XmlImporter {
 
   def getStory: Story
 
-  protected def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene]
+  /** Uses `resourcePath` from the concrete importer instance for media resolution. */
+  protected def extractScenesFromDoc(document: Document): Array[Scene]
 
 }

@@ -1,31 +1,28 @@
-// Copyright by Barry G. Becker, 2016 - 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-
-buildscript {
-    repositories {
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/"}
-        maven { url "https://oss.sonatype.org/content/repositories/releases" }
-    }
-    dependencies {
-        classpath 'com.barrybecker4:bb4-gradle:1.8-SNAPSHOT'
-    }
-}
+// Copyright by Barry G. Becker, 2016 - 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
 plugins {
-    id "com.github.maiflai.scalatest" version "0.32" // needed to run scala tests
+    id 'com.barrybecker4.bb4.scala-library' version '2.0-SNAPSHOT'
+    id 'com.barrybecker4.bb4.publish' version '2.0-SNAPSHOT'
+    id 'com.barrybecker4.bb4.application' version '2.0-SNAPSHOT'
 }
+
 description = 'A framework for creating adventure games. It could also be used for other educational purposes.'
 group = 'com.barrybecker4'
-version = '1.7'
-ext {
-    archivesBaseName = 'bb4-adventure'
-    mainClass = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp"
+version = '2.0-SNAPSHOT'
+
+bb4 {
+    archivesBaseName.set('bb4-adventure')
+    mainClass.set('com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp')
 }
-apply from: project.buildscript.classLoader.getResource('bb4.gradle').toURI()
+
+tasks.withType(ScalaCompile).configureEach {
+    scalaCompileOptions.additionalParameters = ['-deprecation', '-feature']
+}
 
 dependencies {
-    implementation 'com.barrybecker4:bb4-sound:1.8-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-ui:1.8-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-common:1.8-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-sound:2.0-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-ui:2.0-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-common:2.0-SNAPSHOT'
 }
 
 // The appMap is used to create the list of available applications in the html index page and to generate the app tasks.
@@ -89,11 +86,11 @@ appMap['aikidoEditor'] = [
 
 appMap.each { appId, propMap ->
 
-    def mainClass = "com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp"
+    def resolvedMainClass = 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp'
     if (propMap.containsKey('mainClass'))
-        mainClass = propMap['mainClass'] // "${propMap['mainClass']}"
+        resolvedMainClass = propMap['mainClass']
 
-    println("mainClass = ${mainClass})")
+    println("mainClass = ${resolvedMainClass}")
 
     def argsList = []
     if (propMap.containsKey('script'))
@@ -103,18 +100,18 @@ appMap.each { appId, propMap ->
 
     tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
         group = 'application'
-        mainClassName = "${mainClass}"
+        mainClass.set(resolvedMainClass)
         standardInput = System.in
         args = argsList
         classpath = sourceSets.main.runtimeClasspath
-        jvmArgs = ["-ea"]
+        jvmArgs = ['-ea']
     }
 }
 
 ext.jarMap = new LinkedHashMap()
 jarMap['adventure'] = [
-        include:['com/barrybecker4/puzzle/adventure/**'],
-        exclude:['com/barrybecker4/puzzle/adventure/**/*.pdf']
+        include: ['com/barrybecker4/puzzle/adventure/**'],
+        exclude: ['com/barrybecker4/puzzle/adventure/**/*.pdf']
 ]
 
 
@@ -122,19 +119,16 @@ jarMap['adventure'] = [
 // Additional script to run text version.
 // It can take parameters like 'ludlow/ludlowScript.xml' or 'learnBinary/binaryScript.xml'
 task createTextAdventureApp(type: CreateStartScripts) {
-    mainClass.set("com.barrybecker4.puzzle.adventure.TextAdventure")
+    mainClass.set('com.barrybecker4.puzzle.adventure.TextAdventure')
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-text-adventure'
-    defaultJvmOpts = ["-Xmx1024m"]
+    defaultJvmOpts = ['-Xmx1024m']
 }
 
 // add extra execution scripts
-applicationDistribution.into("bin") {
+applicationDistribution.into('bin') {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(createTextAdventureApp)
     fileMode = 0755
 }
-
-apply from: project.buildscript.classLoader.getResource('bb4-publish.gradle').toURI()
-apply from: project.buildscript.classLoader.getResource('bb4-deploy.gradle').toURI()

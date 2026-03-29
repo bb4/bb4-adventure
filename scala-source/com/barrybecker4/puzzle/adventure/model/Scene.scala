@@ -30,8 +30,6 @@ object Scene {
     var image: Option[BufferedImage] = None
     val imagePath = resourcePath + "images/" + name + ".jpg"
     try {
-      println("Scene load resources path = " + resourcePath)
-      println("reading image from " + imagePath)
       image = Some(GUIUtil.getBufferedImage(imagePath))
     } catch {
       case e: NoClassDefFoundError =>
@@ -63,8 +61,13 @@ class Scene(var name: String, var description: String, var label: Option[String]
             val isFirst: Boolean = false) {
 
   def this(name: String, description: String, resourcePath: String) = {
-    this(name, description, None, new ChoiceList(),
-      loadSound(name, resourcePath), loadImage(name, "name"))
+    this(
+      name,
+      description,
+      None,
+      new ChoiceList(),
+      loadSound(name, resourcePath),
+      loadImage(name, resourcePath))
   }
 
   /** Copy constructor.
@@ -120,7 +123,8 @@ class Scene(var name: String, var description: String, var label: Option[String]
     * @return the name of the next scene given the number of the choice.
     */
   def getNextSceneName(choice: Int): String = {
-    assert(choice >= 0 || choice < choices.size)
+    require(choice >= 0 && choice < choices.size,
+      s"choice index $choice out of range; size is ${choices.size}")
     getChoices(choice).destinationScene
   }
 
@@ -131,18 +135,19 @@ class Scene(var name: String, var description: String, var label: Option[String]
   /** Prints what is missing, if anything, for this scene.
     * @return false if something is missing.
     */
+  /** @return true if media is consistent: both image and sound, or neither (text-only scene).
+    *         If only one is present, prints a message and returns false.
+    */
   def verifyMedia: Boolean = {
-    if (image == null) {
-      throw new IllegalStateException("Image is null for " + this.name)
-    }
-    if (image.isDefined || !hasSound) {
-      System.out.print("scene: " + name)
-      if (image == null) System.out.print(" missing image")
+    val hasImage = image.isDefined
+    if (hasImage == hasSound) true
+    else {
+      System.out.print(s"scene: $name")
+      if (!hasImage) System.out.print(" missing image")
       if (!hasSound) System.out.print(" missing sound")
-      println("")
-      return false
+      println()
+      false
     }
-    true
   }
 
   def print: String = {

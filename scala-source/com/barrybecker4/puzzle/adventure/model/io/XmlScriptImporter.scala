@@ -7,46 +7,56 @@ import org.w3c.dom.{Document, Node}
 import com.barrybecker4.puzzle.adventure.model.Scene.{loadImage, loadSound}
 import XmlScriptImporter._
 
-
 object XmlScriptImporter {
   val DTD = "script"
 
+  private def childElementNodes(nodeList: org.w3c.dom.NodeList): Seq[Node] = {
+    val buf = scala.collection.mutable.ArrayBuffer.empty[Node]
+    var i = 0
+    while (i < nodeList.getLength) {
+      val n = nodeList.item(i)
+      if (n.getNodeType == Node.ELEMENT_NODE) buf += n
+      i += 1
+    }
+    buf.toSeq
+  }
+
+  private def findFirstChildElement(parent: Node, tag: String): Option[Node] =
+    childElementNodes(parent.getChildNodes).find(_.getNodeName == tag)
+
+  private def descriptionForScene(sceneNode: Node): String =
+    findFirstChildElement(sceneNode, "description")
+      .map(_.getTextContent)
+      .getOrElse("")
+
   def createScene(sceneNode: Node, resourcePath: String, isFirst: Boolean): Scene = {
     val name = DomUtil.getAttribute(sceneNode, "name")
-
-    new Scene(name,
-      sceneNode.getFirstChild.getTextContent, None,
+    new Scene(
+      name,
+      descriptionForScene(sceneNode),
+      None,
       new ChoiceList(getChoices(sceneNode)),
       loadSound(name, resourcePath),
       loadImage(name, resourcePath),
       isFirst)
   }
 
-  /** if there are choices they will be the second element (right after description).
-    * @return extracted choices from a sceneNode.
+  /** Choices live under a `choices` element; only `choice` element children are used.
     */
-  private def getChoices(sceneNode: Node): Seq[Choice] = {
-    val children = sceneNode.getChildNodes
-    var choices: Seq[Choice] = Seq()
-    if (children.getLength > 1) {
-      val choicesNode = children.item(1)
-      val choiceList = choicesNode.getChildNodes
-      val numChoices = choiceList.getLength
-      choices = Seq()
-      var i = 0
-      while (i < numChoices) {
-        assert(choiceList.item(i) != null)
-        choices :+= createChoice(choiceList.item(i))
-        i += 1
-      }
+  private def getChoices(sceneNode: Node): Seq[Choice] =
+    findFirstChildElement(sceneNode, "choices") match {
+      case Some(choicesNode) =>
+        childElementNodes(choicesNode.getChildNodes)
+          .filter(_.getNodeName == "choice")
+          .map(createChoice)
+      case None =>
+        Seq.empty
     }
-    choices
-  }
 
-  private def createChoice(choiceNode: Node): Choice = {
-    Choice(DomUtil.getAttribute(choiceNode, "description"),
+  private def createChoice(choiceNode: Node): Choice =
+    Choice(
+      DomUtil.getAttribute(choiceNode, "description"),
       DomUtil.getAttribute(choiceNode, "resultScene"))
-  }
 }
 
 /**
@@ -63,19 +73,15 @@ case class XmlScriptImporter(document: Document, resourcePath: String) extends X
     DomUtil.getAttribute(document.getDocumentElement, "author"),
     DomUtil.getAttribute(document.getDocumentElement, "date"),
     resourcePath, DTD,
-    extractScenesFromDoc(document, resourcePath))
+    extractScenesFromDoc(document))
 
   def getStory: Story = story
 
-  protected def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene] = {
+  protected def extractScenesFromDoc(document: Document): Array[Scene] = {
     val root = document.getDocumentElement
-    val children = root.getChildNodes
-    val scenes = new Array[Scene](children.getLength)
-    var i = 0
-    while (i < children.getLength) {
-      scenes(i) = createScene(children.item(i), resourcePath, i == 0)
-      i += 1
-    }
-    scenes
+    val sceneNodes = childElementNodes(root.getChildNodes).filter(_.getNodeName == "scene")
+    sceneNodes.zipWithIndex.map { case (node, idx) =>
+      createScene(node, resourcePath, idx == 0)
+    }.toArray
   }
 }

@@ -112,13 +112,8 @@ class Story(val title: String = "", val name: String = "",
   /** @return a list of all the existing scenes that we could navigate to
     *         that are not already included in the current scene's list of choices.
     */
-  def getCandidateDestinationSceneNames: Seq[String] = {
-    var candidateSceneNames: Seq[String] = Seq()
-    for (sceneName <- sceneMap.sceneNames) {
-      if (!getCurrentScene.choices.isDestination(sceneName)) candidateSceneNames :+= sceneName
-    }
-    candidateSceneNames
-  }
+  def getCandidateDestinationSceneNames: Seq[String] =
+    sceneMap.sceneNames.filterNot(getCurrentScene.choices.isDestination).toSeq
 
   def getAllSceneNames: Set[String] = sceneMap.sceneNames
 }

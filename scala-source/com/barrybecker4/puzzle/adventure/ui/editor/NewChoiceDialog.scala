@@ -37,14 +37,18 @@ class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDi
 
   override def createDialogContent: JComponent = {
     val outerPanel = new JPanel(new BorderLayout)
+    outerPanel.add(buildPickerColumn(), BorderLayout.CENTER)
+    outerPanel.add(createButtonsPanel, BorderLayout.SOUTH)
+    outerPanel
+  }
+
+  private def buildPickerColumn(): JComponent = {
     val mainPanel = new JPanel
-    val layout = new BoxLayout(mainPanel, BoxLayout.Y_AXIS)
-    mainPanel.setLayout(layout)
+    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS))
     sceneSelector = new JComboBox[String](candidateDestinations.sorted.toArray)
     sceneSelector.setAlignmentX(Component.LEFT_ALIGNMENT)
     sceneSelector.setBorder(BorderFactory.createTitledBorder(
-      "Select an existing scene or type in the name for a new scene.")
-    )
+      "Select an existing scene or type in the name for a new scene."))
     val orLabel = new JLabel("or")
     orLabel.setAlignmentX(Component.LEFT_ALIGNMENT)
     sceneTextInput = new TextInput("New scene name")
@@ -54,9 +58,7 @@ class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDi
     mainPanel.add(sceneSelector)
     mainPanel.add(orLabel)
     mainPanel.add(sceneTextInput)
-    outerPanel.add(mainPanel, BorderLayout.CENTER)
-    outerPanel.add(createButtonsPanel, BorderLayout.SOUTH)
-    outerPanel
+    mainPanel
   }
 
   def getSelectedDestinationScene: String = selectedDestinationScene

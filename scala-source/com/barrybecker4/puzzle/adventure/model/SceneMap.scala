@@ -38,15 +38,8 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
   }
 
   /** @return a list of all the scenes that led to the specified scene. */
-  def getParentScenes(scene: Scene): Seq[Scene] = {
-    var parentScenes: Seq[Scene] = Seq()
-    // loop through all the scenes, and if any of them have us as a child, add to the list
-    for (sceneName <- map.keySet) {
-      val s = map(sceneName)
-      if (s.isParentOf(scene)) parentScenes :+= s
-    }
-    parentScenes
-  }
+  def getParentScenes(scene: Scene): Seq[Scene] =
+    map.values.filter(_.isParentOf(scene)).toSeq
 
   def getChildScenes(scene: Scene): Seq[Scene] = {
     scene.choices.choices.map(choice => this.get(choice.destinationScene))
@@ -58,7 +51,7 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
       scene.verifyMedia
       for (choice <- scene.getChoices) {
         val dest = choice.destinationScene
-        if (dest != null && map.get(choice.destinationScene) == null)
+        if (dest != null && !map.contains(dest))
           throw new IllegalStateException(
             "No scene named " + choice.destinationScene + " desc=" + choice.description)
       }

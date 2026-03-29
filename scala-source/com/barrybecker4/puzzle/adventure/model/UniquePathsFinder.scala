@@ -11,17 +11,14 @@ import scala.collection.immutable.Queue
 case class UniquePathsFinder(story: Story) {
 
   case class Path(visited: Set[Scene], pathList: Seq[Scene]) {
-
-    def this(startScene: Scene) = {
-      this(Set(startScene), Seq[Scene](startScene))
-    }
-
     def getLast: Scene = pathList.last
     def getNextScenes: Seq[Scene] = story.getSceneMap.getChildScenes(getLast)
     def asSceneList: Seq[Scene] = pathList
     def contains(scene: Scene): Boolean = visited.contains(scene)
     def add(scene: Scene): Path = Path(visited + scene, pathList :+ scene)
   }
+
+  private def pathFromStart(s: Scene): Path = Path(Set(s), Seq(s))
 
   val startScene: Scene = story.getFirstScene
 
@@ -31,7 +28,7 @@ case class UniquePathsFinder(story: Story) {
     var queue = Queue[Path]()
     var uniquePaths = List[Path]()
 
-    queue = queue.enqueue(new Path(startScene))
+    queue = queue.enqueue(pathFromStart(startScene))
 
     while (queue.nonEmpty) {
       val (path, q) = queue.dequeue
@@ -46,7 +43,6 @@ case class UniquePathsFinder(story: Story) {
       }
     }
 
-    //println("found " + uniquePaths.size + " paths")
     uniquePaths.map(_.asSceneList)
   }
 }

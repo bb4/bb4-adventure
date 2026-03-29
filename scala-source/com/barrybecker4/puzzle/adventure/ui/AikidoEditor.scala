@@ -22,8 +22,9 @@ object AikidoEditor {
       if (args == null || args.isEmpty) Array[String]("techniques.xml", AIKIDO_RESOURCE_ROOT)
       else args
 
-    new GraphicalAdventure(Array(),
-      new StoryImporter(theArgs).getStory, null)
+    new GraphicalAdventure(
+      Array(),
+      StoryImporter.fromArgs(theArgs).getStory, None)
   }
 
 }

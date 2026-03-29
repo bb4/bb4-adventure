@@ -21,6 +21,17 @@ object XmlHierarchyImporter {
     val label = DomUtil.getAttribute(sceneNode, "label")
     DomUtil.getAttribute(sceneNode, "description", label)
   }
+
+  private[io] def childElementNodes(nodeList: NodeList): Seq[Node] = {
+    val buf = scala.collection.mutable.ArrayBuffer.empty[Node]
+    var i = 0
+    while (i < nodeList.getLength) {
+      val n = nodeList.item(i)
+      if (n.getNodeType == Node.ELEMENT_NODE) buf += n
+      i += 1
+    }
+    buf.toSeq
+  }
 }
 
 /**
@@ -34,11 +45,12 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
 
   private val story: Story = new Story(
     DomUtil.getAttribute(document.getDocumentElement, "title"),
-    DTD,
+    DomUtil.getAttribute(document.getDocumentElement, "name", ""),
     DomUtil.getAttribute(document.getDocumentElement, "author"),
     DomUtil.getAttribute(document.getDocumentElement, "date"),
-    resourcePath, DTD,
-    extractScenesFromDoc(document, resourcePath + DomUtil))
+    resourcePath,
+    DTD,
+    extractScenesFromDoc(document))
 
   def getStory: Story = story
 
@@ -56,30 +68,35 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
     * Note that "use" nodes refer to existing nodes in the hierarchy
     * Note that the description is optional. Use label if not specified.
     * @param document doc to extract from
-    * @param resourcePath where the media is
     * @return all the scenes in a flat array
     */
-  protected def extractScenesFromDoc(document: Document, resourcePath: String): Array[Scene] = {
+  protected def extractScenesFromDoc(document: Document): Array[Scene] = {
     val root = document.getDocumentElement
-    val children = root.getChildNodes
+    val topLevelNodes = XmlHierarchyImporter.childElementNodes(root.getChildNodes)
+      .filter(_.getNodeName == "node")
     val scenes = new ArrayBuffer[Scene]()
 
     // since there can be only one start node, if there is more than one
     // child at the root, add a fake parent for those nodes.
-    if (children.getLength > 1) {
-      val rootNode = new Scene(FAKE_ROOT,
-        "-", None, new ChoiceList(getChoices(children)),
-        None, None,
+    if (topLevelNodes.size > 1) {
+      val rootNode = new Scene(
+        FAKE_ROOT,
+        "-",
+        None,
+        new ChoiceList(getChoices(root.getChildNodes)),
+        None,
+        None,
         true)
       scenes.append(rootNode)
 
-      var i = 0
-      while (i < children.getLength) {
-        appendScenesRootedAt(children.item(i), scenes, isFirst = false)
-        i += 1
-      }
+      for (n <- topLevelNodes)
+        appendScenesRootedAt(n, scenes, isFirst = false)
     }
-    else appendScenesRootedAt(children.item(0), scenes, isFirst = true)
+    else if (topLevelNodes.size == 1)
+      appendScenesRootedAt(topLevelNodes.head, scenes, isFirst = true)
+    else
+      throw new IllegalStateException(
+        "hierarchy document has no top-level <node> elements under the root")
 
     scenes.toArray
   }
@@ -99,29 +116,21 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
     idToLabelMap += name -> label
     scenes.append(rootScene)
 
-    // then append all of its children
-    var i = 0
-    val children = sceneNode.getChildNodes
-    while (i < children.getLength) {
-      appendScenesRootedAt(children.item(i), scenes, isFirst = false)
-      i += 1
-    }
+    // Recurse only into nested scene nodes, not <use> refs (those are edges, not new scenes).
+    for (child <- XmlHierarchyImporter.childElementNodes(sceneNode.getChildNodes)
+           if child.getNodeName == "node")
+      appendScenesRootedAt(child, scenes, isFirst = false)
   }
 
-  /** The choices will be the labels and ids of all the children.
-    * @return extracted choices from a sceneNode.
+  /** The choices will be the labels and ids of all the child `node` and `use` elements.
     */
-  private def getChoices(children: NodeList): Seq[Choice] = {
-    var choices: Seq[Choice] = Seq()
-    for (i <- 0 until children.getLength) {
-      val child = children.item(i)
-      choices :+= createChoice(child)
-    }
-    choices
-  }
+  private def getChoices(children: NodeList): Seq[Choice] =
+    XmlHierarchyImporter
+      .childElementNodes(children)
+      .filter(n => n.getNodeName == "node" || n.getNodeName == "use")
+      .map(createChoice)
 
-  private def createChoice(node: Node): Choice = {
-
+  private def createChoice(node: Node): Choice =
     node.getNodeName match {
       case "node" =>
         val id = DomUtil.getAttribute(node, "id")
@@ -132,5 +141,4 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
       case _ =>
         throw new IllegalArgumentException("Unexpected tag: " + node.getNodeName)
     }
-  }
 }

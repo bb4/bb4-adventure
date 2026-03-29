@@ -15,7 +15,10 @@ object GraphicalAdventureApp {
 
   def main(args: Array[String]): Unit = {
     val theArgs = if (args == null) Array[String]() else args
-    new GraphicalAdventure(Array(), new StoryImporter(theArgs).getStory, PASSWORD)
+    new GraphicalAdventure(
+      Array(),
+      StoryImporter.fromArgs(theArgs).getStory,
+      Some(PASSWORD))
   }
 
 }

@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure
 
-import java.util.InputMismatchException
 import java.util.Scanner
+import scala.util.Try
 
 import com.barrybecker4.puzzle.adventure.model.Scene
 import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
@@ -16,40 +16,37 @@ import com.barrybecker4.puzzle.adventure.model.io.StoryImporter
   */
 object TextAdventure {
 
-  def main(args: Array[String] ): Unit = {
-    val story = new StoryImporter(args).getStory
+  /** Parse a 1-based choice number from a line of input (for tests and REPL-style play). */
+  private[adventure] def parseChoiceLine(line: String): Option[Int] =
+    Try(line.trim.toInt).toOption
+
+  def main(args: Array[String]): Unit = {
+    val story = StoryImporter.fromArgs(args).getStory
     val scanner = new Scanner(System.in).useDelimiter("\n")
     while (!story.isOver) {
       val currentScene = story.getCurrentScene
       println(currentScene.print)
-      val nextSceneIndex = getNextSceneIndex(currentScene, scanner)
+      val nextSceneIndex = getNextSceneIndex(currentScene, () => scanner.nextLine())
       story.advanceScene(nextSceneIndex)
     }
     scanner.close()
   }
 
-
-  /** Retrieve the selection from the player using the scanner.
-    * @return the next scene to advance to.
+  /** @param readLine next line from the player (lazy each attempt)
+    * @return 0-based index for [[com.barrybecker4.puzzle.adventure.model.Story.advanceScene]], or -1 if no choices.
     */
-  private def getNextSceneIndex(scene: Scene, scanner: Scanner) = {
-    var sceneIndex = -1
-    if (scene.hasChoices) {
-      var nextInt = -1
-      var valid = true
-      while (!scene.isValidChoice(nextInt)) {
-        try
-          nextInt = scanner.nextInt
-        catch {
-          case e: InputMismatchException =>
-            valid = false
-            scanner.next
+  private[adventure] def getNextSceneIndex(scene: Scene, readLine: () => String): Int =
+    if (!scene.hasChoices) -1
+    else {
+      var choice1Based = -1
+      while (!scene.isValidChoice(choice1Based)) {
+        parseChoiceLine(readLine()) match {
+          case Some(i) => choice1Based = i
+          case None =>
         }
-        if (!scene.isValidChoice(nextInt) || !valid)
+        if (!scene.isValidChoice(choice1Based))
           println("You must enter a number from among the choices.")
       }
-      sceneIndex = nextInt - 1
+      choice1Based - 1
     }
-    sceneIndex
-  }
 }

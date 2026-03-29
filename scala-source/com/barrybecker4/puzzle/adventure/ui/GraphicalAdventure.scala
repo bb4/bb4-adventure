@@ -11,6 +11,8 @@ import javax.swing.JPanel
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.io.File
+
+import scala.compiletime.uninitialized
 import com.barrybecker4.puzzle.adventure.model.io.{StoryExporter, StoryImporter}
 import com.barrybecker4.puzzle.adventure.model.Story
 
@@ -18,8 +20,10 @@ import com.barrybecker4.puzzle.adventure.model.Story
 /**
   * @param story initial story to show.
   */
-final class GraphicalAdventure(args: Array[String],
-                               var story: Story, editPassword: String = null)
+final class GraphicalAdventure(
+    args: Array[String],
+    var story: Story,
+    editPassword: Option[String] = None)
   extends ApplicationApplet(args) with SceneChangeListener {
 
   val frame: JFrame = GUIUtil.showApplet(this)
@@ -29,8 +33,9 @@ final class GraphicalAdventure(args: Array[String],
   frame.setJMenuBar(menubar)
   frame.invalidate()
   frame.validate()
-  private var choicePanel: ChoicePanel = _
-  private var mainPanel: JPanel = _
+  private var choicePanel: ChoicePanel = uninitialized
+  private var storyPanel: StoryPanel = uninitialized
+  private var mainPanel: JPanel = uninitialized
   private var storyEdited: Boolean = false
 
   override def getName: String = story.getTitle
@@ -50,8 +55,7 @@ final class GraphicalAdventure(args: Array[String],
     if (story == null) return
     mainPanel.removeAll()
     this.story = story
-    val storyPanel = new StoryPanel(this.story)
-    // setup for initial scene
+    storyPanel = new StoryPanel(this.story)
     choicePanel = new ChoicePanel(story.getCurrentScene.choices)
     story.getCurrentScene.playSound()
     choicePanel.addSceneChangeListener(this)
@@ -69,22 +73,25 @@ final class GraphicalAdventure(args: Array[String],
   }
 
   /** Allow user to edit the current story if they know the password.
-    * If expected pw is null, they do not need to enter one.
+    * If no password is configured, editing is not gated.
     */
   def editStory(): Unit = {
-    if (editPassword != null) {
-      val pwDlg = new PasswordDialog(editPassword)
-      val canceled = pwDlg.showDialog
-      if (canceled) return
+    val mayProceed = editPassword match {
+      case None => true
+      case Some(pw) =>
+        val pwDlg = new PasswordDialog(pw)
+        !pwDlg.showDialog
     }
 
-    val storyEditor = new StoryEditorDialog(new Story(story))
-    val editingCanceled = storyEditor.showDialog
-    if (!editingCanceled) { // show the edited version.
-      story.initializeFrom(storyEditor.getEditedStory)
-      story.resetToFirstScene()
-      setStory(story)
-      storyEdited = true
+    if (mayProceed) {
+      val storyEditor = new StoryEditorDialog(new Story(story))
+      val editingCanceled = storyEditor.showDialog
+      if (!editingCanceled) {
+        story.initializeFrom(storyEditor.getEditedStory)
+        story.resetToFirstScene()
+        setStory(story)
+        storyEdited = true
+      }
     }
   }
 
@@ -95,7 +102,9 @@ final class GraphicalAdventure(args: Array[String],
     val matchPrefix = "com" + File.separatorChar
     val idx = file.getParent.indexOf(matchPrefix)
     val folder = file.getParent.substring(idx)
-    val story = new StoryImporter(file.getName, folder + File.separatorChar).getStory
+    val story = StoryImporter
+      .fromDefaults(file.getName, folder + File.separator)
+      .getStory
     setStory(story)
   }
 
@@ -108,6 +117,7 @@ final class GraphicalAdventure(args: Array[String],
   /** called when a button is pressed. */
   override def sceneChanged(selectedChoiceIndex: Int): Unit = {
     story.advanceScene(selectedChoiceIndex)
+    storyPanel.refreshFromStory()
     refresh()
     choicePanel.setChoices(story.getCurrentScene.choices)
     story.getCurrentScene.playSound()
@@ -119,7 +129,7 @@ final class GraphicalAdventure(args: Array[String],
   override def init(): Unit = {
     super.init()
     if (story == null) {
-      val story = new StoryImporter(Array[String]()).getStory
+      val story = StoryImporter.fromArgs(Array[String]()).getStory
       setStory(story)
     }
   }

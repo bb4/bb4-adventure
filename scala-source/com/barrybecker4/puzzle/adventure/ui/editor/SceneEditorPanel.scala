@@ -36,35 +36,41 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
     this.setLayout(new BorderLayout)
     this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Edit current Scene"))
 
+    val mainContent = new JPanel(new BorderLayout)
+    mainContent.add(buildTopInputsPanel(), BorderLayout.NORTH)
+    mainContent.add(buildDescriptionArea(), BorderLayout.CENTER)
+
+    add(mainContent, BorderLayout.CENTER)
+    addThumbnailIfPresent()
+    add(createMediaButtons, BorderLayout.SOUTH)
+  }
+
+  private def buildTopInputsPanel(): JPanel = {
     val topInputs = new JPanel(new BorderLayout)
     nameInput = new TextInput("name:", scene.name)
     nameInput.setColumns(40)
     topInputs.add(nameInput, BorderLayout.NORTH)
-
     if (scene.label.isDefined) {
       labelInput = new TextInput("label:", scene.label.get)
       labelInput.setColumns(45)
       topInputs.add(labelInput, BorderLayout.CENTER)
     }
+    topInputs
+  }
 
+  private def buildDescriptionArea(): ScrollingTextArea = {
     sceneDescription = new ScrollingTextArea
     sceneDescription.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
     sceneDescription.setEditable(true)
     sceneDescription.setFont(StoryPanel.TEXT_FONT)
     sceneDescription.setText(scene.description)
-
-    val mainContent = new JPanel()
-    mainContent.setLayout(new BorderLayout)
-    mainContent.add(topInputs, BorderLayout.NORTH)
-    mainContent.add(sceneDescription, BorderLayout.CENTER)
-
-    add(mainContent, BorderLayout.CENTER)
-    if (scene.image.isDefined) {
-      val imageThumbnail = createImageThumbNail(scene.image.get)
-      add(imageThumbnail, BorderLayout.EAST)
-    }
-    add(createMediaButtons, BorderLayout.SOUTH)
+    sceneDescription
   }
+
+  private def addThumbnailIfPresent(): Unit =
+    scene.image.foreach { img =>
+      add(createImageThumbNail(img), BorderLayout.EAST)
+    }
 
   /** For sound and image and whatever else is associated with the scene.
     * @return image and sound buttons in a panel.
