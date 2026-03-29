@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE script SYSTEM "https://raw.githubusercontent.com/bb4/bb4-adventure/master/scala-source/com/barrybecker4/puzzle/adventure/script.dtd">
-<!--DOCTYPE script SYSTEM "http://barrybecker4.com/bb4-projects/schema/script.dtd"-->
+<?xml version="1.0" encoding="UTF-8"?>
 <script author="Barry Becker" date="10/19/2006" name="ludlow" title="The Mansion of Professor Ludlow">
     <scene name="start">
         <description>
@@ -12,7 +10,7 @@
 You are on a camping trip with a large group of boy scouts.
 During a nighttime hike, you get separated from the rest of the group.
 You stumble upon a meadow. There in front of you is a large mansion.
-You hear an eary plea for help coming from inside.
+You hear an eerie plea for help coming from inside.
 What do you do?
         </description>
         <choices>
@@ -43,44 +41,214 @@ You find nothing in them except for leaves, dust, and stray paperclips.
         </choices>
     </scene>
     <scene name="sky_falls">
-        <description>The sky falls on you. Game over.</description>
+        <description>
+The sky falls on you. Game over.
+        </description>
         <choices>
             <choice description="Start over" resultScene="start"/>
         </choices>
     </scene>
-    <scene name="stub">
-        <description>TBD</description>
-        <choices/>
-    </scene>
     <scene name="quit">
-        <description>You go back to the others. They don't believe your story. You enjoy the rest of the camping trip.
+        <description>
+You go back to the others. They don't believe your story. You enjoy the rest of the camping trip.
         </description>
         <choices>
             <choice description="Return to the mansion" resultScene="start"/>
         </choices>
     </scene>
     <scene name="A.inside_entrance">
-        <description>The double door is unlocked and opens easily.
+        <description>
+The double door is unlocked and opens easily.
 The beam of your flashlight reveals an empty hallway with a mirror at the opposite end.
 There are openings that lead to rooms on the left and right.
 The hall has inch-thick red carpeting and walnut-paneled walls.
 The mirror at the end runs from the floor to the twenty-foot-high ceiling and covers the forty feet of wall section on that south face of the hall.
+(Referee note: the mirror lifts to reveal a secret door. All first-floor walls are actually unbreakable metal.)
         </description>
         <choices>
             <choice description="Go through left (east) opening" resultScene="B.rat_room"/>
             <choice description="Go through right (west) opening" resultScene="K.trophyRoom"/>
-            <choice description="Tamper with mirror at the end of the hall (to the south). " resultScene="A.mirror"/>
+            <choice description="Tamper with mirror at the end of the hall (to the south)" resultScene="A.mirror"/>
+            <choice description="Explore the north wing (areas M–O)" resultScene="M.marbleBedroom"/>
+            <choice description="Enter the special halls (gold / mirror / silver)" resultScene="goldHall"/>
             <choice description="Exit the mansion" resultScene="quit"/>
         </choices>
     </scene>
+    <scene name="M.marbleBedroom">
+        <description>
+The beams of your flashlights show a room with walls, floor, and ceiling of white marble.
+There is a bed in one corner, several dressers, and a floor-to-ceiling mirror on one wall.
+The bed is a huge four-poster with dust on the green satin bedspread.
+Four dressers hold white operating gowns and masks; bedstands hide dimes, batteries, and a gold letter opener.
+(Referee: under the pillow is a red plastic disc—when worn, every room lights up. If anyone lies fully on the bed, the canopy tries to suffocate them for 5 hp/round until cut away.)
+        </description>
+        <choices>
+            <choice description="Continue to the armor-lined hall" resultScene="N.armorHall"/>
+            <choice description="Return to the entrance hall" resultScene="A.inside_entrance"/>
+        </choices>
+    </scene>
+    <scene name="N.armorHall">
+        <description>
+The beams of your flashlights show a room with twelve figures dressed in metal.
+On the opposite side of the room is another exit.
+The room is paneled in red oak. The twelve figures are suits of armor in two rows of six, each with an upraised sword.
+(Referee: if the two northernmost suits are touched, they animate and attack. There are two such rooms labeled N on the map—this is one of them.)
+        </description>
+        <choices>
+            <choice description="Proceed to the kitchen" resultScene="O.kitchen"/>
+            <choice description="Back to the marble bedroom" resultScene="M.marbleBedroom"/>
+        </choices>
+    </scene>
+    <scene name="O.kitchen">
+        <description>
+The beams of your flashlights show a room with a large table and chairs, cupboards, metal sinks, a gas stove, and a huge refrigerator.
+The room is painted yellow. Cupboards hold canned goods; pots and pans fill another cupboard.
+(Referee: if the freezer is broken into, a white pudding attacks. Two such kitchen rooms exist on the map.)
+        </description>
+        <choices>
+            <choice description="Follow the passage toward the trophy wing" resultScene="K.trophyRoom"/>
+            <choice description="Return toward the armor hall" resultScene="N.armorHall"/>
+        </choices>
+    </scene>
+    <scene name="goldHall">
+        <description>
+The beams of your flashlights reveal a short hall with gold-colored metal walls, floor, and ceiling.
+The hall is sixty feet east-west and twenty feet north-south, plated with thin riveted squares.
+(Referee: the plates are real gold worth 9 gp each.)
+        </description>
+        <choices>
+            <choice description="Enter the mirror hall" resultScene="mirrorHall"/>
+            <choice description="Return to the entrance hall" resultScene="A.inside_entrance"/>
+        </choices>
+    </scene>
+    <scene name="mirrorHall">
+        <description>
+The beams of your flashlights reveal a hall lined with mirrors, 140 feet long east-west.
+Light seems to build unnaturally each round you stand here.
+(Referee: every 21st melee round, stored light disintegrates the darkest target for 100 damage, then resets.)
+        </description>
+        <choices>
+            <choice description="Continue to the silver hall" resultScene="silverHall"/>
+            <choice description="Back to the gold hall" resultScene="goldHall"/>
+        </choices>
+    </scene>
+    <scene name="silverHall">
+        <description>
+The beams of your flashlights reveal a hall with silver-colored metal walls, eighty feet long.
+(Referee: plates are solid silver worth 3 gp each.)
+        </description>
+        <choices>
+            <choice description="Enter the closet rooms" resultScene="closets"/>
+            <choice description="Descend toward the annex pool (area AA)" resultScene="AA.pool"/>
+            <choice description="Back to the mirror hall" resultScene="mirrorHall"/>
+        </choices>
+    </scene>
+    <scene name="closets">
+        <description>
+Rooms filled with clothing: coats, raincoats, boots—all sized for a tall man.
+        </description>
+        <choices>
+            <choice description="Continue to the grape-juice pool room" resultScene="AA.pool"/>
+            <choice description="Return to the silver hall" resultScene="silverHall"/>
+        </choices>
+    </scene>
+    <scene name="AA.pool">
+        <description>
+The beams of your flashlights reveal a swimming pool filled with dark liquid. A ten-foot concrete border lets you walk around it.
+The liquid smells sickeningly sweet.
+(Referee: it is grape juice, fresh and drinkable; the pool is thirty feet deep.)
+        </description>
+        <choices>
+            <choice description="Go to the copper-walled room" resultScene="BB.copper"/>
+            <choice description="Back toward the silver hall" resultScene="silverHall"/>
+        </choices>
+    </scene>
+    <scene name="BB.copper">
+        <description>
+An empty room whose walls are dull copper-colored metal, forty feet square.
+        </description>
+        <choices>
+            <choice description="Enter the L-shaped marble room" resultScene="CC.corridor"/>
+            <choice description="Return to the pool room" resultScene="AA.pool"/>
+        </choices>
+    </scene>
+    <scene name="CC.corridor">
+        <description>
+An L-shaped room: paneled oak walls, grey marble floor and ceiling, wide hallway exit and another opening diagonally opposite.
+(Referee: two CC rooms exist; wide openings lead toward the Silver Hall and Gold Hall.)
+        </description>
+        <choices>
+            <choice description="Descend toward the black spiral room" resultScene="DD.blackSpiral"/>
+            <choice description="Back to the copper room" resultScene="BB.copper"/>
+        </choices>
+    </scene>
+    <scene name="DD.blackSpiral">
+        <description>
+A room with black barn-board walls and a metal spiral staircase going up at one end.
+Eighty feet east-west, forty feet north-south.
+        </description>
+        <choices>
+            <choice description="Climb the spiral" resultScene="EE.sheetRoom"/>
+            <choice description="Return to the L-shaped room" resultScene="CC.corridor"/>
+        </choices>
+    </scene>
+    <scene name="EE.sheetRoom">
+        <description>
+A room with several objects covered by sheets—the walls are dark oak beneath foam rubber bits if you dig.
+(Referee: a spiral staircase of metal may be uncovered here.)
+        </description>
+        <choices>
+            <choice description="Return to the entrance hall" resultScene="A.inside_entrance"/>
+            <choice description="Back to the black spiral room" resultScene="DD.blackSpiral"/>
+        </choices>
+    </scene>
+    <scene name="R.foamRoom">
+        <description>
+A room filled top to bottom with small bits of foam rubber. Moving through it takes time.
+Underneath, surfaces are dark oak; a metal spiral staircase may lie hidden.
+        </description>
+        <choices>
+            <choice description="Push on to the computer room" resultScene="S.computerRoom"/>
+            <choice description="Return to the skeleton room" resultScene="Q.skeleton_room"/>
+        </choices>
+    </scene>
+    <scene name="S.computerRoom">
+        <description>
+A huge computer fills both sides of the room; a narrow path runs between the machines.
+On the east side, a table holds a typewriter; above it, a television screen.
+(Referee: the computer answers typed questions about the house; technical answers come back in Latin.)
+        </description>
+        <choices>
+            <choice description="Continue to the pink fiberglass bathroom" resultScene="T.pinkBathroom"/>
+            <choice description="Back to the foam room" resultScene="R.foamRoom"/>
+        </choices>
+    </scene>
+    <scene name="T.pinkBathroom">
+        <description>
+A bathroom with stool, sink, mirror, and tub. Everything is pink fiberglass; the tub bubbles.
+(Referee: the tub holds hydrochloric acid—dissolves anything except glass. The medicine cabinet behind the mirror is empty.)
+        </description>
+        <choices>
+            <choice description="Go to the fungus-filled library" resultScene="U.fungusLibrary"/>
+            <choice description="Back to the computer room" resultScene="S.computerRoom"/>
+        </choices>
+    </scene>
+    <scene name="U.fungusLibrary">
+        <description>
+A room filled with books on shelves, a desk, and another exit. Fungus coats surfaces five inches thick; spores cloud the air.
+(Referee: harmless but foul-smelling; the pile hides +4 glowing plate mail.)
+        </description>
+        <choices>
+            <choice description="Return to the entrance hall" resultScene="A.inside_entrance"/>
+            <choice description="Back to the pink bathroom" resultScene="T.pinkBathroom"/>
+        </choices>
+    </scene>
     <scene name="B.rat_room">
-        <description>The beams of your flashlight show a room paneled in redstained barn boards with a floor of the same substance. There is a couch in the northeast corner of the room and an opening out of theroom on the east wall.
-
-There are leaves on the floor, and an old worn out couch in the north east corner.
-There is a musty smell to the room, and leaves are littered on the floor.
-The couch is an old, dusty, overstuffed relic with several cushions and rips on all parts of it.
-The room measures sixty feet east and west and forty feet north and south, if paced out.
-There is a door on the east side of the room.
+        <description>
+The beams of your flashlight show a room paneled in red-stained barn boards with a floor of the same substance.
+There is a couch in the northeast corner and an opening on the east wall.
+Leaves litter the floor; the couch is dusty and overstuffed.
+The room measures sixty feet east and west and forty feet north and south.
         </description>
         <choices>
             <choice description="Inspect the couch." resultScene="B.rat_attack"/>
@@ -90,10 +258,9 @@ There is a door on the east side of the room.
         </choices>
     </scene>
     <scene name="C.pink_hallway">
-        <description>The beam of your flashlight show a hall with pink walls and a floor of red marble.
-The walls have clean squares all over them where pictures were obviously once hung, but are no longer.
-The floor has dried leaves littering it. If paced out, the hall is eighty feet long east and west and twenty feet long north and south.
-The hall leads to another room at the end.
+        <description>
+The beam of your flashlight shows a hall with pink walls and a floor of red marble.
+Clean squares mark where pictures once hung. The hall is eighty feet east-west, twenty feet north-south.
         </description>
         <choices>
             <choice description="Proceed into the room at the end of the hall (east)." resultScene="D.crate_room"/>
@@ -102,14 +269,9 @@ The hall leads to another room at the end.
     </scene>
     <scene name="D.crate_room">
         <description>
-The beam of the flashlight shows a room with gray painted walls and a cement floor.
-It is filled with wooden crates and there are leaves all over the room in large piles.
-There are 200 empty wooden crates of differing sizes, and the biggest concentration of leaves is in the
-southwest corner of the room.
-The room measures sixty feet east and west and forty feet north and south and has a side alcove to the
-south starting on the east wall that is forty feet long east and west and twenty feet long north and south.
-It is here that the concentration of leaves is located. Behind a big crate along the east wall, thirty
-feet from the north corner, one finds a door with a normal handle.
+Gray painted walls, cement floor, wooden crates, leaves in piles.
+Two hundred empty crates; the biggest leaf piles are in the southwest alcove.
+Behind a big crate on the east wall, thirty feet from the north corner, is a door with a normal handle.
         </description>
         <choices>
             <choice description="Go through door behind big crate (east)." resultScene="E.gray_storage_room"/>
@@ -119,7 +281,8 @@ feet from the north corner, one finds a door with a normal handle.
         </choices>
     </scene>
     <scene name="D.crate_room_leaves">
-        <description>There are snakes in the leaves. A group of 3 4 foot long rattlesnakes attack.
+        <description>
+There are snakes in the leaves. Three four-foot rattlesnakes attack.
 (HP: 10,8,5; #AT: 1; damage:1-3; AC: 5; SA: Save versus death caused by poison).
         </description>
         <choices>
@@ -127,213 +290,159 @@ feet from the north corner, one finds a door with a normal handle.
         </choices>
     </scene>
     <scene name="F.oak_room">
-        <description>The beams of the flashlights show a room paneled in oak with
-an oaken floor that is filled with shelves upon shelves of rocks. From
-the door, a set of stairs is visible going up from the south section of
-the room.
-These shelves are obviously a
-geological exhibit of some type, since every sample of rock has a
-scientific name on it. Each of the samples weighs about a pound. If
-paced out, the room is sixty feet west and east with a partial wall
-running north, starting twenty feet from the east wall and extending
-forty feet. The room is eighty feet long north and south. On the west
-wall in the north corner is a passageway out of the room. Also on that
-wall, sixty feet from the north corner, is a doorway. Further down from
-this door is a twenty by twenty feet corridor section that ends at the
-bottom of the stairs up; on the east wall section by the stairs is
-another way out of the room.</description>
+        <description>
+Oak-paneled room filled with rock shelves; stairs go up from the south.
+A partial wall divides the space; passageway on the west in the north corner; doorway farther south; another exit by the stairs on the east.
+        </description>
         <choices>
             <choice description="Head south and climb the stairs." resultScene="F.stairway"/>
             <choice description="Exit to the east using the opening at the base of the stairs." resultScene="J.Bathroom"/>
             <choice description="Inspect the rocks on the shelves." resultScene="F.rocks"/>
-            <choice description="Exit to the west into the passageway at the north corner of the room" resultScene="G.passageway"/>
+            <choice description="Exit to the west into the passageway at the north corner" resultScene="G.passageway"/>
             <choice description="Go back to gray storage room." resultScene="E.gray_storage_room"/>
         </choices>
     </scene>
     <scene name="E.crazy_man_attacks">
-        <description>When you enter the room, you are immediately attacked by an incredibly old man dressed in rags and carrying a butcher knife
-(HP: 7; #AT: 1; damage: 1-6; AC: 10; SA: None).
-He leaps out from behind some of the boxes and surprises you.
-He will never follow a retreating group out of the room, but will act dangerously at all other times and will never listen to any type of reason.</description>
+        <description>
+An incredibly old man in rags attacks with a butcher knife
+(HP: 7; #AT: 1; damage: 1-6; AC: 10).
+He will not follow you out of the room.
+        </description>
         <choices>
             <choice description="Retreat to the crate room" resultScene="D.crate_room"/>
-            <choice description="If you survive or subdue him, continue searching the storeroom" resultScene="E.gray_storage_room"/>
+            <choice description="If you survive or subdue him, continue searching" resultScene="E.gray_storage_room"/>
         </choices>
     </scene>
     <scene name="E.gray_storage_room">
-        <description>The beam of your flashlight shows a room with gray painted walls and a cement floor.
-It is filled with boxes and barrels.
-There are thirteen barrels of grain alcohol each with the number "50" painted on it.
-There are thirteen boxes filled with pairs of white gloves.
-A metal chest contains a silver set made to serve eighteen people, four pairs of silver candlesticks,
-three huge silver carving knives (like short swords), and eighteen solid silver goblets
-(total worth of the silver items is 20,000 silver pieces).
-There are thirteen chests filled with books about plants;
-thirteen boxes filled with assorted sizes of clay pots;
-and ten large crates with mattresses in them.
-When paced out, the room is forty feet wide east and west and sixty feet wide north and south.
-A door on the east wall is originally hidden by the mattress crates.
-
+        <description>
+Gray walls, cement floor, boxes and barrels: grain alcohol, gloves, silver service, plant books, clay pots, mattress crates hiding the east door.
         </description>
         <choices>
-            <choice description="Go through the door on the east side of the room." resultScene="F.oak_room"/>
-            <choice description=" Inspect boxes and barrels further." resultScene="E.crazy_man_attacks"/>
+            <choice description="Go through the door on the east side." resultScene="F.oak_room"/>
+            <choice description="Inspect boxes and barrels further." resultScene="E.crazy_man_attacks"/>
             <choice description="Go back to the room with the crates (west)." resultScene="D.crate_room"/>
         </choices>
     </scene>
     <scene name="G.passageway">
-        <description>The beams of the flashlights show the passageway has
-strange objects hanging on its gray painted walls. The floor is of black
-marble. There are openings out of the hall from the east and west
-ends.
- The hall is lined with hanging medieval weapons: 3 heavy maces, 2 halberds, 3 crossbows
-with one bolt each, 3 short swords, 5 huge two-handed swords, 5 dagoers.
-4 boar soears. and 3 flails. All of these are easily detachable and have traces of preserving oil on them.
-The hall is twenty feet wide, north and south and 100 feet long east and west.
-
-The weapons are all in perfect
-condition and do the following damage: Maces-2-7 pts; Halberds-
-1-10 pts.; Crossbows-1-4 pts.; Short Swords-1-6 pts.; two-handed
-Swords-1-10 pts.; Oaggers-1-4 pts.; Boar Spears-2-7 pts.; and
-Flails-2-7 pts.</description>
+        <description>
+Gray walls, black marble floor, openings east and west. Medieval weapons hang in perfect condition.
+The hall is twenty feet by one hundred feet.
+        </description>
         <choices>
-            <choice description="Travel west along the hallway and open the door at the end." resultScene="H.fur_room"/>
-            <choice description=" Go back to the oak storage room." resultScene="F.oak_room"/>
+            <choice description="Travel west along the hallway to the door at the end." resultScene="H.fur_room"/>
+            <choice description="Go back to the oak storage room." resultScene="F.oak_room"/>
         </choices>
     </scene>
     <scene name="F.stairway">
-        <description>A creaky wooden stairway climbs from the south end of the oak-walled rock gallery.
-Cold air drifts down from above. You can make out a landing and a closed door at the top.</description>
+        <description>
+A creaky wooden stairway climbs from the south end of the oak-walled rock gallery.
+Cold air drifts from above; a landing and closed door wait at the top.
+        </description>
         <choices>
             <choice description="Climb the stairs to the second floor" resultScene="VII.chunksRoom"/>
             <choice description="Go back down into the oak room" resultScene="F.oak_room"/>
         </choices>
     </scene>
     <scene name="F.rocks">
-        <description>All of the valuable minerals in the
-rock collection like gold, silver, platinum, and copper, are on shelves
-on the south wall in the small corridor created by the dividing northsouth
-wall. They will all be on the highest shelves and above the
-normal eye level of any scout. There are no crystal samples in the
-entire room.</description>
+        <description>
+Valuable mineral samples sit on high shelves on the south wall in the corridor behind the dividing wall—no crystal samples anywhere.
+        </description>
         <choices>
             <choice description="Return to the oak room" resultScene="F.oak_room"/>
         </choices>
     </scene>
     <scene name="H.fur_room">
-        <description>The beams of the flashlights show a room filled with furs
-covering the walls, ceiling, and floor. There is a large spiral staircase
-in one corner that seems to be made out of metal.
-
-The furs are purple in color and very rough to the touch. They do not appear to be dyed,
-and each fur is very large and cannot be cut or moved from any section of the
-room. The spiral staircase is in the northwest corner of the room. It is
-made of metal and painted with purple enamel paint. If paced out, the
-room is eighty feet east and west and sixty feet wide to the north and
-south.</description>
+        <description>
+Purple furs cover walls, ceiling, and floor. A metal spiral staircase in the northwest corner is painted purple enamel.
+Eighty by sixty feet.
+        </description>
         <choices>
-            <choice description=" inspect furs on wall." resultScene="H.inspect_wall"/>
+            <choice description="Inspect furs on wall." resultScene="H.inspect_wall"/>
             <choice description="Go up the spiral staircase." resultScene="H.spiral_staircase"/>
             <choice description="Go back to the passageway." resultScene="G.passageway"/>
         </choices>
     </scene>
     <scene name="H.inspect_wall">
-        <description>If any tapping is done to the wall section marked with the secret door symbol it will
-            show a hollow sound. If the wall is closely examined by hand, that whole section of
-            fur will appear to be loose. It will easily move to the side with the push
-            of a hand, revealing a normal door.</description>
+        <description>
+Tapping shows a hollow; a section of fur slides aside to reveal a normal door.
+        </description>
         <choices>
             <choice description="Go through the secret door." resultScene="I.statue_room"/>
             <choice description="Stay in fur room." resultScene="H.fur_room"/>
         </choices>
     </scene>
     <scene name="H.spiral_staircase">
-        <description>The purple-enameled metal spiral is steep and narrow. It groans under your weight
-but holds steady. After many steps the air grows close and furred—until you step out into
-another chamber lined with heavy animal pelts, warmer and brighter than the purple room below.</description>
+        <description>
+The purple metal spiral is steep. At the top, air grows warm and furred—you emerge in another fur-lined chamber.
+        </description>
         <choices>
             <choice description="Explore the fur-lined room at the top" resultScene="X.spiralStaircase"/>
-            <choice description="Climb back down to the purple fur room" resultScene="H.fur_room"/>
+            <choice description="Climb back down" resultScene="H.fur_room"/>
         </choices>
     </scene>
     <scene name="I.statue_room">
-        <description>The beams of the flashlights show a room filled with statues of
-differing types. The walls, floor and ceiling are of green paneled
-wood.
-There are fifteen statues in this area:
-three Viking types with ring mail for armor, horned helmets, and
-drawn swords in their hands; two female amazon types, each with a
-bow and arrow ready to fire; four men in plate mail with plumed
-helmets and swords at their sides; and five Wisconsin State Highway
-Patrolmen with pistols and equipment on their belts and nightsticks in
-their hands. The room is paced out to be sixty feet to the east and
-west and forty feet to the north and south.</description>
+        <description>
+Green wood paneling; fifteen statues—Vikings, amazons, knights, and five Wisconsin State Patrol figures with nightsticks.
+Sixty by forty feet.
+(Referee: all are petrified people, aware but unable to communicate.)
+        </description>
         <choices>
             <choice description="Attempt to speak with the statues" resultScene="I.talk_to_statues"/>
             <choice description="Attack the statues" resultScene="I.attack_statues"/>
-            <choice description="Slip back through the secret door to the fur room" resultScene="H.fur_room"/>
+            <choice description="Slip back through the secret door" resultScene="H.fur_room"/>
         </choices>
     </scene>
     <scene name="I.talk_to_statues">
-        <description> They make some grunting noises back to you.</description>
+        <description>
+They make grunting noises back to you.
+        </description>
         <choices>
             <choice description="Attack the statues." resultScene="I.attack_statues"/>
             <choice description="Continue" resultScene="I.statue_room"/>
         </choices>
     </scene>
     <scene name="I.attack_statues">
-        <description>Your blows clang uselessly against solid stone. The figures do not move to defend themselves.
-The module notes that these are people—not statues—trapped in petrification; they are aware but cannot speak or act.
-You accomplish nothing except noise and a growing sense of shame.</description>
+        <description>
+Your blows clang on stone. The module notes these are living people, petrified—unable to respond.
+        </description>
         <choices>
             <choice description="Stop and look for another way to help them" resultScene="I.statue_room"/>
         </choices>
     </scene>
     <scene name="A.mirror">
-        <description>You find that the mirror lifts easily. There is a secret door behind it.</description>
+        <description>
+You find that the mirror lifts easily. There is a secret door behind it.
+        </description>
         <choices>
             <choice description="Open the secret door" resultScene="P.plant_room"/>
-            <choice description="Lower the mirror and return to the entrance hall" resultScene="A.inside_entrance"/>
+            <choice description="Lower the mirror and return" resultScene="A.inside_entrance"/>
         </choices>
     </scene>
     <scene name="P.plant_room">
-        <description>The beams of the flashlights show a room filled with plants
-from wall to wall and traveling up to the ceiling. One also notices a
-strange purple glow from the bottoms of all the plants. An exit is
-visible on the other side of the room.
-
-All of the plants are in tanks that
-are filled with a glowing purple liquid. The plants seem to sway
-towards any people entering the area. Some of them bear fruit and
-berries. The room cannot be paced out because of the plants, but the
-path from exit to exit is eighty feet.
-
-Dense thorny brambles block the professor&apos;s secret door until they are cut away—disturbing the growth risks stirring what lives among the leaves.
+        <description>
+Plants in glowing purple liquid fill tanks wall to wall; the path across is about eighty feet.
+Thorny brambles block the secret door until cut—cutting risks stirges.
         </description>
         <choices>
             <choice description="Inspect or cut the plants (risk attacks)" resultScene="P.inspect_plants"/>
-            <choice description="Pick your way carefully toward the far exit without cutting" resultScene="Q.skeleton_room"/>
+            <choice description="Pick your way carefully toward the far exit" resultScene="Q.skeleton_room"/>
             <choice description="Return to the entrance hall" resultScene="A.inside_entrance"/>
         </choices>
     </scene>
     <scene name="P.inspect_plants">
-        <description>The moment you cut or seriously disturb the foliage, seven stirges burst from the growth and dive at you.
-(HP 5 each; #AT 1; damage 1-3; AC 8; special: blood drain.)</description>
+        <description>
+Seven stirges burst from the foliage when it is disturbed.
+(HP 5 each; #AT 1; damage 1-3; AC 8; blood drain.)
+        </description>
         <choices>
             <choice description="Fight or flee back toward the secret door" resultScene="P.plant_room"/>
         </choices>
     </scene>
     <scene name="J.Bathroom">
-        <description>The beams of the flashlights show a bathroom with all the
-things one would expect to find in such a place. There is a sink with a
-mirror above it, a stool, and a bathtub. The floor, walls, ceiling, and all
-fixtures are of black marble.
-The water works fine in this area, except when it is about to overflow any sink or tub or stool for any
-reason—it cuts itself off first. There are hinges on the door frame but
-no other sign that there ever was a door there. If paced out, the main
-room is forty feet by forty feet, plus a hall section that has the tub at its
-end. This hall section starts on the south wall and is twenty feet wide
-(east and west) and forty feet long.</description>
+        <description>
+Black marble bathroom: sink, mirror, stool, tub. Water shuts off before overflow. Hinges suggest a missing door.
+Forty-foot square plus a tub hall.
+        </description>
         <choices>
             <choice description="Examine the sink and turn on the water" resultScene="J.turnOnWater"/>
             <choice description="Open the medicine cabinet" resultScene="J.medicine_cabinet"/>
@@ -341,11 +450,9 @@ end. This hall section starts on the south wall and is twenty feet wide
         </choices>
     </scene>
     <scene name="J.medicine_cabinet">
-        <description> The mirror over the sink has a recessed cabinet.
-In it are two small plastic bottles of pills:
-   One has ten green pills.
-   One has twenty pink pills.
-</description>
+        <description>
+Two plastic bottles: ten green pills; twenty pink pills.
+        </description>
         <choices>
             <choice description="Swallow one of the green pills" resultScene="J.takeGreenPill"/>
             <choice description="Swallow one of the pink pills" resultScene="J.takePinkPill"/>
@@ -353,112 +460,344 @@ In it are two small plastic bottles of pills:
         </choices>
     </scene>
     <scene name="B.rat_attack">
-        <description>Three giant rats boil out from under the couch and attack whoever is nearest
-(HP 4,3,2; #AT 1; damage 1-3; AC 7; bite has a 5% chance of disease—save versus poison).
+        <description>
+Three giant rats boil out from under the couch.
+(HP 4,3,2; #AT 1; damage 1-3; AC 7; 5% disease on bite.)
         </description>
         <choices>
-            <choice description="Back away from the couch and regroup" resultScene="B.rat_room"/>
+            <choice description="Back away from the couch" resultScene="B.rat_room"/>
         </choices>
     </scene>
     <scene name="B.key">
         <description>
 You find a golden key under the pile of leaves.
-(Suggestion: keep an inventory of items that the player has.)
+(Keep an inventory of found items in play.)
         </description>
         <choices>
             <choice description="Continue" resultScene="B.rat_room"/>
         </choices>
     </scene>
     <scene name="L.upStaircase">
-        <description> The beams of the flashlights show a room covered in small
-furs of some type and a spiral staircase leading up through the
-ceiling.
-
-The fur seems to be rat fur. It has lice and smells of rotten meat.
-It covers the walls, floor and ceiling and when cut it shows bare
-cement floor and metal walls underneath. If the room is paced out,
-it is sixty feet square. The staircase is made of metal and painted
-with black enamel paint and is located in the northwest corner of the room.</description>
+        <description>
+Rat fur covers walls, floor, and ceiling; lice and rot smell. A black-enameled metal spiral rises in the northwest corner.
+Sixty feet square beneath the fur.
+        </description>
         <choices>
-            <choice description="walk up the spiral staircase." resultScene="X.spiralStaircase"/>
+            <choice description="Walk up the spiral staircase." resultScene="X.spiralStaircase"/>
+            <choice description="Return to the trophy room" resultScene="K.trophyRoom"/>
         </choices>
     </scene>
     <scene name="K.trophyRoom">
-        <description>The beams of your flashlight show a large room with animal
-heads hanging on the walls and large animals mounted fully on
-stands. There are many of these all over the room. There are exits on
-the east and west walls.
-
-This is a trophy room of some type with stuffed felines of all
-different descriptions along the brown painted walls. On the north
-wall is a cabinet with three long rifles that are very heavy, and two
-shorter rifles that have two barrels apiece. There is a drawer under these rifles,
-containing two boxes of what must be shells. Besides the triggers,
-there are two levers on each gun; one is large and on the stock and one
-is small and near the trigger.
-
- If paced out, the room is forty feet east and west and sixty feet north and south.</description>
+        <description>
+Stuffed felines on brown walls; rifles and shotguns in a north-wall cabinet with shells in the drawer.
+Forty by sixty feet. Exits east and west.
+        </description>
         <choices>
-            <choice description="Take one of the guns." resultScene="K.trophyRoom"/>
-            <choice description="Proceed through the exit to the west." resultScene="L.upStaircase"/>
+            <choice description="Examine the rifles (risk mishandling)" resultScene="K.fireRifle"/>
+            <choice description="Proceed west toward the rat-fur spiral room" resultScene="L.upStaircase"/>
+            <choice description="Return to the entrance hall (east)" resultScene="A.inside_entrance"/>
+        </choices>
+    </scene>
+    <scene name="K.fireRifle">
+        <description>
+You heft a heavy rifle. Without a gunnery merit badge, working the levers is guesswork—metal slams into your shoulder (1–4 bruising) and the shot goes wide.
+The trophies seem to watch in the dim light.
+        </description>
+        <choices>
+            <choice description="Set the rifle down" resultScene="K.trophyRoom"/>
         </choices>
     </scene>
     <scene name="X.spiralStaircase">
-        <description>The beams of the flashlights reveal a room covered in furs of
-various types. There is also an exit out of the area on a side wall.
-The furs are all very thick and there are some recognizable ones including:
-zebra, lion, leopard, and polar bear.
-Each fur is worth tens of gold pieces (module suggests at least 50 gp each, or roll 1D6 × value as treasure).
-They are easily detachable from their mounting. When more than one
-person walks onto the furs, four giant centipedes scuttle out from underneath
-(HP: 2,2,1,2; #AT: 1; damage: nil; AC: 9; SA: save versus poison).</description>
+        <description>
+Thick furs—zebra, lion, leopard, polar bear—worth serious treasure. A side exit leads off the landing.
+Four giant centipedes may appear when several people step on the furs.
+        </description>
         <choices>
-            <choice description="Descend the spiral toward the rat-fur room and trophy hall" resultScene="L.upStaircase"/>
-            <choice description="Descend the spiral toward the purple fur chamber" resultScene="H.fur_room"/>
+            <choice description="Descend toward the rat-fur room" resultScene="L.upStaircase"/>
+            <choice description="Descend toward the purple fur chamber" resultScene="H.fur_room"/>
         </choices>
     </scene>
     <scene name="VII.chunksRoom">
-        <description>The beams of the flashlights show a room with a number of
-metal chunks littering the floor. There are three doors, each one on a
-different wall.
-When you enter, more chunks shower from the ceiling—you can see millions of them stuck overhead.
-After anyone enters, every melee round 3-18 chunks drop. Each weighs fifteen ounces and does 1-6 damage if it hits;
-only about a 15% chance per chunk actually strikes anyone in the open area. The three doors are fake:
-the handles turn but nothing opens. They look like oak but are metal like the rest of the mansion.</description>
+        <description>
+Metal chunks litter the floor; three fake oak doors refuse to open. Chunks rain from the ceiling each round after entry.
+(Referee: 3–18 chunks per round, 15% hit chance each, 1–6 damage.)
+        </description>
         <choices>
-            <choice description="Give up on the doors and retreat down the stairs" resultScene="F.stairway"/>
+            <choice description="Search for another exit among the scrap" resultScene="Floor2.I"/>
+            <choice description="Retreat down the stairs to the oak room" resultScene="F.stairway"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.I">
+        <description>
+Yellow carpet; huge spiderwebs on the ceiling. Thirty feet square; stairs ascend along the west wall. Three giant spiders wait above.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.II"/>
+            <choice description="Go back" resultScene="VII.chunksRoom"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.II">
+        <description>
+Nine benches of glassware, acids, and green flammable jelly. Another exit hides a spiral staircase down.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.III"/>
+            <choice description="Go back" resultScene="Floor2.I"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.III">
+        <description>
+A barbed devil is chained in a silver circle, pleading in foreign tongues. Boxes underfoot hold a ring of one wish and dust of disappearance.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.IV"/>
+            <choice description="Go back" resultScene="Floor2.II"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.IV">
+        <description>
+Bare room: dazzling lights and deafening sound when active. Sunburn and hearing loss if you linger.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.V"/>
+            <choice description="Go back" resultScene="Floor2.III"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.V">
+        <description>
+A Persian rug hides a central pit. Stay near the walls or fall fifteen feet.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.VI"/>
+            <choice description="Go back" resultScene="Floor2.IV"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.VI">
+        <description>
+Super-magnet in the ceiling seizes metal; a glass plate on the floor covers the off switch.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.VIII"/>
+            <choice description="Go back" resultScene="Floor2.V"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.VIII">
+        <description>
+Bare room, stairs down on a south landing; flower-scented gas weakens Strength. Secret door on the landing opens if light shines one minute.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.IX"/>
+            <choice description="Go back" resultScene="Floor2.VI"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.IX">
+        <description>
+Electronics lab: chips, tubes, solder, barrels of wire. Ascending stairs in the east corner lead up.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.X"/>
+            <choice description="Go back" resultScene="Floor2.VIII"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.X">
+        <description>
+Bunk beds, dressers, desk strewn with cloning notes; secret drawer holds poison gas and a photo of Ludlow with a giant robot.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XI"/>
+            <choice description="Go back" resultScene="Floor2.IX"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XI">
+        <description>
+Shooting gallery with air rifles, pellets, and targets—disturbing the guns may release a lion.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XII"/>
+            <choice description="Go back" resultScene="Floor2.X"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XII">
+        <description>
+Satin cushions; a winged woman sleeps—an Erinyes who feigns kindness if freed.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XIII"/>
+            <choice description="Go back" resultScene="Floor2.XI"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XIII">
+        <description>
+Strong purple light; intense heat heals damage but burns if you stay past ten minutes.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XIV"/>
+            <choice description="Go back" resultScene="Floor2.XII"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XIV">
+        <description>
+A hill giant shambles in a cage; rags hide cash, a laser pistol, and a bloody knife.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XV"/>
+            <choice description="Go back" resultScene="Floor2.XIII"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XV">
+        <description>
+Locked cabinets of pure elements and chemicals—dangerous if mishandled.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XVI"/>
+            <choice description="Go back" resultScene="Floor2.XIV"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XVI">
+        <description>
+Shower room with ten stalls; water drains to a central grate.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XVII"/>
+            <choice description="Go back" resultScene="Floor2.XV"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XVII">
+        <description>
+Pipe storage and threading tools—enough stock to improvise clubs.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XXI"/>
+            <choice description="Go back" resultScene="Floor2.XVI"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XXI">
+        <description>
+Torture devices: rack, iron maiden, branding irons with 'L'. Good campers should find it revolting.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XXII"/>
+            <choice description="Go back" resultScene="Floor2.XVII"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XXII">
+        <description>
+Bright theater: projector, screen, film canister 'Laser Rifle Care by Ludlow'—ropers drop from the ceiling mid-film.
+        </description>
+        <choices>
+            <choice description="Press on to the next chamber" resultScene="Floor2.XXIII"/>
+            <choice description="Go back" resultScene="Floor2.XXI"/>
+        </choices>
+    </scene>
+    <scene name="Floor2.XXIII">
+        <description>
+Assembly benches for laser-rifle parts; a completed prototype may lie under Bench Eight.
+        </description>
+        <choices>
+            <choice description="Ascend to the third floor" resultScene="Floor3.X"/>
+            <choice description="Return toward the electronics lab" resultScene="Floor2.IX"/>
+        </choices>
+    </scene>
+    <scene name="Floor3.X">
+        <description>
+Glowing pillar ten feet wide; something moves inside the light.
+(Referee: breaking the beam frees a hell hound that pursues you.)
+        </description>
+        <choices>
+            <choice description="Continue" resultScene="Floor3.XI"/>
+            <choice description="Retreat to the assembly room" resultScene="Floor2.XXIII"/>
+        </choices>
+    </scene>
+    <scene name="Floor3.XI">
+        <description>
+Spiral staircase; a leather sack of ball bearings hovers magnetically in the center.
+        </description>
+        <choices>
+            <choice description="Continue" resultScene="Floor3.XII"/>
+            <choice description="Back" resultScene="Floor3.X"/>
+        </choices>
+    </scene>
+    <scene name="Floor3.XII">
+        <description>
+Microscope lab: twenty-two benches of slides and specimens.
+        </description>
+        <choices>
+            <choice description="Continue" resultScene="Floor3.XIII"/>
+            <choice description="Back" resultScene="Floor3.XI"/>
+        </choices>
+    </scene>
+    <scene name="Floor3.XIII">
+        <description>
+Purple glow; dried bones in a corner; ultraviolet heat sears if you linger.
+        </description>
+        <choices>
+            <choice description="Continue" resultScene="Floor3.XIV"/>
+            <choice description="Back" resultScene="Floor3.XII"/>
+        </choices>
+    </scene>
+    <scene name="Floor3.XIV">
+        <description>
+Robot parts and tentacles on benches; a dormant robot waits in the corner.
+(Referee: touching its left shoulder with metal activates it.)
+        </description>
+        <choices>
+            <choice description="Continue" resultScene="Floor3.XV"/>
+            <choice description="Back" resultScene="Floor3.XIII"/>
+        </choices>
+    </scene>
+    <scene name="Floor3.XV">
+        <description>
+Everything is coated in red plastic that sticks to your feet every tenth step until you sweat free.
+        </description>
+        <choices>
+            <choice description="Confront the source of the recording" resultScene="storyFinale"/>
+            <choice description="Back" resultScene="Floor3.XIV"/>
+        </choices>
+    </scene>
+    <scene name="storyFinale">
+        <description>
+Deep in the mansion you find Professor Ludlow's control nook: a tape recorder on loop, wired to the front doors—there never was a prisoner, only bait.
+You smash the device, gather your nerve, and run for the exit before the house can answer.
+The night air never tasted so sweet.
+(Referee: the 'Help!' was a recording, as noted in the module.)
+        </description>
+        <choices>
+            <choice description="Leave the mansion behind" resultScene="quit"/>
+            <choice description="Play again from the start" resultScene="start"/>
         </choices>
     </scene>
     <scene name="J.turnOnWater">
-        <description>The water runs clear and shuts off on its own before anything can overflow.</description>
+        <description>
+The water runs clear and shuts off before overflow.
+        </description>
         <choices>
-            <choice description="Step back from the sink" resultScene="J.Bathroom"/>
+            <choice description="Step back" resultScene="J.Bathroom"/>
         </choices>
     </scene>
     <scene name="J.takeGreenPill">
-        <description>Your heart hammers—your reflexes feel doubled; everything else seems to crawl by.
-(Effect per module: your speed is doubled for three melee rounds.)
-</description>
+        <description>
+Your heart hammers—reflexes doubled for three melee rounds (module).
+        </description>
         <choices>
             <choice description="Put the bottle back" resultScene="J.medicine_cabinet"/>
         </choices>
     </scene>
     <scene name="J.takePinkPill">
-        <description>Warmth spreads through you; wounds knit slightly—up to ten lost hit points restored per pink pill.</description>
+        <description>
+Warmth spreads; up to ten hit points restored per pink pill.
+        </description>
         <choices>
             <choice description="Put the bottle back" resultScene="J.medicine_cabinet"/>
         </choices>
     </scene>
     <scene name="Q.skeleton_room">
-        <description>The beams of the flashlights show a room with stone walls,
-floor, and ceiling. The body of a skeleton lies in the middle of the
-room and its head is in a far corner. There is another exit.
-On closer inspection the bones are old and yellow, child-sized. A golden ring glints on one finger.
-If paced out, the space is about forty feet east–west by seventy feet north–south.
-
-(Referee: bringing the skull within two feet of the body animates the skeleton—HP 10; AC 7; damage 1-6; it may chase you outside. The ring holds three wishes but cannot be used until the skeleton is destroyed.)</description>
+        <description>
+Stone walls; a child's skeleton lies in pieces; a golden ring glints on a finger.
+(Referee: skull near body animates the skeleton; ring holds three wishes after the skeleton is destroyed.)
+        </description>
         <choices>
-            <choice description="Leave through the way you came (plant gallery)" resultScene="P.plant_room"/>
+            <choice description="Leave through the plant gallery" resultScene="P.plant_room"/>
+            <choice description="Follow the farther exit toward foam and machinery" resultScene="R.foamRoom"/>
         </choices>
     </scene>
 </script>

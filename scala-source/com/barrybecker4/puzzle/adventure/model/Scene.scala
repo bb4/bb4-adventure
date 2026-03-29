@@ -17,8 +17,12 @@ object Scene {
   def loadSound(name: String, resourcePath: String): Option[URL] = {
     var soundUrl: Option[URL] = None
     try {
-      val soundPath = resourcePath + "sounds/" + name + ".au"
-      soundUrl = Option(FileUtil.getURL(soundPath, failIfNotFound = false))
+      val auPath = resourcePath + "sounds/" + name + ".au"
+      soundUrl = Option(FileUtil.getURL(auPath, failIfNotFound = false))
+      if (soundUrl.isEmpty) {
+        val wavPath = resourcePath + "sounds/" + name + ".wav"
+        soundUrl = Option(FileUtil.getURL(wavPath, failIfNotFound = false))
+      }
     } catch {
       case e: NoClassDefFoundError =>
         System.err.println("You are trying to load sound when only text scenes are supported.")
