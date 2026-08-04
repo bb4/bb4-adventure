@@ -30,9 +30,13 @@ class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDi
 
   /** click this when done selecting a name for the destination scene. */
   private val okButton = new GradientButton
-  private var sceneSelector: JComboBox[String] = _
-  private var sceneTextInput: TextInput = _
-  private var selectedDestinationScene: String = _
+  private val sceneSelector = new JComboBox[String](candidateDestinations.sorted.toArray)
+  private val sceneTextInput: TextInput = {
+    val input = new TextInput("New scene name")
+    input.setColumns(30)
+    input
+  }
+  private var selectedDestinationScene = ""
   showContent()
 
   override def createDialogContent: JComponent = {
@@ -45,14 +49,11 @@ class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDi
   private def buildPickerColumn(): JComponent = {
     val mainPanel = new JPanel
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS))
-    sceneSelector = new JComboBox[String](candidateDestinations.sorted.toArray)
     sceneSelector.setAlignmentX(Component.LEFT_ALIGNMENT)
     sceneSelector.setBorder(BorderFactory.createTitledBorder(
       "Select an existing scene or type in the name for a new scene."))
     val orLabel = new JLabel("or")
     orLabel.setAlignmentX(Component.LEFT_ALIGNMENT)
-    sceneTextInput = new TextInput("New scene name")
-    sceneTextInput.setColumns(30)
     sceneTextInput.setAlignmentX(Component.LEFT_ALIGNMENT)
     sceneTextInput.setBorder(BorderFactory.createTitledBorder("Enter the name for a new scene."))
     mainPanel.add(sceneSelector)
@@ -85,10 +86,9 @@ class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDi
 
   private[editor] def ok(): Unit = {
     val customSceneName = sceneTextInput.getValue
-    if (customSceneName != "")
-      selectedDestinationScene = customSceneName
-    else
-      selectedDestinationScene = sceneSelector.getSelectedItem.toString
+    selectedDestinationScene =
+      if (customSceneName != "") customSceneName
+      else sceneSelector.getSelectedItem.toString
     this.setVisible(false)
   }
 }
