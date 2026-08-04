@@ -19,11 +19,10 @@ class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
     */
   def isDestination(sceneName: String): Boolean = choices.exists(_.destinationScene == sceneName)
 
-  def sceneNameChanged(oldSceneName: String, newSceneName: String): Unit = {
-    for (c <- choices) {
+  def sceneNameChanged(oldSceneName: String, newSceneName: String): Unit =
+    choices.foreach { c =>
       if (c.destinationScene == oldSceneName) c.destinationScene = newSceneName
     }
-  }
 
   /** Update the order and descriptions
     * @param choiceMap new order and descriptions to update with.
@@ -33,11 +32,7 @@ class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
       println("Old choices: " + choices.mkString(", "))
       println("New choices: " + choiceMap.mkString(", "))
     }
-    var newChoices = Seq[Choice]()
-    for (dest <- choiceMap.keySet) {
-      newChoices :+= Choice(choiceMap(dest), dest)
-    }
-    choices = newChoices
+    choices = choiceMap.iterator.map { case (dest, desc) => Choice(desc, dest) }.toSeq
   }
 
   def size: Int = choices.size
