@@ -26,8 +26,6 @@ import com.barrybecker4.puzzle.adventure.model.Story
 class ChildTablePanel(val story: Story, tableButtonListener: TableButtonListener)
   extends JPanel with ActionListener with ListSelectionListener {
 
-  private var childTable: ChildTable = _
-
   // for adding/removing/reordering scene choice destinations
   private val addButton = new GradientButton
   private val removeButton = new GradientButton
@@ -35,8 +33,9 @@ class ChildTablePanel(val story: Story, tableButtonListener: TableButtonListener
   private val moveDownButton = new GradientButton
   private var selectedChildRow = -1
 
+  private val childTable = new ChildTable(story.getCurrentScene.choices, tableButtonListener)
+
   setLayout(new BorderLayout)
-  childTable = new ChildTable(story.getCurrentScene.choices, tableButtonListener)
   childTable.addListSelectionListener(this)
   setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder,
     "Choices (to navigate to child scenes)"))
