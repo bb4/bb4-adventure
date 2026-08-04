@@ -25,11 +25,9 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
     */
   def updateSceneChoices(currentScene: Scene): Unit = {
     val choiceMap = new mutable.LinkedHashMap[String, String]()
-    var i = 0
-    while (i < getRowCount) {
+    (0 until getRowCount).foreach { i =>
       val dest = getValueAt(i, NAVIGATE_INDEX).asInstanceOf[String]
       choiceMap += dest -> getValueAt(i, CHOICE_DESCRIPTION_INDEX).toString
-      i += 1
     }
     currentScene.choices.update(choiceMap)
   }
@@ -54,10 +52,10 @@ class ChildTableModel(columnNames: Array[AnyRef], rowCount: Int)
     this.fireTableRowsDeleted(row, row)
   }
 
-  override def getColumnClass(col: Int): Class[_] = {
+  override def getColumnClass(col: Int): Class[?] = {
     dataVector.elementAt(0) match {
       // case list: List[_] => list(col).getClass
-      case vec: java.util.Vector[_] => vec.get(col).getClass
+      case vec: java.util.Vector[?] => vec.get(col).getClass
     }
   }
 

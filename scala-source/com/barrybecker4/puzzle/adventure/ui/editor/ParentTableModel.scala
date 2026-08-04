@@ -16,10 +16,10 @@ class ParentTableModel(columnNames: Array[AnyRef], rowCount: Int)
     throw new UnsupportedOperationException("This constructor not supported")
   }
 
-  override def getColumnClass(col: Int): Class[_] = {
+  override def getColumnClass(col: Int): Class[?] = {
     dataVector.elementAt(0) match {
-      // case list: List[_] => list(col).getClass
-      case vec: java.util.Vector[_] => vec.get(col).getClass
+      // case list: List[?] => list(col).getClass
+      case vec: java.util.Vector[?] => vec.get(col).getClass
     }
   }
 

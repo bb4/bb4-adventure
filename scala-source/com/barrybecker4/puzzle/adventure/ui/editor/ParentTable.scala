@@ -11,7 +11,7 @@ import com.barrybecker4.puzzle.adventure.model.Scene
 
 
 object ParentTable {
-  var NAV_FROM_ID = "navdFrom"
+  val NAV_FROM_ID = "navdFrom"
   val NAVIGATE_TO_PARENT_BUTTON_ID = "navToParent"
 
   private val NAVIGATED_FROM_INDEX = 0
@@ -33,7 +33,7 @@ object ParentTable {
 class ParentTable(val scenes: Seq[Scene], val prevScene: Option[Scene],
                   var tableButtonListener: TableButtonListener) extends TableBase {
   initColumnMeta(PARENT_COLUMN_NAMES)
-  initializeTable(scenes.asInstanceOf[Seq[_]])
+  initializeTable(scenes.asInstanceOf[Seq[?]])
   table.setRowHeight(ROW_HEIGHT)
 
   /** Add a row based on a player object

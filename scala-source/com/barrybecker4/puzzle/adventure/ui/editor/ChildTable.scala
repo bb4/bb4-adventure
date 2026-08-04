@@ -27,7 +27,7 @@ class ChildTable(val choices: ChoiceList, var tableButtonListener: TableButtonLi
   extends TableBase {
 
   initColumnMeta(ChildTable.CHILD_COLUMN_NAMES)
-  initializeTable(choices.choices.asInstanceOf[Seq[_]])
+  initializeTable(choices.choices.asInstanceOf[Seq[?]])
   table.setRowHeight(ROW_HEIGHT)
   getTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 
