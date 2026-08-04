@@ -12,9 +12,7 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
 
   def copy(): SceneMap = {
     val newMap = new mutable.LinkedHashMap[String, Scene]()
-    for (sceneName <- map.keySet) {
-      val scene = map(sceneName)
-      // add deep copies of the scene.
+    map.foreach { case (sceneName, scene) =>
       newMap.put(sceneName, new Scene(scene))
     }
     new SceneMap(newMap)
