@@ -25,11 +25,8 @@ class ChoicePanel(val choices: ChoiceList) extends JPanel with ActionListener {
     */
   def setChoices(choices: ChoiceList): Unit = {
     this.removeAll()
-    // for each choice add a button and text.
-    var i = 1
-    for (choice <- choices.choices) {
-      addOption(i, choice)
-      i += 1
+    choices.choices.zipWithIndex.foreach { case (choice, idx) =>
+      addOption(idx + 1, choice)
     }
     this.revalidate()
     this.repaint()
@@ -57,8 +54,6 @@ class ChoicePanel(val choices: ChoiceList) extends JPanel with ActionListener {
   override def actionPerformed(e: ActionEvent): Unit = {
     val sourceButton = e.getSource.asInstanceOf[JButton]
     val selectedChoiceIndex = sourceButton.getText.toInt - 1
-    for (listener <- sceneChangeListeners) {
-      listener.sceneChanged(selectedChoiceIndex)
-    }
+    sceneChangeListeners.foreach(_.sceneChanged(selectedChoiceIndex))
   }
 }
