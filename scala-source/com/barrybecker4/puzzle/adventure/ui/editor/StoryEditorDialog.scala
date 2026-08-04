@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import com.barrybecker4.puzzle.adventure.model.{Scene, Story}
 
+import scala.compiletime.uninitialized
+
 
 object StoryEditorDialog {
   private val INSTRUCTION_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 10)
@@ -38,14 +40,14 @@ object StoryEditorDialog {
 class StoryEditorDialog(val story: Story)
   extends AbstractDialog with ActionListener with TableButtonListener {
 
-  /** The story to edit */
-  private var sceneEditor: SceneEditorPanel = _
-  private var parentScenes: Seq[Scene] = _
-  private var childTablePanel: ChildTablePanel = _
+  /** Rebuilt when navigation refreshes dialog content via showContent(). */
+  private var sceneEditor: SceneEditorPanel = uninitialized
+  private var parentScenes: Seq[Scene] = uninitialized
+  private var childTablePanel: ChildTablePanel = uninitialized
 
   /** click this when done editing the scene. */
   private val okButton = new GradientButton
-  private var sceneSelector: JComboBox[String] = _
+  private var sceneSelector: JComboBox[String] = uninitialized
   private var lastVisitedScene: Option[Scene] = None
 
   this.setResizable(true)
