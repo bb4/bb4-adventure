@@ -21,8 +21,8 @@ object StoryPanel {
 class StoryPanel(var story: Story) extends JSplitPane {
   setContinuousLayout(true)
   setDividerLocation(StoryPanel.INITIAL_LEFT_WIDTH)
-  private var textArea = createTextArea
-  private var imagePanel = createImagePanel
+  private val textArea = createTextArea
+  private val imagePanel = createImagePanel
   add(imagePanel, JSplitPane.RIGHT)
   add(textArea, JSplitPane.LEFT)
 
