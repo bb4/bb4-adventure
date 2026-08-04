@@ -5,7 +5,7 @@ import com.barrybecker4.puzzle.adventure.ui.StoryPanel
 import com.barrybecker4.ui.components.{GradientButton, ImageListPanel, ScrollingTextArea, TextInput}
 import com.barrybecker4.ui.dialogs.ImagePreviewDialog
 import javax.swing._
-import java.awt.{BorderLayout, Component, Dimension, FlowLayout}
+import java.awt.{BorderLayout, Dimension, FlowLayout}
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.image.BufferedImage
@@ -23,12 +23,29 @@ object SceneEditorPanel {
   */
 class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with ActionListener {
   private val oldSceneName = scene.name
-  private var showImageButton: GradientButton = _
-  private var playSoundButton: GradientButton = _
-  private var showPathsButton: GradientButton = _
-  private var nameInput: TextInput = _
-  private var labelInput: TextInput = _
-  private var sceneDescription: ScrollingTextArea = _
+
+  private val nameInput: TextInput = {
+    val input = new TextInput("name:", scene.name)
+    input.setColumns(40)
+    input
+  }
+  private val labelInput: Option[TextInput] = scene.label.map { label =>
+    val input = new TextInput("label:", label)
+    input.setColumns(45)
+    input
+  }
+  private val sceneDescription: ScrollingTextArea = {
+    val area = new ScrollingTextArea
+    area.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
+    area.setEditable(true)
+    area.setFont(StoryPanel.TEXT_FONT)
+    area.setText(scene.description)
+    area
+  }
+  private val showImageButton = new GradientButton("Image")
+  private val playSoundButton = new GradientButton("Sound")
+  private val showPathsButton = new GradientButton("Show paths")
+
   createUI()
 
 
@@ -38,7 +55,7 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
 
     val mainContent = new JPanel(new BorderLayout)
     mainContent.add(buildTopInputsPanel(), BorderLayout.NORTH)
-    mainContent.add(buildDescriptionArea(), BorderLayout.CENTER)
+    mainContent.add(sceneDescription, BorderLayout.CENTER)
 
     add(mainContent, BorderLayout.CENTER)
     addThumbnailIfPresent()
@@ -47,24 +64,9 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
 
   private def buildTopInputsPanel(): JPanel = {
     val topInputs = new JPanel(new BorderLayout)
-    nameInput = new TextInput("name:", scene.name)
-    nameInput.setColumns(40)
     topInputs.add(nameInput, BorderLayout.NORTH)
-    if (scene.label.isDefined) {
-      labelInput = new TextInput("label:", scene.label.get)
-      labelInput.setColumns(45)
-      topInputs.add(labelInput, BorderLayout.CENTER)
-    }
+    labelInput.foreach(topInputs.add(_, BorderLayout.CENTER))
     topInputs
-  }
-
-  private def buildDescriptionArea(): ScrollingTextArea = {
-    sceneDescription = new ScrollingTextArea
-    sceneDescription.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
-    sceneDescription.setEditable(true)
-    sceneDescription.setFont(StoryPanel.TEXT_FONT)
-    sceneDescription.setText(scene.description)
-    sceneDescription
   }
 
   private def addThumbnailIfPresent(): Unit =
@@ -78,15 +80,12 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
   private def createMediaButtons = {
     val buttonPanel = new JPanel(new FlowLayout)
 
-    showImageButton = new GradientButton("Image")
     showImageButton.addActionListener(this)
     showImageButton.setEnabled(scene.image.isDefined)
 
-    playSoundButton = new GradientButton("Sound")
     playSoundButton.addActionListener(this)
     playSoundButton.setEnabled(scene.hasSound)
 
-    showPathsButton = new GradientButton("Show paths")
     showPathsButton.addActionListener(this)
     showPathsButton.setEnabled(scene.image.isDefined)
 
@@ -125,8 +124,8 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
   def doSave(): Unit = {
     if (isSceneNameChanged) scene.setName(nameInput.getValue)
     scene.description = sceneDescription.getText
-    if (scene.label.isDefined) {
-      scene.label = Some(labelInput.getValue)
+    labelInput.foreach { input =>
+      scene.label = Some(input.getValue)
     }
   }
 }
