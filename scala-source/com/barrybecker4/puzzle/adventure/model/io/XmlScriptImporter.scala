@@ -10,19 +10,8 @@ import XmlScriptImporter._
 object XmlScriptImporter {
   val DTD = "script"
 
-  private def childElementNodes(nodeList: org.w3c.dom.NodeList): Seq[Node] = {
-    val buf = scala.collection.mutable.ArrayBuffer.empty[Node]
-    var i = 0
-    while (i < nodeList.getLength) {
-      val n = nodeList.item(i)
-      if (n.getNodeType == Node.ELEMENT_NODE) buf += n
-      i += 1
-    }
-    buf.toSeq
-  }
-
   private def findFirstChildElement(parent: Node, tag: String): Option[Node] =
-    childElementNodes(parent.getChildNodes).find(_.getNodeName == tag)
+    DomNodeUtil.childElementNodes(parent.getChildNodes).find(_.getNodeName == tag)
 
   private def descriptionForScene(sceneNode: Node): String =
     findFirstChildElement(sceneNode, "description")
@@ -46,7 +35,7 @@ object XmlScriptImporter {
   private def getChoices(sceneNode: Node): Seq[Choice] =
     findFirstChildElement(sceneNode, "choices") match {
       case Some(choicesNode) =>
-        childElementNodes(choicesNode.getChildNodes)
+        DomNodeUtil.childElementNodes(choicesNode.getChildNodes)
           .filter(_.getNodeName == "choice")
           .map(createChoice)
       case None =>
@@ -79,7 +68,7 @@ case class XmlScriptImporter(document: Document, resourcePath: String) extends X
 
   protected def extractScenesFromDoc(document: Document): Array[Scene] = {
     val root = document.getDocumentElement
-    val sceneNodes = childElementNodes(root.getChildNodes).filter(_.getNodeName == "scene")
+    val sceneNodes = DomNodeUtil.childElementNodes(root.getChildNodes).filter(_.getNodeName == "scene")
     sceneNodes.zipWithIndex.map { case (node, idx) =>
       createScene(node, resourcePath, idx == 0)
     }.toArray
