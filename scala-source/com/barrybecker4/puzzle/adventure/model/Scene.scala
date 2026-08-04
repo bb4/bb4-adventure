@@ -14,35 +14,32 @@ object Scene {
 
   val PLACEHOLDER_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 12)
 
-  def loadSound(name: String, resourcePath: String): Option[URL] = {
-    var soundUrl: Option[URL] = None
+  def loadSound(name: String, resourcePath: String): Option[URL] =
     try {
       val auPath = resourcePath + "sounds/" + name + ".au"
-      soundUrl = Option(FileUtil.getURL(auPath, failIfNotFound = false))
-      if (soundUrl.isEmpty) {
+      Option(FileUtil.getURL(auPath, failIfNotFound = false)).orElse {
         val wavPath = resourcePath + "sounds/" + name + ".wav"
-        soundUrl = Option(FileUtil.getURL(wavPath, failIfNotFound = false))
+        Option(FileUtil.getURL(wavPath, failIfNotFound = false))
       }
     } catch {
-      case e: NoClassDefFoundError =>
+      case _: NoClassDefFoundError =>
         System.err.println("You are trying to load sound when only text scenes are supported.")
+        None
     }
-    soundUrl
-  }
 
   def loadImage(name: String, resourcePath: String): Option[BufferedImage] = {
-    var image: Option[BufferedImage] = None
     val imagePath = resourcePath + "images/" + name + ".jpg"
     try {
-      image = Some(GUIUtil.getBufferedImage(imagePath))
+      Some(GUIUtil.getBufferedImage(imagePath))
     } catch {
-      case e: NoClassDefFoundError =>
+      case _: NoClassDefFoundError =>
         System.err.println("You are trying to load image when only text scenes are supported. " +
           "If you need this to work, add the jai library to your classpath.")
-      case ise: IllegalStateException =>
+        None
+      case _: IllegalStateException =>
         System.err.println("Could not load image from: " + imagePath)
+        None
     }
-    image
   }
 }
 
@@ -109,9 +106,8 @@ class Scene(var name: String, var description: String, var label: Option[String]
     if (hasSound) SoundUtil.playSound(soundUrl.get)
   }
 
-  def getImage: BufferedImage = {
-     if (image.isDefined) image.get else createPlaceholderImg()
-  }
+  def getImage: BufferedImage =
+    image.getOrElse(createPlaceholderImg())
 
   private def createPlaceholderImg(): BufferedImage = {
     val placeHolderImg = ImageUtil.createCompatibleImage(200, 100)
@@ -136,9 +132,6 @@ class Scene(var name: String, var description: String, var label: Option[String]
   def hasChoices: Boolean = !choices.isEmpty
   def getChoices: Seq[Choice] = choices.choices
 
-  /** Prints what is missing, if anything, for this scene.
-    * @return false if something is missing.
-    */
   /** @return true if media is consistent: both image and sound, or neither (text-only scene).
     *         If only one is present, prints a message and returns false.
     */
@@ -155,13 +148,11 @@ class Scene(var name: String, var description: String, var label: Option[String]
   }
 
   def print: String = {
-    var s: String = s"\n $description\n"
-    if (!choices.isEmpty) {
-      s += choices.choices.zipWithIndex.map {
-        case (c, i) => s"${i + 1}) ${c.description}"
-      }.mkString("\n")
-    }
-    s
+    val header = s"\n $description\n"
+    if (choices.isEmpty) header
+    else header + choices.choices.zipWithIndex.map {
+      case (c, i) => s"${i + 1}) ${c.description}"
+    }.mkString("\n")
   }
 
   /** @return the text and choices. */
