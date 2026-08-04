@@ -20,9 +20,9 @@ tasks.withType(ScalaCompile).configureEach {
 }
 
 dependencies {
-    implementation 'com.barrybecker4:bb4-sound:2.0.0'
-    implementation 'com.barrybecker4:bb4-ui:2.0.0'
-    implementation 'com.barrybecker4:bb4-common:2.0.0'
+    implementation 'com.barrybecker4:bb4-sound:2.1-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-ui:2.1-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-common:2.1-SNAPSHOT'
 }
 
 // The appMap is used to create the list of available applications in the html index page and to generate the app tasks.
