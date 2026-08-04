@@ -28,10 +28,10 @@ class StoryMenu(var storyApp: GraphicalAdventure) extends JMenu("Story") with Ac
 
   this.setBorder(BorderFactory.createEtchedBorder)
   setBorder(BorderFactory.createEtchedBorder)
-  private var openItem = createMenuItem("Open")
-  private var saveItem  = createMenuItem("Save")
-  private var editItem = createMenuItem("Edit")
-  private var exitItem = createMenuItem("Exit")
+  private val openItem = createMenuItem("Open")
+  private val saveItem = createMenuItem("Save")
+  private val editItem = createMenuItem("Edit")
+  private val exitItem = createMenuItem("Exit")
   add(openItem)
   add(saveItem)
   add(editItem)
@@ -76,9 +76,8 @@ class StoryMenu(var storyApp: GraphicalAdventure) extends JMenu("Story") with Ac
   /** Save the current story to a file. */
   private def saveStory(): Unit = {
     val file = FileChooserUtil.getSelectedFileToSave(StoryMenu.EXT, getDefaultDir)
-    if (file != null) { // if it does not have the .sgf extension already then add it
-      var fPath = file.getAbsolutePath
-      fPath = ExtensionFileFilter.addExtIfNeeded(fPath, StoryMenu.EXT)
+    if (file != null) {
+      val fPath = ExtensionFileFilter.addExtIfNeeded(file.getAbsolutePath, StoryMenu.EXT)
       storyApp.saveStory(fPath)
     }
   }
