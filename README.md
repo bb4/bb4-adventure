@@ -1,6 +1,6 @@
 # bb4-adventure
 
-📊 [Build status for all bb4 projects](https://github.com/bb4)
+📊 [Build status for all bb4 projects](https://github.com/bb4/.github)
 
 A configurable story builder. Stories are configured using xml script files that reside in 
 com/barryecker4/puzzle/adventure/stories.
