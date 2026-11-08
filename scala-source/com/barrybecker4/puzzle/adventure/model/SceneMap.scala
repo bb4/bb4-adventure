@@ -56,8 +56,14 @@ class SceneMap(map: mutable.LinkedHashMap[String, Scene] = new mutable.LinkedHas
     }
   }
 
-  /** Since the name of one of the scenes has changed we need to update the sceneMap. */
+  /** Since the name of one of the scenes has changed we need to update the sceneMap.
+    * Renaming onto an existing scene name is rejected so another scene is not silently dropped.
+    */
   def sceneNameChanged(oldSceneName: String, newSceneName: String): Unit = {
+    if (oldSceneName != newSceneName && map.contains(newSceneName))
+      throw new IllegalArgumentException(
+        s"Cannot rename scene '$oldSceneName' to '$newSceneName': that name already exists")
+
     val changedScene = map.remove(oldSceneName)
     map.put(newSceneName, changedScene.get)
     // also need to update the references to named scenes in the choices.

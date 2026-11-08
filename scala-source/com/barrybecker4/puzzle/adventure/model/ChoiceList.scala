@@ -9,9 +9,12 @@ import scala.collection.mutable
   */
 class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
 
-  /** @param scene use the choices from this scene to initialize from. */
+  /** @param scene use the choices from this scene to initialize from.
+    *              Choices are deep-copied so later mutations (e.g. rename) do not
+    *              alias the source scene's Choice instances.
+    */
   def this(scene: Scene) = {
-    this(scene.getChoices)
+    this(scene.getChoices.map(c => Choice(c.description, c.destinationScene)))
   }
 
   /** @param sceneName sceneName to look for as a destination.
@@ -40,7 +43,7 @@ class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
   def contains(o: Any): Boolean = choices.contains(o)
   def add(choice: Choice): Unit = { choices :+= choice }
 
-  /** Remove the choice at the given 0-based index. */
+  /** Remove the choice at the given 0-based index (matches Swing table rows). */
   def remove(index: Int): Unit = {
     require(index >= 0 && index < choices.size,
       s"choice index $index out of range; size is ${choices.size}")
