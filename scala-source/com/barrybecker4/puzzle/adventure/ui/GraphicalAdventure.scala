@@ -97,15 +97,9 @@ final class GraphicalAdventure(
 
   def isStoryEdited: Boolean = storyEdited
 
+  /** Load a story XML from a user-selected file (any filesystem location). */
   def loadStory(file: File): Unit = {
-    println("parent = " + file.getParent)
-    val matchPrefix = "com" + File.separatorChar
-    val idx = file.getParent.indexOf(matchPrefix)
-    val folder = file.getParent.substring(idx)
-    val story = StoryImporter
-      .fromDefaults(file.getName, folder + File.separator)
-      .getStory
-    setStory(story)
+    setStory(StoryImporter.fromFile(file).getStory)
   }
 
   /** @param fPath fully qualified filename and path to save to.*/
