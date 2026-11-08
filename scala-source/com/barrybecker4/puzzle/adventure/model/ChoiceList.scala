@@ -39,5 +39,11 @@ class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
   def isEmpty: Boolean = choices.isEmpty
   def contains(o: Any): Boolean = choices.contains(o)
   def add(choice: Choice): Unit = { choices :+= choice }
-  def remove(index: Int): Unit = choices = choices.take(index - 1) ++ choices.drop(index)
+
+  /** Remove the choice at the given 0-based index. */
+  def remove(index: Int): Unit = {
+    require(index >= 0 && index < choices.size,
+      s"choice index $index out of range; size is ${choices.size}")
+    choices = choices.take(index) ++ choices.drop(index + 1)
+  }
 }

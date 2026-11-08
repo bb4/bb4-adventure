@@ -19,8 +19,7 @@ class TextAdventureSuite extends AnyFunSuite {
       None,
       new ChoiceList(Seq(Choice("a", "x"), Choice("b", "y"))),
       None,
-      None,
-      true)
+      None)
     val lines = Iterator("not-a-number", "9", "2")
     val idx = TextAdventure.getNextSceneIndex(scene, () => lines.next())
     assert(idx == 1)
@@ -28,7 +27,7 @@ class TextAdventureSuite extends AnyFunSuite {
 
   test("getNextSceneIndex returns -1 when scene has no choices") {
     val scene =
-      new Scene("s", "d", None, new ChoiceList(), None, None, true)
+      new Scene("s", "d", None, new ChoiceList(), None, None)
     assert(TextAdventure.getNextSceneIndex(scene, () => "") == -1)
   }
 }

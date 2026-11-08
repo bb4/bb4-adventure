@@ -18,7 +18,7 @@ object XmlScriptImporter {
       .map(_.getTextContent)
       .getOrElse("")
 
-  def createScene(sceneNode: Node, resourcePath: String, isFirst: Boolean): Scene = {
+  def createScene(sceneNode: Node, resourcePath: String): Scene = {
     val name = DomUtil.getAttribute(sceneNode, "name")
     new Scene(
       name,
@@ -26,8 +26,7 @@ object XmlScriptImporter {
       None,
       new ChoiceList(getChoices(sceneNode)),
       loadSound(name, resourcePath),
-      loadImage(name, resourcePath),
-      isFirst)
+      loadImage(name, resourcePath))
   }
 
   /** Choices live under a `choices` element; only `choice` element children are used.
@@ -69,8 +68,6 @@ case class XmlScriptImporter(document: Document, resourcePath: String) extends X
   protected def extractScenesFromDoc(document: Document): Array[Scene] = {
     val root = document.getDocumentElement
     val sceneNodes = DomNodeUtil.childElementNodes(root.getChildNodes).filter(_.getNodeName == "scene")
-    sceneNodes.zipWithIndex.map { case (node, idx) =>
-      createScene(node, resourcePath, idx == 0)
-    }.toArray
+    sceneNodes.map(node => createScene(node, resourcePath)).toArray
   }
 }

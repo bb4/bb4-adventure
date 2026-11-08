@@ -13,10 +13,20 @@ class ChoiceListSuite extends AnyFunSuite {
     assert(cl.choices.head.destinationScene == "new")
   }
 
-  test("ChoiceList remove drops 1-based index") {
+  test("ChoiceList remove drops 0-based index") {
     val cl = new ChoiceList(Seq(Choice("a", "1"), Choice("b", "2"), Choice("c", "3")))
-    cl.remove(2)
+    cl.remove(1)
     assert(cl.choices.map(_.destinationScene) == Seq("1", "3"))
+  }
+
+  test("ChoiceList remove rejects out-of-range index") {
+    val cl = new ChoiceList(Seq(Choice("a", "1")))
+    intercept[IllegalArgumentException] {
+      cl.remove(1)
+    }
+    intercept[IllegalArgumentException] {
+      cl.remove(-1)
+    }
   }
 
   test("ChoiceList update rebuilds from LinkedHashMap order") {
@@ -35,8 +45,7 @@ class ChoiceListSuite extends AnyFunSuite {
       None,
       new ChoiceList(Seq(Choice("x", "y"))),
       None,
-      None,
-      true)
+      None)
     val cl2 = new ChoiceList(scene)
     assert(cl2.choices == scene.getChoices)
   }
