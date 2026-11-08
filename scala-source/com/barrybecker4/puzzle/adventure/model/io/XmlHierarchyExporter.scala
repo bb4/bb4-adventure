@@ -19,7 +19,7 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
     rootElement.setAttribute("author", story.author)
     rootElement.setAttribute("title", story.title)
     rootElement.setAttribute("date", story.date)
-    rootElement.setAttribute("imgpath", "techniques/images") // hardcoded for aikido
+    rootElement.setAttribute("imgpath", story.imgPath)
     document.appendChild(rootElement)
 
     // iterate through scenes in scenemap
@@ -73,13 +73,14 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
       parentElement.appendChild(createUseElement(scene, document))
     }
     else {
+      // Mark before recursing so cycles emit <use> instead of overflowing the stack.
+      visitedScenes.add(scene)
       val sceneElem = createSceneElement(scene, document, fallBackLabel)
       scene.getChoices.foreach { choice =>
         addSceneToDom(sceneElem, document,
           sceneMap.get(choice.destinationScene), choice.description, visitedScenes)
       }
       parentElement.appendChild(sceneElem)
-      visitedScenes.add(scene)
     }
   }
 

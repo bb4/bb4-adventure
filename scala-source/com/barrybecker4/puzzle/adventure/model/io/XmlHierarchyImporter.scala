@@ -32,14 +32,18 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
 
   private var idToLabelMap = Map[String, String]()
 
-  private val story: Story = new Story(
-    DomUtil.getAttribute(document.getDocumentElement, "title"),
-    DomUtil.getAttribute(document.getDocumentElement, "name", ""),
-    DomUtil.getAttribute(document.getDocumentElement, "author"),
-    DomUtil.getAttribute(document.getDocumentElement, "date"),
-    resourcePath,
-    DTD,
-    extractScenesFromDoc(document))
+  private val story: Story = {
+    val imported = new Story(
+      DomUtil.getAttribute(document.getDocumentElement, "title"),
+      DomUtil.getAttribute(document.getDocumentElement, "name", ""),
+      DomUtil.getAttribute(document.getDocumentElement, "author"),
+      DomUtil.getAttribute(document.getDocumentElement, "date"),
+      resourcePath,
+      DTD,
+      extractScenesFromDoc(document))
+    imported.imgPath = DomUtil.getAttribute(document.getDocumentElement, "imgpath", "")
+    imported
+  }
 
   def getStory: Story = story
 
