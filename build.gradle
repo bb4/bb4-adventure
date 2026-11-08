@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2016 - 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
 plugins {
-    id 'com.barrybecker4.bb4.scala-library' version '2.0.0'
-    id 'com.barrybecker4.bb4.publish' version '2.0.0'
-    id 'com.barrybecker4.bb4.application' version '2.0.0'
+    id 'com.barrybecker4.bb4.scala-library' version '2.1-SNAPSHOT'
+    id 'com.barrybecker4.bb4.publish' version '2.1-SNAPSHOT'
+    id 'com.barrybecker4.bb4.application' version '2.1-SNAPSHOT'
 }
 
 description = 'A framework for creating adventure games. It could also be used for other educational purposes.'
@@ -13,6 +13,10 @@ version = '2.1-SNAPSHOT'
 bb4 {
     archivesBaseName.set('bb4-adventure')
     mainClass.set('com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp')
+    jarMap.put('adventure', [
+            include: ['com/barrybecker4/puzzle/adventure/**'],
+            exclude: ['com/barrybecker4/puzzle/adventure/**/*.pdf']
+    ])
 }
 
 tasks.withType(ScalaCompile).configureEach {
@@ -108,17 +112,10 @@ appMap.each { appId, propMap ->
     }
 }
 
-ext.jarMap = new LinkedHashMap()
-jarMap['adventure'] = [
-        include: ['com/barrybecker4/puzzle/adventure/**'],
-        exclude: ['com/barrybecker4/puzzle/adventure/**/*.pdf']
-]
-
-
 // The application is deployed to /build/distributions. Run scripts are in the bin directory.
 // Additional script to run text version.
 // It can take parameters like 'ludlow/ludlowScript.xml' or 'learnBinary/binaryScript.xml'
-task createTextAdventureApp(type: CreateStartScripts) {
+def createTextAdventureApp = tasks.register('createTextAdventureApp', CreateStartScripts) {
     mainClass.set('com.barrybecker4.puzzle.adventure.TextAdventure')
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
@@ -127,8 +124,10 @@ task createTextAdventureApp(type: CreateStartScripts) {
 }
 
 // add extra execution scripts
-applicationDistribution.into('bin') {
+application.applicationDistribution.into('bin') {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(createTextAdventureApp)
-    fileMode = 0755
+    filePermissions {
+        unix('755')
+    }
 }
