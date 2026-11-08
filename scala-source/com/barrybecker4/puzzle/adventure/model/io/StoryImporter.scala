@@ -21,7 +21,12 @@ object StoryImporter {
   }
 
   def fromFile(file: File): StoryImporter =
-    new StoryImporter(DomUtil.parseXMLFile(file), file.getParent + File.separator)
+    DomUtil.parseXMLFile(file) match {
+      case Some(document) =>
+        new StoryImporter(document, file.getParent + File.separator)
+      case None =>
+        throw new IllegalArgumentException(s"Could not parse XML file: $file")
+    }
 
   def fromDefaults(
       fileName: String = DEFAULT_FILE,

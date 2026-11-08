@@ -10,7 +10,8 @@ class XmlScriptExporter(story: Story) extends XmlExporter(story) {
 
   /** @return the story document based on the current state of the story. */
   override protected def createStoryDocument: Document = {
-    val document = DomUtil.createNewDocument
+    val document = DomUtil.createNewDocument.getOrElse(
+      throw new IllegalStateException("Could not create XML document"))
     val rootElement = document.createElement(story.rootTag)
     rootElement.setAttribute("author", story.author)
     rootElement.setAttribute("name", story.name)

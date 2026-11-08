@@ -17,9 +17,9 @@ object Scene {
   def loadSound(name: String, resourcePath: String): Option[URL] =
     try {
       val auPath = resourcePath + "sounds/" + name + ".au"
-      Option(FileUtil.getURL(auPath, failIfNotFound = false)).orElse {
+      FileUtil.getURLOption(auPath).orElse {
         val wavPath = resourcePath + "sounds/" + name + ".wav"
-        Option(FileUtil.getURL(wavPath, failIfNotFound = false))
+        FileUtil.getURLOption(wavPath)
       }
     } catch {
       case _: NoClassDefFoundError =>
