@@ -19,7 +19,7 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
     rootElement.setAttribute("author", story.author)
     rootElement.setAttribute("title", story.title)
     rootElement.setAttribute("date", story.date)
-    rootElement.setAttribute("imgpath", "techniques/images") // hardcoded for aikido
+    rootElement.setAttribute("imgpath", story.imgPath)
     document.appendChild(rootElement)
 
     // iterate through scenes in scenemap

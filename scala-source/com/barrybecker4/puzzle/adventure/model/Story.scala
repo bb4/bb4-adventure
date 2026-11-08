@@ -27,6 +27,9 @@ class Story(val title: String = "", val name: String = "",
 
   assert(scenes.nonEmpty)
 
+  /** Hierarchy `imgpath` attribute from the source document (empty for script stories). */
+  var imgPath: String = ""
+
   /** The scene where the user is now. */
   private var currentScene: Scene = scenes(0)
 
@@ -43,6 +46,7 @@ class Story(val title: String = "", val name: String = "",
 
   private[adventure] def initializeFrom(story: Story): Unit = {
     this.resourcePath = story.resourcePath
+    this.imgPath = story.imgPath
     sceneMap = story.sceneMap.copy()
     advanceToScene(story.getCurrentScene.name)
   }
