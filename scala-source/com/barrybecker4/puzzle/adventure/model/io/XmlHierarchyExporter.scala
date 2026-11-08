@@ -73,7 +73,7 @@ class XmlHierarchyExporter(story: Story) extends XmlExporter(story) {
       parentElement.appendChild(createUseElement(scene, document))
     }
     else {
-      // Mark before recursing so cycles emit <use> instead of overflowing the stack.
+      // Mark visited before recursing so cycles emit <use> instead of overflowing.
       visitedScenes.add(scene)
       val sceneElem = createSceneElement(scene, document, fallBackLabel)
       scene.getChoices.foreach { choice =>

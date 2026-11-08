@@ -13,10 +13,25 @@ class ChoiceListSuite extends AnyFunSuite {
     assert(cl.choices.head.destinationScene == "new")
   }
 
-  test("ChoiceList remove drops 1-based index") {
+  test("ChoiceList remove drops 0-based index used by the editor") {
     val cl = new ChoiceList(Seq(Choice("a", "1"), Choice("b", "2"), Choice("c", "3")))
-    cl.remove(2)
-    assert(cl.choices.map(_.destinationScene) == Seq("1", "3"))
+    cl.remove(0)
+    assert(cl.choices.map(_.destinationScene) == Seq("2", "3"))
+    cl.remove(1)
+    assert(cl.choices.map(_.destinationScene) == Seq("2"))
+  }
+
+  test("Scene.deleteChoice removes the intended choice for Swing 0-based row") {
+    val scene = new Scene(
+      "s",
+      "d",
+      None,
+      new ChoiceList(Seq(Choice("a", "1"), Choice("b", "2"), Choice("c", "3"))),
+      None,
+      None,
+      true)
+    scene.deleteChoice(1)
+    assert(scene.getChoices.map(_.destinationScene) == Seq("1", "3"))
   }
 
   test("ChoiceList update rebuilds from LinkedHashMap order") {

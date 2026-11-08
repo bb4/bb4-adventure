@@ -64,6 +64,16 @@ class StoryAndSceneMapSuite extends AnyFunSuite {
     assert(story.getCurrentScene.getChoices.map(_.destinationScene) == Seq("finale"))
   }
 
+  test("SceneMap sceneNameChanged rejects rename onto an existing scene name") {
+    val story = twoSceneStory()
+    intercept[IllegalArgumentException] {
+      story.sceneNameChanged("end", "start")
+    }
+    assert(story.getSceneMap.contains("start"))
+    assert(story.getSceneMap.contains("end"))
+    assert(story.getSceneMap.get("start").getChoices.map(_.destinationScene) == Seq("end"))
+  }
+
   test("Scene getNextSceneName requires in-range index") {
     val scene = new Scene(
       "s",

@@ -1,12 +1,13 @@
 package com.barrybecker4.puzzle.adventure
 
-import com.barrybecker4.puzzle.adventure.model.{Choice, ChoiceList, Scene, Story}
-import com.barrybecker4.puzzle.adventure.model.io.{XmlHierarchyExporter, XmlHierarchyImporter}
+import com.barrybecker4.puzzle.adventure.model.*
+import com.barrybecker4.puzzle.adventure.model.io.{StoryExporter, XmlHierarchyExporter, XmlHierarchyImporter}
 import org.scalatest.funsuite.AnyFunSuite
-import org.w3c.dom.{Document, Element, Node}
+import org.w3c.dom.Document
 
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
+import java.nio.file.Files
 import javax.xml.parsers.DocumentBuilderFactory
 
 class XmlHierarchyExporterSuite extends AnyFunSuite {
@@ -22,45 +23,38 @@ class XmlHierarchyExporterSuite extends AnyFunSuite {
     builder.parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)))
   }
 
-  private def childElements(parent: Node): Seq[Element] =
-    (0 until parent.getChildNodes.getLength)
-      .map(parent.getChildNodes.item)
-      .collect { case e: Element => e }
-
-  test("cyclic hierarchy A↔B exports with <use> for the back-edge") {
+  private def cyclicStory(): Story = {
     val b = new Scene(
-      "b",
-      "scene b",
-      Some("B"),
-      new ChoiceList(Seq(Choice("back to a", "a"))),
+      "B",
+      "b desc",
+      Some("bee"),
+      new ChoiceList(Seq(Choice("back to A", "A"))),
       None,
       None,
       false)
     val a = new Scene(
-      "a",
-      "scene a",
-      Some("A"),
-      new ChoiceList(Seq(Choice("to b", "b"))),
+      "A",
+      "a desc",
+      Some("ay"),
+      new ChoiceList(Seq(Choice("to B", "B"))),
       None,
       None,
       true)
-    val story = new Story("Cycle", "cycle", "author", "date", "", "hierarchy", Array(a, b))
+    new Story("Cycle", "cycle", "a", "d", "", XmlHierarchyImporter.DTD, Array(a, b))
+  }
 
-    val doc = new TestableExporter(story).exportedDocument
-    val root = doc.getDocumentElement
-    val topNodes = childElements(root).filter(_.getNodeName == "node")
-    assert(topNodes.size == 1)
-    assert(topNodes.head.getAttribute("id") == "a")
+  test("hierarchy export of A→B→A completes and emits use for the back-edge") {
+    val story = cyclicStory()
+    val out = Files.createTempFile("bb4-hierarchy-cycle-", ".xml").toFile
+    out.deleteOnExit()
 
-    val aChildren = childElements(topNodes.head)
-    assert(aChildren.size == 1)
-    assert(aChildren.head.getNodeName == "node")
-    assert(aChildren.head.getAttribute("id") == "b")
+    StoryExporter(story).saveTo(out.getAbsolutePath)
 
-    val bChildren = childElements(aChildren.head)
-    assert(bChildren.size == 1)
-    assert(bChildren.head.getNodeName == "use")
-    assert(bChildren.head.getAttribute("ref") == "a")
+    val xml = new String(Files.readAllBytes(out.toPath), StandardCharsets.UTF_8)
+    assert(xml.contains("<use") && xml.contains("""ref="A""""),
+      s"expected use back-edge to A in:\n$xml")
+    assert(xml.contains("""id="A""""))
+    assert(xml.contains("""id="B""""))
   }
 
   test("hierarchy export preserves imported imgpath") {
