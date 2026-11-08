@@ -12,8 +12,7 @@ class SceneSuite extends AnyFunSuite {
       None,
       new ChoiceList(choices),
       None,
-      None,
-      true)
+      None)
 
   test("print includes description and 1-based choice lines") {
     val scene = sceneWithChoices(Choice("go left", "left"), Choice("go right", "right"))
@@ -29,7 +28,7 @@ class SceneSuite extends AnyFunSuite {
   }
 
   test("isParentOf is true when choice destinations match child name") {
-    val child = new Scene("left", "left room", None, new ChoiceList(), None, None, false)
+    val child = new Scene("left", "left room", None, new ChoiceList(), None, None)
     val parent = sceneWithChoices(Choice("go left", "left"))
     assert(parent.isParentOf(child))
     assert(!child.isParentOf(parent))

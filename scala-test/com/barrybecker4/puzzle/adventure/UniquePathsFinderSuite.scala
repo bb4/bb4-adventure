@@ -6,31 +6,28 @@ import org.scalatest.funsuite.AnyFunSuite
 class UniquePathsFinderSuite extends AnyFunSuite {
 
   test("findUniquePaths counts distinct acyclic routes in a diamond") {
-    val d = new Scene("d", "d", None, new ChoiceList(), None, None, false)
+    val d = new Scene("d", "d", None, new ChoiceList(), None, None)
     val b = new Scene(
       "b",
       "b",
       None,
       new ChoiceList(Seq(Choice("to d", "d"))),
       None,
-      None,
-      false)
+      None)
     val c = new Scene(
       "c",
       "c",
       None,
       new ChoiceList(Seq(Choice("to d", "d"))),
       None,
-      None,
-      false)
+      None)
     val a = new Scene(
       "a",
       "a",
       None,
       new ChoiceList(Seq(Choice("to b", "b"), Choice("to c", "c"))),
       None,
-      None,
-      true)
+      None)
     val story = new Story("t", "n", "", "", "", "script", Array(a, b, c, d))
     val paths = UniquePathsFinder(story).findUniquePaths(d)
     assert(paths.size == 2)
@@ -39,15 +36,14 @@ class UniquePathsFinderSuite extends AnyFunSuite {
   }
 
   test("findUniquePaths is one for a simple chain") {
-    val b = new Scene("b", "b", None, new ChoiceList(), None, None, false)
+    val b = new Scene("b", "b", None, new ChoiceList(), None, None)
     val a = new Scene(
       "a",
       "a",
       None,
       new ChoiceList(Seq(Choice("go", "b"))),
       None,
-      None,
-      true)
+      None)
     val story = new Story("t", "n", "", "", "", "script", Array(a, b))
     val paths = UniquePathsFinder(story).findUniquePaths(b)
     assert(paths == List(Seq(a, b)))

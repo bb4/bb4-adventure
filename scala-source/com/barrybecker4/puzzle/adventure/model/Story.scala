@@ -33,9 +33,6 @@ class Story(val title: String = "", val name: String = "",
   /** The scene where the user is now. */
   private var currentScene: Scene = scenes(0)
 
-  /** A stack of currently visited scenes. There may be duplicates if you visit the same scene twice. */
-  private var visitedScenes: Seq[Scene] = Seq()
-
   /** Maps scene name to the scene. Preserves order of scenes. */
   private var sceneMap: SceneMap = new SceneMap()
 
@@ -52,7 +49,6 @@ class Story(val title: String = "", val name: String = "",
     this.imgPath = story.imgPath
     sceneMap = story.sceneMap.copy()
     advanceToScene(story.getCurrentScene.name)
-    visitedScenes = story.visitedScenes
   }
 
   /** @return the title of the story */
@@ -90,7 +86,6 @@ class Story(val title: String = "", val name: String = "",
     */
   def advanceToScene(nextSceneName: String): Unit = {
     if (nextSceneName != null) {
-      if (currentScene != null) visitedScenes :+= currentScene
       assert(sceneMap.contains(nextSceneName), nextSceneName +
         " not found among map keys: " + sceneMap)
       currentScene = sceneMap.get(nextSceneName)

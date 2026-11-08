@@ -6,15 +6,14 @@ import org.scalatest.funsuite.AnyFunSuite
 class StoryCopySuite extends AnyFunSuite {
 
   private def twoSceneStory(): Story = {
-    val end = new Scene("end", "end desc", None, new ChoiceList(), None, None, false)
+    val end = new Scene("end", "end desc", None, new ChoiceList(), None, None)
     val start = new Scene(
       "start",
       "start desc",
       None,
       new ChoiceList(Seq(Choice("finish", "end"))),
       None,
-      None,
-      true)
+      None)
     new Story("t", "n", "", "", "", "script", Array(start, end))
   }
 
