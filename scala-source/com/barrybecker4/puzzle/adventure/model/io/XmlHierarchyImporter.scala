@@ -65,6 +65,10 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
       .filter(_.getNodeName == "node")
     val scenes = new ArrayBuffer[Scene]()
 
+    // Pass 1: register every node id → label so forward <use> refs resolve.
+    idToLabelMap = Map.empty
+    topLevelNodes.foreach(collectIds)
+
     // since there can be only one start node, if there is more than one
     // child at the root, add a fake parent for those nodes.
     if (topLevelNodes.size > 1) {
@@ -90,6 +94,16 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
     scenes.toArray
   }
 
+  /** Walk all nested <node> elements and fill idToLabelMap. */
+  private def collectIds(sceneNode: Node): Unit = {
+    val name = DomUtil.getAttribute(sceneNode, "id")
+    val label = DomUtil.getAttribute(sceneNode, "label")
+    idToLabelMap += name -> label
+    for (child <- DomNodeUtil.childElementNodes(sceneNode.getChildNodes)
+           if child.getNodeName == "node")
+      collectIds(child)
+  }
+
   /** Append the scene for the specified sceneNode and all of its children.
     */
   def appendScenesRootedAt(sceneNode: Node,
@@ -102,7 +116,6 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
       Some(label), new ChoiceList(getChoices(sceneNode.getChildNodes)),
       loadSound(name, resourcePath), loadImage(name, resourcePath),
       isFirst)
-    idToLabelMap += name -> label
     scenes.append(rootScene)
 
     // Recurse only into nested scene nodes, not <use> refs (those are edges, not new scenes).
@@ -126,7 +139,11 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
         Choice(DomUtil.getAttribute(node, "label"), id)
       case "use" =>
         val id = DomUtil.getAttribute(node, "ref")
-        Choice(idToLabelMap(id), id)
+        idToLabelMap.get(id) match {
+          case Some(label) => Choice(label, id)
+          case None =>
+            throw new IllegalArgumentException(s"Unknown hierarchy use ref: $id")
+        }
       case _ =>
         throw new IllegalArgumentException("Unexpected tag: " + node.getNodeName)
     }
