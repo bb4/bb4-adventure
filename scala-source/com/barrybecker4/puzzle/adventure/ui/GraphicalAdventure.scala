@@ -17,20 +17,6 @@ import com.barrybecker4.puzzle.adventure.model.io.{StoryExporter, StoryImporter}
 import com.barrybecker4.puzzle.adventure.model.Story
 
 
-object GraphicalAdventure {
-
-  /**
-    * Resolve a classpath-style resource folder from a filesystem parent path.
-    * When the path contains a `com/` (or `com\`) segment, return from that segment
-    * onward; otherwise return the parent path unchanged (no index exception).
-    */
-  def resourceFolderFromParent(parent: String): String = {
-    val matchPrefix = "com" + File.separatorChar
-    val idx = parent.indexOf(matchPrefix)
-    if (idx >= 0) parent.substring(idx) else parent
-  }
-}
-
 /**
   * @param story initial story to show.
   */
@@ -111,13 +97,9 @@ final class GraphicalAdventure(
 
   def isStoryEdited: Boolean = storyEdited
 
+  /** Load a story XML from a user-selected file (any filesystem location). */
   def loadStory(file: File): Unit = {
-    println("parent = " + file.getParent)
-    val folder = GraphicalAdventure.resourceFolderFromParent(file.getParent)
-    val story = StoryImporter
-      .fromDefaults(file.getName, folder + File.separator)
-      .getStory
-    setStory(story)
+    setStory(StoryImporter.fromFile(file).getStory)
   }
 
   /** @param fPath fully qualified filename and path to save to.*/

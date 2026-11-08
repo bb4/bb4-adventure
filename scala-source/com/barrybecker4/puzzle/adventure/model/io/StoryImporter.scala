@@ -20,10 +20,21 @@ object StoryImporter {
     fromDefaults(fileName, fileRoot)
   }
 
+  /**
+    * Resource root for a story file chosen from disk: the file's parent directory.
+    * Does not substring-match on "com/" — that was brittle and crashed when absent.
+    */
+  def resourcePathFor(file: File): String = {
+    val parent = file.getParent
+    if (parent == null)
+      throw new IllegalArgumentException(s"Story file must have a parent directory: $file")
+    parent + File.separator
+  }
+
   def fromFile(file: File): StoryImporter =
     DomUtil.parseXMLFile(file) match {
       case Some(document) =>
-        new StoryImporter(document, file.getParent + File.separator)
+        new StoryImporter(document, resourcePathFor(file))
       case None =>
         throw new IllegalArgumentException(s"Could not parse XML file: $file")
     }
