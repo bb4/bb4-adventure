@@ -46,20 +46,19 @@ object Scene {
 /**
   * Every scene has a name, some text which describes the scene, and a list of
   * choices which the actor chooses from to decide what to do next.
-  * There is a "Return to last scene" choice automatically appended to all list of choices.
   * A scene may also have an associated sound and image.
+  * The first/root scene of a story is determined by SceneMap insertion order
+  * (typically the first scene imported), not by a flag on Scene.
   * @param name unique id/name of the scene. No spaces should be in it.
   * @param description textual description of the scene
   * @param label optional label for the scene
   * @param soundUrl optional URL to a sound for this scene
   * @param image optional image to display with this scene
-  * @param isFirst if true, then this is the first/root scene in the story
   * @author Barry Becker
   */
 class Scene(var name: String, var description: String, var label: Option[String] = None,
             val choices: ChoiceList = new ChoiceList(),
-            val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None,
-            val isFirst: Boolean = false) {
+            val soundUrl: Option[URL] = None, val image: Option[BufferedImage] = None) {
 
   def this(name: String, description: String, resourcePath: String) = {
     this(
@@ -76,7 +75,7 @@ class Scene(var name: String, var description: String, var label: Option[String]
     */
   def this(scene: Scene) = {
     this(scene.name, scene.description, scene.label, new ChoiceList(scene),
-      scene.soundUrl, scene.image, scene.isFirst)
+      scene.soundUrl, scene.image)
   }
 
   def isValidChoice(i: Int): Boolean =

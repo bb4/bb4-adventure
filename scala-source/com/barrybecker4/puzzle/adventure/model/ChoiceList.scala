@@ -44,5 +44,9 @@ class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
   def add(choice: Choice): Unit = { choices :+= choice }
 
   /** Remove the choice at the given 0-based index (matches Swing table rows). */
-  def remove(index: Int): Unit = choices = choices.take(index) ++ choices.drop(index + 1)
+  def remove(index: Int): Unit = {
+    require(index >= 0 && index < choices.size,
+      s"choice index $index out of range; size is ${choices.size}")
+    choices = choices.take(index) ++ choices.drop(index + 1)
+  }
 }

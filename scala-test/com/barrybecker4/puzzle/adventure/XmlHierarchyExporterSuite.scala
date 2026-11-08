@@ -16,16 +16,14 @@ class XmlHierarchyExporterSuite extends AnyFunSuite {
       Some("bee"),
       new ChoiceList(Seq(Choice("back to A", "A"))),
       None,
-      None,
-      false)
+      None)
     val a = new Scene(
       "A",
       "a desc",
       Some("ay"),
       new ChoiceList(Seq(Choice("to B", "B"))),
       None,
-      None,
-      true)
+      None)
     new Story("Cycle", "cycle", "a", "d", "", XmlHierarchyImporter.DTD, Array(a, b))
   }
 

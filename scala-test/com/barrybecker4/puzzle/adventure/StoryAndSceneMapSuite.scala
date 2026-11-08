@@ -6,15 +6,14 @@ import org.scalatest.funsuite.AnyFunSuite
 class StoryAndSceneMapSuite extends AnyFunSuite {
 
   private def twoSceneStory(): Story = {
-    val end = new Scene("end", "end desc", None, new ChoiceList(), None, None, false)
+    val end = new Scene("end", "end desc", None, new ChoiceList(), None, None)
     val start = new Scene(
       "start",
       "start desc",
       None,
       new ChoiceList(Seq(Choice("finish", "end"))),
       None,
-      None,
-      true)
+      None)
     new Story("t", "n", "", "", "", "script", Array(start, end))
   }
 
@@ -48,8 +47,7 @@ class StoryAndSceneMapSuite extends AnyFunSuite {
       None,
       new ChoiceList(Seq(Choice("nowhere", "missing"))),
       None,
-      None,
-      true)
+      None)
     intercept[IllegalStateException] {
       new Story("t", "n", "", "", "", "script", Array(orphan))
     }
@@ -81,8 +79,7 @@ class StoryAndSceneMapSuite extends AnyFunSuite {
       None,
       new ChoiceList(Seq(Choice("a", "x"), Choice("b", "y"))),
       None,
-      None,
-      true)
+      None)
     assert(scene.getNextSceneName(0) == "x")
     intercept[IllegalArgumentException] {
       scene.getNextSceneName(2)

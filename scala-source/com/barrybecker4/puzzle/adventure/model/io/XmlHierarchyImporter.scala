@@ -78,15 +78,14 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
         None,
         new ChoiceList(getChoices(root.getChildNodes)),
         None,
-        None,
-        true)
+        None)
       scenes.append(rootNode)
 
       for (n <- topLevelNodes)
-        appendScenesRootedAt(n, scenes, isFirst = false)
+        appendScenesRootedAt(n, scenes)
     }
     else if (topLevelNodes.size == 1)
-      appendScenesRootedAt(topLevelNodes.head, scenes, isFirst = true)
+      appendScenesRootedAt(topLevelNodes.head, scenes)
     else
       throw new IllegalStateException(
         "hierarchy document has no top-level <node> elements under the root")
@@ -106,22 +105,20 @@ case class XmlHierarchyImporter(document: Document, resourcePath: String) extend
 
   /** Append the scene for the specified sceneNode and all of its children.
     */
-  def appendScenesRootedAt(sceneNode: Node,
-                           scenes: ArrayBuffer[Scene], isFirst: Boolean): Unit = {
+  def appendScenesRootedAt(sceneNode: Node, scenes: ArrayBuffer[Scene]): Unit = {
     // first append the root node
     val name = DomUtil.getAttribute(sceneNode, "id")
     val label = DomUtil.getAttribute(sceneNode, "label")
     val rootScene = new Scene(name,
       getNodeDesc(sceneNode),
       Some(label), new ChoiceList(getChoices(sceneNode.getChildNodes)),
-      loadSound(name, resourcePath), loadImage(name, resourcePath),
-      isFirst)
+      loadSound(name, resourcePath), loadImage(name, resourcePath))
     scenes.append(rootScene)
 
     // Recurse only into nested scene nodes, not <use> refs (those are edges, not new scenes).
     for (child <- DomNodeUtil.childElementNodes(sceneNode.getChildNodes)
            if child.getNodeName == "node")
-      appendScenesRootedAt(child, scenes, isFirst = false)
+      appendScenesRootedAt(child, scenes)
   }
 
   /** The choices will be the labels and ids of all the child `node` and `use` elements.
