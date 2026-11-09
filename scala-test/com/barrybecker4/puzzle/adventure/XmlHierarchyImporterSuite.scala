@@ -1,6 +1,6 @@
 package com.barrybecker4.puzzle.adventure
 
-import com.barrybecker4.puzzle.adventure.model.io.XmlHierarchyImporter
+import com.barrybecker4.puzzle.adventure.model.io.{StoryImporter, XmlHierarchyImporter}
 import org.scalatest.funsuite.AnyFunSuite
 import org.w3c.dom.Document
 
@@ -54,5 +54,18 @@ class XmlHierarchyImporterSuite extends AnyFunSuite {
     }
     assert(ex.getMessage.toLowerCase.contains("missing_id") ||
       ex.getMessage.toLowerCase.contains("unknown"))
+  }
+
+  private val aikidoResourceRoot =
+    "com/barrybecker4/puzzle/adventure/stories/aikido/"
+
+  test("XmlHierarchyImporter loads shipped techniques.xml with sibling forward use refs") {
+    val story = StoryImporter.fromDefaults("techniques.xml", aikidoResourceRoot).getStory
+    assert(story.getSceneMap.contains("katate_dori"))
+    assert(story.getSceneMap.contains("left_sumi_entrance_low"))
+    val parentChoices = story.getSceneMap.get("katate_dori").getChoices
+    assert(
+      parentChoices.exists(c =>
+        c.destinationScene == "left_sumi_entrance_low" && c.description.nonEmpty))
   }
 }
