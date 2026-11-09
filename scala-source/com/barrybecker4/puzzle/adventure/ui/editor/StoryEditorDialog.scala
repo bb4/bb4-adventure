@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.ui.editor
 
 import com.barrybecker4.ui.components.GradientButton
@@ -11,7 +11,6 @@ import javax.swing.JComboBox
 import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
-import javax.swing.JScrollPane
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.FlowLayout
@@ -76,33 +75,14 @@ class StoryEditorDialog(val story: Story)
     */
   private def createEditingPane = {
     val editingPane = new JPanel(new BorderLayout)
-    editingPane.add(createParentTablePanel, BorderLayout.NORTH)
-    editingPane.add(createSceneEditingPanel, BorderLayout.CENTER)
+    val parentTablePanel = new ParentTablePanel(story, lastVisitedScene, this)
+    parentScenes = parentTablePanel.parentScenes
+    val sceneEditingPanel = new SceneEditingPanel(story, this)
+    sceneEditor = sceneEditingPanel.sceneEditor
+    childTablePanel = sceneEditingPanel.childTablePanel
+    editingPane.add(parentTablePanel, BorderLayout.NORTH)
+    editingPane.add(sceneEditingPanel, BorderLayout.CENTER)
     editingPane
-  }
-
-  /** @return table holding list of scenes that lead to the currently edited scene. */
-  private def createParentTablePanel = {
-    val parentContainer = new JPanel(new BorderLayout)
-    parentScenes = story.getParentScenes
-    val parentTable = new ParentTable(parentScenes, lastVisitedScene, this)
-    val tableHolder = new JPanel
-    tableHolder.setMaximumSize(new Dimension(500, 300))
-    parentContainer.setBorder(
-      BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Parent Scenes")
-    )
-    parentContainer.add(new JScrollPane(parentTable.getTable), BorderLayout.WEST)
-    parentContainer.setPreferredSize(new Dimension(SceneEditorPanel.EDITOR_WIDTH, 130))
-    parentContainer
-  }
-
-  private def createSceneEditingPanel = {
-    val container = new JPanel(new BorderLayout)
-    sceneEditor = new SceneEditorPanel(story.getCurrentScene, story)
-    childTablePanel = new ChildTablePanel(story, this)
-    container.add(sceneEditor, BorderLayout.CENTER)
-    container.add(childTablePanel, BorderLayout.SOUTH)
-    container
   }
 
   /** Create the buttons that go at the botton ( eg row editing buttons and OK, Cancel, ...)
