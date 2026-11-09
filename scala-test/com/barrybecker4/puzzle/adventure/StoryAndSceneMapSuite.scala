@@ -53,6 +53,17 @@ class StoryAndSceneMapSuite extends AnyFunSuite {
     }
   }
 
+  test("SceneMap copy does not alias choice instances from the source map") {
+    val story = twoSceneStory()
+    val originalDest = story.getSceneMap.get("start").getChoices.head
+    val copied = story.getSceneMap.copy()
+    copied.sceneNameChanged("end", "finale")
+    assert(originalDest.destinationScene == "end")
+    assert(story.getSceneMap.get("start").getChoices.head.destinationScene == "end")
+    assert(copied.get("start").getChoices.head.destinationScene == "finale")
+    assert(!(copied.get("start").getChoices.head eq originalDest))
+  }
+
   test("SceneMap sceneNameChanged updates keys and choice destinations") {
     val story = twoSceneStory()
     assert(story.sceneNameChanged("end", "finale"))
