@@ -118,7 +118,10 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
 
   def isSceneNameChanged: Boolean = !(oldSceneName == nameInput.getValue)
   def getOldSceneName: String = oldSceneName
+  def getProposedSceneName: String = nameInput.getValue
   def getEditedScene: Scene = scene
+
+  def revertProposedSceneName(): Unit = nameInput.setValue(oldSceneName)
 
   /** Persist the scene changes to the story. */
   def doSave(): Unit = {

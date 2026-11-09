@@ -141,7 +141,7 @@ class ChildTablePanel(val story: Story, tableButtonListener: TableButtonListener
         else ChildTable.DEFAULT_CHOICE_DESC_LABEL
       childModel.addNewChildChoice(row, addedSceneName, initialLabel)
       val choiceDescription = childModel.getChoiceDescription(row)
-      story.addChoiceToCurrentScene(addedSceneName, choiceDescription)
+      story.addChoiceToCurrentScene(addedSceneName, choiceDescription, row)
       newChoiceDlg.close()
     }
   }

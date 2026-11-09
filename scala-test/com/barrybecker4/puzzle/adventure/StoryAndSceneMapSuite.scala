@@ -55,21 +55,27 @@ class StoryAndSceneMapSuite extends AnyFunSuite {
 
   test("SceneMap sceneNameChanged updates keys and choice destinations") {
     val story = twoSceneStory()
-    story.sceneNameChanged("end", "finale")
+    assert(story.sceneNameChanged("end", "finale"))
     assert(story.getSceneMap.contains("finale"))
     assert(!story.getSceneMap.contains("end"))
     story.advanceToScene("start")
     assert(story.getCurrentScene.getChoices.map(_.destinationScene) == Seq("finale"))
   }
 
-  test("SceneMap sceneNameChanged rejects rename onto an existing scene name") {
+  test("SceneMap sceneNameChanged refuses duplicate name") {
     val story = twoSceneStory()
-    intercept[IllegalArgumentException] {
-      story.sceneNameChanged("end", "start")
-    }
+    assert(!story.sceneNameChanged("start", "end"))
     assert(story.getSceneMap.contains("start"))
     assert(story.getSceneMap.contains("end"))
-    assert(story.getSceneMap.get("start").getChoices.map(_.destinationScene) == Seq("end"))
+    assert(story.getSceneMap.get("end").name == "end")
+  }
+
+  test("Story addChoiceToCurrentScene inserts at index") {
+    val story = twoSceneStory()
+    story.addChoiceToCurrentScene("end", "finish first", 0)
+    assert(story.getCurrentScene.getChoices.map(_.destinationScene) == Seq("end", "end"))
+    story.addChoiceToCurrentScene("end", "middle", 1)
+    assert(story.getCurrentScene.getChoices.map(_.description) == Seq("finish first", "middle", "finish"))
   }
 
   test("Scene getNextSceneName requires in-range index") {

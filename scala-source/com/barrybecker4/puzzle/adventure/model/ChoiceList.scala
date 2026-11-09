@@ -43,10 +43,17 @@ class ChoiceList(var choices: Seq[Choice] = Seq[Choice]()) {
   def contains(o: Any): Boolean = choices.contains(o)
   def add(choice: Choice): Unit = { choices :+= choice }
 
-  /** Remove the choice at the given 0-based index (matches Swing table rows). */
+  /** Insert at a 0-based index (same indexing as Swing table rows and runtime choice selection). */
+  def insert(index: Int, choice: Choice): Unit = {
+    require(index >= 0 && index <= choices.size,
+      s"choice insert index $index out of range; size is ${choices.size}")
+    choices = choices.take(index) ++ Seq(choice) ++ choices.drop(index)
+  }
+
+  /** Remove the choice at a 0-based index. */
   def remove(index: Int): Unit = {
     require(index >= 0 && index < choices.size,
-      s"choice index $index out of range; size is ${choices.size}")
+      s"choice remove index $index out of range; size is ${choices.size}")
     choices = choices.take(index) ++ choices.drop(index + 1)
   }
 }

@@ -15,10 +15,8 @@ class ChoiceListSuite extends AnyFunSuite {
 
   test("ChoiceList remove drops 0-based index used by the editor") {
     val cl = new ChoiceList(Seq(Choice("a", "1"), Choice("b", "2"), Choice("c", "3")))
-    cl.remove(0)
-    assert(cl.choices.map(_.destinationScene) == Seq("2", "3"))
     cl.remove(1)
-    assert(cl.choices.map(_.destinationScene) == Seq("2"))
+    assert(cl.choices.map(_.destinationScene) == Seq("1", "3"))
   }
 
   test("Scene.deleteChoice removes the intended choice for Swing 0-based row") {
@@ -41,6 +39,22 @@ class ChoiceListSuite extends AnyFunSuite {
     intercept[IllegalArgumentException] {
       cl.remove(-1)
     }
+  }
+
+  test("ChoiceList remove first middle and last") {
+    val cl = new ChoiceList(Seq(Choice("a", "1"), Choice("b", "2"), Choice("c", "3")))
+    cl.remove(0)
+    assert(cl.choices.map(_.destinationScene) == Seq("2", "3"))
+    cl.remove(1)
+    assert(cl.choices.map(_.destinationScene) == Seq("2"))
+    cl.remove(0)
+    assert(cl.choices.isEmpty)
+  }
+
+  test("ChoiceList insert at index matches table order") {
+    val cl = new ChoiceList(Seq(Choice("a", "1"), Choice("c", "3")))
+    cl.insert(1, Choice("b", "2"))
+    assert(cl.choices.map(_.destinationScene) == Seq("1", "2", "3"))
   }
 
   test("ChoiceList update rebuilds from LinkedHashMap order") {

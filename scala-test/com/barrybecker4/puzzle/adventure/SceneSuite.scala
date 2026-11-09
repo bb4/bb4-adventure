@@ -34,6 +34,17 @@ class SceneSuite extends AnyFunSuite {
     assert(!child.isParentOf(parent))
   }
 
+  test("deleteChoice removes 0-based choice index") {
+    val scene = sceneWithChoices(
+      Choice("a", "x"),
+      Choice("b", "y"),
+      Choice("c", "z"))
+    scene.deleteChoice(0)
+    assert(scene.getChoices.map(_.destinationScene) == Seq("y", "z"))
+    scene.deleteChoice(1)
+    assert(scene.getChoices.map(_.destinationScene) == Seq("y"))
+  }
+
   test("isValidChoice accepts 1-based indices within range") {
     val scene = sceneWithChoices(Choice("a", "x"), Choice("b", "y"))
     assert(!scene.isValidChoice(0))

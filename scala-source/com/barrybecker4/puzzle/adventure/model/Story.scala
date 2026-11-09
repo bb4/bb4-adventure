@@ -61,7 +61,8 @@ class Story(val title: String = "", val name: String = "",
 
   def getSceneMap: SceneMap = sceneMap
 
-  def sceneNameChanged(oldSceneName: String, newSceneName: String): Unit =
+  /** @return false if newSceneName is already used by another scene. */
+  def sceneNameChanged(oldSceneName: String, newSceneName: String): Boolean =
     sceneMap.sceneNameChanged(oldSceneName, newSceneName)
 
   def getCurrentScene: Scene = currentScene
@@ -99,13 +100,14 @@ class Story(val title: String = "", val name: String = "",
   /** @param newSceneName      name of the new scene. It may or may not exist already.
     * @param choiceDescription text describing what you will do to go to the destination.
     */
-  def addChoiceToCurrentScene(newSceneName: String, choiceDescription: String): Unit = {
-    // if we do not already have this scene, we need to create it.
+  def addChoiceToCurrentScene(newSceneName: String, choiceDescription: String, index: Int): Unit = {
     if (!sceneMap.contains(newSceneName)) {
       val newScene = new Scene(newSceneName, " --- describe the scene here ---", resourcePath)
       sceneMap.put(newSceneName, newScene)
     }
-    this.getCurrentScene.choices.add(Choice(choiceDescription, newSceneName))
+    val choice = Choice(choiceDescription, newSceneName)
+    val at = Math.min(index, getCurrentScene.choices.size)
+    getCurrentScene.choices.insert(at, choice)
   }
 
   /** @return a list of all the existing scenes that we could navigate to

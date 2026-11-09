@@ -6,6 +6,7 @@ import com.barrybecker4.ui.dialogs.AbstractDialog
 import com.barrybecker4.ui.table.TableButtonListener
 import com.barrybecker4.ui.util.GUIUtil
 import javax.swing.BorderFactory
+import javax.swing.JOptionPane
 import javax.swing.JComboBox
 import javax.swing.JComponent
 import javax.swing.JLabel
@@ -173,10 +174,21 @@ class StoryEditorDialog(val story: Story)
   def getEditedStory: Story = story
 
   private def commitSceneChanges(): Unit = {
+    if (sceneEditor.isSceneNameChanged &&
+        story.getSceneMap.contains(sceneEditor.getProposedSceneName)) {
+      JOptionPane.showMessageDialog(
+        this,
+        "A scene named \"" + sceneEditor.getProposedSceneName + "\" already exists. Choose a different name.",
+        "Duplicate scene name",
+        JOptionPane.ERROR_MESSAGE)
+      sceneEditor.revertProposedSceneName()
+    }
     sceneEditor.doSave()
-    if (sceneEditor.isSceneNameChanged)
-      story.sceneNameChanged(sceneEditor.getOldSceneName, sceneEditor.getEditedScene.name)
-    // also save the choice text (it may have been modified or reordered)
+    if (sceneEditor.isSceneNameChanged &&
+        !story.sceneNameChanged(sceneEditor.getOldSceneName, sceneEditor.getEditedScene.name)) {
+      sceneEditor.revertProposedSceneName()
+      sceneEditor.doSave()
+    }
     childTablePanel.updateSceneChoices()
   }
 
