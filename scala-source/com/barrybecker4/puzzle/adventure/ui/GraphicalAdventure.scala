@@ -84,7 +84,7 @@ final class GraphicalAdventure(
     }
 
     if (mayProceed) {
-      val storyEditor = new StoryEditorDialog(new Story(story))
+      val storyEditor = new StoryEditorDialog(this, new Story(story))
       val editingCanceled = storyEditor.showDialog
       if (!editingCanceled) {
         story.initializeFrom(storyEditor.getEditedStory)

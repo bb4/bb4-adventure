@@ -111,7 +111,7 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
         imgPreviewDlg.showDialog
       case psb if psb == playSoundButton => scene.playSound()
       case spb if spb == showPathsButton =>
-        val showUniquePathsDlg = new ShowUniquePathsDialog(scene, story)
+        val showUniquePathsDlg = new ShowUniquePathsDialog(this, scene, story)
         showUniquePathsDlg.showDialog
     }
   }
@@ -121,7 +121,9 @@ class SceneEditorPanel(var scene: Scene, val story: Story) extends JPanel with A
   def getProposedSceneName: String = nameInput.getValue
   def getEditedScene: Scene = scene
 
-  def revertProposedSceneName(): Unit = nameInput.setValue(oldSceneName)
+  def revertProposedSceneName(): Unit = {
+    nameInput.panel.getComponent(0).asInstanceOf[JTextField].setText(oldSceneName)
+  }
 
   /** Persist the scene changes to the story. */
   def doSave(): Unit = {

@@ -20,8 +20,8 @@ object ShowUniquePathsDialog {
   *
   * @author Barry Becker
   */
-class ShowUniquePathsDialog(val currentScene: Scene, story: Story)
-    extends AbstractDialog with ActionListener {
+class ShowUniquePathsDialog(parent: java.awt.Component, val currentScene: Scene, story: Story)
+    extends AbstractDialog(parent) with ActionListener {
 
   private val pathsFinder = UniquePathsFinder(story)
   private val paths = pathsFinder.findUniquePaths(currentScene)

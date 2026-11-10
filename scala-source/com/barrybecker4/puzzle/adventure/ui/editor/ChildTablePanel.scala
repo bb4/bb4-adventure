@@ -130,7 +130,7 @@ class ChildTablePanel(val story: Story, tableButtonListener: TableButtonListener
   private def addNewChoice(newRow: Int): Unit = {
     val row = if (newRow < 0) 0
     else newRow
-    val newChoiceDlg = new NewChoiceDialog(story.getCandidateDestinationSceneNames)
+    val newChoiceDlg = new NewChoiceDialog(this, story.getCandidateDestinationSceneNames)
     val childModel = childTable.getChildTableModel
     val canceled = newChoiceDlg.showDialog
     if (!canceled) {

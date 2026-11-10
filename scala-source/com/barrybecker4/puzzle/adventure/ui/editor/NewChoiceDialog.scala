@@ -22,7 +22,8 @@ import java.awt.event.ActionListener
   * @param candidateDestinations used to populate the choice list
   * @author Barry Becker
   */
-class NewChoiceDialog(var candidateDestinations: Seq[String]) extends AbstractDialog with ActionListener {
+class NewChoiceDialog(parent: Component, var candidateDestinations: Seq[String])
+    extends AbstractDialog(parent) with ActionListener {
 
   this.setResizable(false)
   setTitle("New Scene Choice")

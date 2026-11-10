@@ -12,6 +12,7 @@ import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 import java.awt.BorderLayout
+import java.awt.Component
 import java.awt.Dimension
 import java.awt.FlowLayout
 import java.awt.Font
@@ -37,8 +38,8 @@ object StoryEditorDialog {
   * You can add/remove/reorder/change scenes in the story.
   * @param story creates a copy of this in case we cancel.
   */
-class StoryEditorDialog(val story: Story)
-  extends AbstractDialog with ActionListener with TableButtonListener {
+class StoryEditorDialog(parent: Component, val story: Story)
+  extends AbstractDialog(parent) with ActionListener with TableButtonListener {
 
   /** Rebuilt when navigation refreshes dialog content via showContent(). */
   private var sceneEditor: SceneEditorPanel = uninitialized
