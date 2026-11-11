@@ -51,6 +51,10 @@ appMap['textAdventure'] = [
         mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
         resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
         script: 'ludlowScript.xml',
+        // Console app: Windows installer opens a console; Linux menu item opens a terminal.
+        console: true,
+        // --mac-package-name is limited to 16 characters; keep it distinct from "Ludlow Adventure".
+        macPackageName: 'Ludlow Text',
         description: 'Explore a haunted house.',
         longDescription: 'The scenes are stored in an xml file. ' +
                 'This story is based on an adventure published by James M. Ward in Dragon Magazine back in 1980.'
@@ -72,6 +76,8 @@ appMap['textBinaryTutorial'] = [
         mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
         resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
         script: 'binaryScript.xml',
+        console: true,
+        macPackageName: 'Text Binary',
         description: 'Learn about binary numbers.',
         longDescription: 'The same framework that is used to make adventure games ' +
                 'can also be used for pedagogical purposes.'
@@ -121,6 +127,8 @@ def createTextAdventureApp = tasks.register('createTextAdventureApp', CreateStar
     outputDir = startScripts.outputDir
     applicationName = 'bb4-text-adventure'
     defaultJvmOpts = ['-Xmx1024m']
+    // jarMap disables :jar; the runtime classpath points at adventureJar's output.
+    dependsOn 'adventureJar'
 }
 
 // add extra execution scripts
@@ -131,3 +139,10 @@ application.applicationDistribution.into('bin') {
         unix('755')
     }
 }
+
+// jpackage --app-version rejects -SNAPSHOT and other non x[.y[.z]] strings.
+def rawVersion = project.version.toString()
+def strippedVersion = rawVersion.replaceAll(/-SNAPSHOT$/, '')
+ext.jpackageVersion = (strippedVersion ==~ /\d+(\.\d+){0,2}/) ? strippedVersion : '0.0.1'
+
+apply from: 'gradle/jpackage.gradle'
