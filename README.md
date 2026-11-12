@@ -68,7 +68,7 @@ If you have not already done so, first install [Git](http://git-scm.com/), and [
 
 Requires **JDK 25+** (bb4-gradle 2.1). Type `./gradlew build run` at the root. This will start the adventure game.
 `./gradlew jpackageAllApps` builds every native installer for the current OS (`.deb` on Linux, `.dmg` on macOS, `.msi` on Windows).
-If you want to open the source in Intellij, then first run `./gradlew idea`.
+Open the project in IntelliJ via Gradle import (File → Open on the repo root).
 
 When there is a new release, versioned artifacts will be published by Barry Becker to [Sonatype](https://oss.sonatype.org).
 
