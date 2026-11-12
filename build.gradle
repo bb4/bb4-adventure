@@ -17,6 +17,23 @@ bb4 {
             include: ['com/barrybecker4/puzzle/adventure/**'],
             exclude: ['com/barrybecker4/puzzle/adventure/**/*.pdf']
     ])
+    jpackage {
+        enabled = true
+        packageIdentifierPrefix = 'com.barrybecker4.puzzle.adventure'
+        mainJarKey = { String appId, Map props -> 'adventure' }
+        defaultMainClass = 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp'
+        arguments = { String appId, Map props ->
+            def args = []
+            if (props.containsKey('script')) {
+                args << (props.script as String)
+            }
+            if (props.containsKey('resourcePath')) {
+                args << (props.resourcePath as String)
+            }
+            args
+        }
+        consoleDesktopTemplate = layout.projectDirectory.file('packaging/linux-console/template.desktop')
+    }
 }
 
 tasks.withType(ScalaCompile).configureEach {
@@ -140,9 +157,3 @@ application.applicationDistribution.into('bin') {
     }
 }
 
-// jpackage --app-version rejects -SNAPSHOT and other non x[.y[.z]] strings.
-def rawVersion = project.version.toString()
-def strippedVersion = rawVersion.replaceAll(/-SNAPSHOT$/, '')
-ext.jpackageVersion = (strippedVersion ==~ /\d+(\.\d+){0,2}/) ? strippedVersion : '0.0.1'
-
-apply from: 'gradle/jpackage.gradle'
