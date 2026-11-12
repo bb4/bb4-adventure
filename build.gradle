@@ -17,6 +17,76 @@ bb4 {
             include: ['com/barrybecker4/puzzle/adventure/**'],
             exclude: ['com/barrybecker4/puzzle/adventure/**/*.pdf']
     ])
+
+    // Multi-app model (run*, create*App, jpackage)
+    apps.put('adventure', [
+        title: 'Ludlow Adventure',
+        command: 'bb4-adventure ludlowScript.xml',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
+        script: 'ludlowScript.xml',
+        description: 'Explore a haunted house.',
+        longDescription: 'This started as a simple text based adventure. The scenes are stored in an xml file. ' +
+            'I thought it would be cool to have images and sounds associated with the scenes, so I added a UI. ' +
+            'When editing the xml file got tedious, I decided to add the graphical editor. ' +
+            'You can edit the story if you know the password. ' +
+            'Next I may add support for keeping track of found items and hit-points. ' +
+            'This story is based on an adventure published by James M. Ward in Dragon Magazine back in 1980.',
+        applicationName: 'bb4-adventure'
+    ])
+    apps.put('textAdventure', [
+        title: 'Ludlow Text Adventure',
+        command: 'bb4-text-adventure ludlowScript.xml',
+        mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
+        script: 'ludlowScript.xml',
+        // Console app: Windows installer opens a console; Linux menu item opens a terminal.
+        console: true,
+        // --mac-package-name is limited to 16 characters; keep it distinct from "Ludlow Adventure".
+        macPackageName: 'Ludlow Text',
+        description: 'Explore a haunted house.',
+        longDescription: 'The scenes are stored in an xml file. ' +
+                'This story is based on an adventure published by James M. Ward in Dragon Magazine back in 1980.',
+        applicationName: 'bb4-text-adventure'
+    ])
+    apps.put('binaryTutorial', [
+        title: 'Binary Tutorial',
+        command: 'bb4-adventure binaryScript.xml com/barrybecker4/puzzle/adventure/stories/learnBinary/',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
+        script: 'binaryScript.xml',
+        description: 'Learn about binary numbers.',
+        longDescription: 'The same framework that is used to make adventure games ' +
+                'can also be used for pedagogical purposes. ' +
+                'Here, the socratc method is used to teach about binary numbers.',
+        applicationName: 'bb4-adventure'
+    ])
+    apps.put('textBinaryTutorial', [
+        title: 'Binary Tutorial (text version)',
+        command: 'bb4-text-adventure binaryScript.xml com/barrybecker4/puzzle/adventure/stories/learnBinary/',
+        mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
+        script: 'binaryScript.xml',
+        console: true,
+        macPackageName: 'Text Binary',
+        description: 'Learn about binary numbers.',
+        longDescription: 'The same framework that is used to make adventure games ' +
+                'can also be used for pedagogical purposes.',
+        applicationName: 'bb4-text-adventure'
+    ])
+    apps.put('aikidoEditor', [
+        title: 'Aikido Editor',
+        command: 'bb4-adventure techniques.xml com/barrybecker4/puzzle/adventure/stories/aikido/',
+        mainClass: 'com.barrybecker4.puzzle.adventure.ui.AikidoEditor',
+        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/aikido/',
+        //resourcePath: '../../bb4-aikido-app/deployment/techniques/',
+        script: 'techniques.xml',
+        description: 'Edit library of aikido techniques for builder application.',
+        longDescription: 'The same framework that is used to make adventure games ' +
+                'can also be used for editing aikido techniques.',
+        applicationName: 'bb4-adventure'
+    ])
+
     jpackage {
         enabled = true
         packageIdentifierPrefix = 'com.barrybecker4.puzzle.adventure'
@@ -44,116 +114,5 @@ dependencies {
     implementation bb4Libs.sound
     implementation bb4Libs.ui
     implementation bb4Libs.common
-}
-
-// The appMap is used to create the list of available applications in the html index page and to generate the app tasks.
-ext.appMap = new LinkedHashMap()
-appMap['adventure'] = [
-        title: 'Ludlow Adventure',
-        command: 'bb4-adventure ludlowScript.xml',
-        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
-        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
-        script: 'ludlowScript.xml',
-        description: 'Explore a haunted house.',
-        longDescription: 'This started as a simple text based adventure. The scenes are stored in an xml file. ' +
-            'I thought it would be cool to have images and sounds associated with the scenes, so I added a UI. ' +
-            'When editing the xml file got tedious, I decided to add the graphical editor. ' +
-            'You can edit the story if you know the password. ' +
-            'Next I may add support for keeping track of found items and hit-points. ' +
-            'This story is based on an adventure published by James M. Ward in Dragon Magazine back in 1980.'
-]
-appMap['textAdventure'] = [
-        title: 'Ludlow Text Adventure',
-        command: 'bb4-text-adventure ludlowScript.xml',
-        mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
-        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/ludlow/',
-        script: 'ludlowScript.xml',
-        // Console app: Windows installer opens a console; Linux menu item opens a terminal.
-        console: true,
-        // --mac-package-name is limited to 16 characters; keep it distinct from "Ludlow Adventure".
-        macPackageName: 'Ludlow Text',
-        description: 'Explore a haunted house.',
-        longDescription: 'The scenes are stored in an xml file. ' +
-                'This story is based on an adventure published by James M. Ward in Dragon Magazine back in 1980.'
-]
-appMap['binaryTutorial'] = [
-        title: 'Binary Tutorial',
-        command: 'bb4-adventure binaryScript.xml com/barrybecker4/puzzle/adventure/stories/learnBinary/',
-        mainClass: 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp',
-        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
-        script: 'binaryScript.xml',
-        description: 'Learn about binary numbers.',
-        longDescription: 'The same framework that is used to make adventure games ' +
-                'can also be used for pedagogical purposes. ' +
-                'Here, the socratc method is used to teach about binary numbers.'
-]
-appMap['textBinaryTutorial'] = [
-        title: 'Binary Tutorial (text version)',
-        command: 'bb4-text-adventure binaryScript.xml com/barrybecker4/puzzle/adventure/stories/learnBinary/',
-        mainClass: 'com.barrybecker4.puzzle.adventure.TextAdventure',
-        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/learnBinary/',
-        script: 'binaryScript.xml',
-        console: true,
-        macPackageName: 'Text Binary',
-        description: 'Learn about binary numbers.',
-        longDescription: 'The same framework that is used to make adventure games ' +
-                'can also be used for pedagogical purposes.'
-]
-appMap['aikidoEditor'] = [
-        title: 'Aikido Editor',
-        command: 'bb4-adventure techniques.xml com/barrybecker4/puzzle/adventure/stories/aikido/',
-        mainClass: 'com.barrybecker4.puzzle.adventure.ui.AikidoEditor',
-        resourcePath: 'com/barrybecker4/puzzle/adventure/stories/aikido/',
-        //resourcePath: '../../bb4-aikido-app/deployment/techniques/',
-        script: 'techniques.xml',
-        description: 'Edit library of aikido techniques for builder application.',
-        longDescription: 'The same framework that is used to make adventure games ' +
-                'can also be used for editing aikido techniques.'
-]
-
-appMap.each { appId, propMap ->
-
-    def resolvedMainClass = 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp'
-    if (propMap.containsKey('mainClass'))
-        resolvedMainClass = propMap['mainClass']
-
-    println("mainClass = ${resolvedMainClass}")
-
-    def argsList = []
-    if (propMap.containsKey('script'))
-        argsList << "${propMap['script']}"
-    if (propMap.containsKey('resourcePath'))
-        argsList << "${propMap['resourcePath']}"
-
-    tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
-        group = 'application'
-        mainClass.set(resolvedMainClass)
-        standardInput = System.in
-        args = argsList
-        classpath = sourceSets.main.runtimeClasspath
-        jvmArgs = ['-ea']
-    }
-}
-
-// The application is deployed to /build/distributions. Run scripts are in the bin directory.
-// Additional script to run text version.
-// It can take parameters like 'ludlow/ludlowScript.xml' or 'learnBinary/binaryScript.xml'
-def createTextAdventureApp = tasks.register('createTextAdventureApp', CreateStartScripts) {
-    mainClass.set('com.barrybecker4.puzzle.adventure.TextAdventure')
-    classpath = startScripts.classpath
-    outputDir = startScripts.outputDir
-    applicationName = 'bb4-text-adventure'
-    defaultJvmOpts = ['-Xmx1024m']
-    // jarMap disables :jar; the runtime classpath points at adventureJar's output.
-    dependsOn 'adventureJar'
-}
-
-// add extra execution scripts
-application.applicationDistribution.into('bin') {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from(createTextAdventureApp)
-    filePermissions {
-        unix('755')
-    }
 }
 
