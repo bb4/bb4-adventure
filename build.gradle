@@ -90,7 +90,6 @@ bb4 {
     jpackage {
         enabled = true
         packageIdentifierPrefix = 'com.barrybecker4.puzzle.adventure'
-        mainJarKey = { String appId, Map props -> 'adventure' }
         defaultMainClass = 'com.barrybecker4.puzzle.adventure.ui.GraphicalAdventureApp'
         arguments = { String appId, Map props ->
             def args = []
@@ -104,10 +103,6 @@ bb4 {
         }
         consoleDesktopTemplate = layout.projectDirectory.file('packaging/linux-console/template.desktop')
     }
-}
-
-tasks.withType(ScalaCompile).configureEach {
-    scalaCompileOptions.additionalParameters = ['-deprecation', '-feature']
 }
 
 dependencies {
