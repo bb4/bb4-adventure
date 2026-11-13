@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2018-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.puzzle.adventure.model.io
 
-import com.barrybecker4.common.xml.DomUtil
+import com.barrybecker4.xml.DomUtil
 import com.barrybecker4.puzzle.adventure.model.{Choice, Scene, Story}
 import org.w3c.dom.{Document, Element}
 

@@ -109,5 +109,6 @@ dependencies {
     implementation bb4Libs.sound
     implementation bb4Libs.ui
     implementation bb4Libs.common
+    implementation bb4Libs.xml
 }
 

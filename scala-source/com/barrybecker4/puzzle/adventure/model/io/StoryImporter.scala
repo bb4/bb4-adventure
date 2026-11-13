@@ -3,7 +3,7 @@ package com.barrybecker4.puzzle.adventure.model.io
 
 import java.io.File
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.common.xml.DomUtil
+import com.barrybecker4.xml.DomUtil
 import com.barrybecker4.puzzle.adventure.model.Story
 import org.w3c.dom.Document
 
